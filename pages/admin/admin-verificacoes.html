@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>seuMota — Verificações</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/variables.css" />
+  <link rel="stylesheet" href="../../assets/css/animations.css" />
+  <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+  <link rel="stylesheet" href="../../assets/css/mota.css" />
+  <link rel="stylesheet" href="../../assets/css/extras.css" />
+  <link rel="stylesheet" href="../../assets/css/admin.css" />
+  <style>
+    /* ── VERIFICATION CARDS ─────────────────────── */
+    .verification-card {
+      background: var(--white);
+      border: 2px solid var(--sand);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: all .2s;
+      cursor: pointer;
+    }
+
+    .verification-card:hover {
+      border-color: #818CF8;
+      box-shadow: 0 4px 12px rgba(129,140,248,0.12);
+    }
+
+    .verification-card.urgent {
+      border-left: 4px solid #EF4444;
+    }
+
+    .verification-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .candidate-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #818CF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .candidate-info {
+      flex: 1;
+    }
+
+    .candidate-name {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .candidate-id {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-light);
+      margin-bottom: 6px;
+    }
+
+    .candidate-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--ink-mid);
+      flex-wrap: wrap;
+    }
+
+    .verification-docs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .doc-badge {
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-badge.verified {
+      background: #DCFCE7;
+      color: #16A34A;
+    }
+
+    .doc-badge.pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .doc-badge.missing {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .verification-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .quick-action {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .quick-action.approve {
+      background: #22C55E;
+      color: white;
+    }
+
+    .quick-action.approve:hover {
+      background: #16A34A;
+      transform: translateY(-2px);
+    }
+
+    .quick-action.reject {
+      background: #EF4444;
+      color: white;
+    }
+
+    .quick-action.reject:hover {
+      background: #DC2626;
+      transform: translateY(-2px);
+    }
+
+    .quick-action.review {
+      background: #818CF8;
+      color: white;
+    }
+
+    .quick-action.review:hover {
+      background: #6366F1;
+      transform: translateY(-2px);
+    }
+
+    /* ── DETAIL MODAL ───────────────────────────── */
+    .verification-detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .verification-detail-overlay.active {
+      display: flex;
+    }
+
+    .verification-detail-panel {
+      background: var(--white);
+      border-radius: 20px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--cream);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all .2s;
+      z-index: 10;
+    }
+
+    .detail-close:hover {
+      background: #EF4444;
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    .detail-header {
+      padding: 28px;
+      border-bottom: 2px solid var(--sand);
+      background: var(--white);
+    }
+
+    .detail-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .detail-content {
+      padding: 28px;
+    }
+
+    .detail-section {
+      margin-bottom: 28px;
+    }
+
+    .detail-section-title {
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--ink-light);
+      margin-bottom: 12px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .detail-field {
+      background: var(--cream);
+      padding: 14px 16px;
+      border-radius: 10px;
+    }
+
+    .detail-field-label {
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--ink-light);
+      margin-bottom: 4px;
+    }
+
+    .detail-field-value {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .doc-preview {
+      background: var(--cream);
+      border: 2px dashed var(--sand);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .doc-preview-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .doc-preview-name {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .doc-preview-info {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-light);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--sand);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 16px;
+      padding-left: 12px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #818CF8;
+      border: 2px solid var(--white);
+    }
+
+    .timeline-time {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--ink-light);
+      margin-bottom: 3px;
+    }
+
+    .timeline-text {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .detail-actions {
+      padding: 20px 28px;
+      border-top: 2px solid var(--sand);
+      display: flex;
+      gap: 10px;
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-approve {
+      background: #22C55E;
+      color: white;
+    }
+
+    .action-approve:hover {
+      background: #16A34A;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+    }
+
+    .action-reject {
+      background: #EF4444;
+      color: white;
+    }
+
+    .action-reject:hover {
+      background: #DC2626;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+    }
+
+    .action-request {
+      background: var(--cream);
+      border: 1.5px solid var(--sand);
+      color: var(--ink);
+    }
+
+    .action-request:hover {
+      border-color: #818CF8;
+      color: #818CF8;
+    }
+
+    @media (max-width: 768px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .verification-actions {
+        flex-direction: column;
+      }
+
+      .detail-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="admin-dashboard.html" class="sidebar-logo">
+      <div class="sidebar-logo-icon" style="background:#818CF8;">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0"/>
+          <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0"/>
+          <rect x="24" y="49" width="22" height="16" rx="6" fill="none" stroke="#4A3728" stroke-width="3"/>
+          <rect x="54" y="49" width="22" height="16" rx="6" fill="none" stroke="#4A3728" stroke-width="3"/>
+          <circle cx="35" cy="57" r="5" fill="#4A3728"/><circle cx="65" cy="57" r="5" fill="#4A3728"/>
+          <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878"/>
+          <path d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z" fill="white"/>
+          <path d="M40 70 Q45 73 50 71 Q55 73 60 70" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0"/><ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0"/>
+        </svg>
+      </div>
+      <span class="sidebar-logo-text">seu<span>Mota</span> <small style="font-size:.55rem;background:#818CF8;color:white;padding:2px 7px;border-radius:4px;margin-left:4px;vertical-align:middle;">ADMIN</small></span>
+    </a>
+
+    <div class="nav-section">
+      <a href="admin-dashboard.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="admin-usuarios.html" class="nav-item"><span class="nav-icon">👥</span> Usuários<span class="nav-badge" style="background:#818CF8;">1.2k</span></a>
+      <a href="admin-motas.html" class="nav-item"><span class="nav-icon">🏍️</span> Motas<span class="nav-badge" style="background:#818CF8;">348</span></a>
+      <a href="admin-tarefas.html" class="nav-item"><span class="nav-icon">📋</span> Tarefas</a>
+      <a href="admin-financeiro.html" class="nav-item"><span class="nav-icon">💰</span> Financeiro</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Moderação</div>
+      <a href="admin-verificacoes.html" class="nav-item active"><span class="nav-icon">🔍</span> Verificações<span class="nav-badge" style="background:#F59E0B;">7</span></a>
+      <a href="admin-reportes.html" class="nav-item"><span class="nav-icon">⚠️</span> Reportes<span class="nav-badge" style="background:#EF4444;">3</span></a>
+      <a href="admin-tickets.html" class="nav-item"><span class="nav-icon">🎫</span> Tickets</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Sistema</div>
+      <a href="admin-configuracoes.html" class="nav-item"><span class="nav-icon">⚙️</span> Configurações</a>
+      <a href="admin-logs.html" class="nav-item"><span class="nav-icon">📜</span> Logs</a>
+      <a href="../../index.html" class="nav-item"><span class="nav-icon">↩️</span> Sair do admin</a>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-card">
+        <div class="user-avatar">🛡️</div>
+        <div class="user-info"><div class="user-name">Admin seuMota</div><div class="user-role">Administrador</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-nav-toggle" id="navToggle">☰</button>
+        <div class="topbar-left">
+          <h2>Verificações de Motas</h2>
+          <p>Candidatos aguardando aprovação</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div style="display:flex;align-items:center;gap:6px;background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:50px;padding:6px 14px;font-size:0.78rem;font-weight:800;color:#92400E;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#F59E0B;animation:pulse-orange 1.5s infinite;display:inline-block;"></span>
+          7 pendentes
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Stats -->
+      <div class="admin-stat-grid">
+        <div class="admin-stat">
+          <div class="admin-stat-icon" style="background:#FEF3C7;">⏳</div>
+          <div class="admin-stat-value">7</div>
+          <div class="admin-stat-label">Aguardando análise</div>
+          <div class="admin-stat-delta down">2 há mais de 24h</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon" style="background:#DCFCE7;">✅</div>
+          <div class="admin-stat-value">124</div>
+          <div class="admin-stat-label">Aprovados (mês)</div>
+          <div class="admin-stat-delta up">↑ +18 vs mês anterior</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon" style="background:#FEE2E2;">❌</div>
+          <div class="admin-stat-value">9</div>
+          <div class="admin-stat-label">Rejeitados (mês)</div>
+          <div class="admin-stat-delta">Taxa rejeição: 6.8%</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon" style="background:#EEF2FF;">⏱️</div>
+          <div class="admin-stat-value">4.2h</div>
+          <div class="admin-stat-label">Tempo médio análise</div>
+          <div class="admin-stat-delta up">↓ -1.3h vs mês anterior</div>
+        </div>
+      </div>
+
+      <!-- Status Tabs -->
+      <div class="status-tabs" style="margin-bottom:20px;">
+        <button class="status-tab active" data-status="pending">Pendentes <span>7</span></button>
+        <button class="status-tab" data-status="approved">Aprovados <span>124</span></button>
+        <button class="status-tab" data-status="rejected">Rejeitados <span>9</span></button>
+        <button class="status-tab" data-status="all">Todos</button>
+      </div>
+
+      <!-- Verification List -->
+      <div class="verifications-list" id="verificationsList">
+
+        <!-- Candidate 1: Urgent -->
+        <div class="verification-card urgent" data-candidate="1">
+          <div class="verification-header">
+            <div class="candidate-avatar">🧑</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Marcos Oliveira Santos</div>
+              <div class="candidate-id">#CAND-4782</div>
+              <div class="candidate-meta">
+                <span>📍 São Paulo, SP</span>
+                <span>·</span>
+                <span>📅 Enviado há 2h</span>
+                <span>·</span>
+                <span style="color:#EF4444;font-weight:900;">⚠️ Urgente</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-docs">
+            <span class="doc-badge verified">✓ CPF Verificado</span>
+            <span class="doc-badge verified">✓ Selfie com Doc</span>
+            <span class="doc-badge verified">✓ Comprovante End.</span>
+            <span class="doc-badge pending">⏳ Antecedentes</span>
+          </div>
+
+          <div class="verification-actions">
+            <button class="quick-action approve" onclick="quickApprove(1)">✅ Aprovar</button>
+            <button class="quick-action review" onclick="openDetail(1)">👁️ Revisar</button>
+            <button class="quick-action reject" onclick="quickReject(1)">❌ Rejeitar</button>
+          </div>
+        </div>
+
+        <!-- Candidate 2 -->
+        <div class="verification-card" data-candidate="2">
+          <div class="verification-header">
+            <div class="candidate-avatar">👩</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Carla Mendes Silva</div>
+              <div class="candidate-id">#CAND-4781</div>
+              <div class="candidate-meta">
+                <span>📍 Rio de Janeiro, RJ</span>
+                <span>·</span>
+                <span>📅 Enviado há 5h</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-docs">
+            <span class="doc-badge verified">✓ CPF Verificado</span>
+            <span class="doc-badge verified">✓ Selfie com Doc</span>
+            <span class="doc-badge pending">⏳ Comprovante End.</span>
+            <span class="doc-badge pending">⏳ Antecedentes</span>
+          </div>
+
+          <div class="verification-actions">
+            <button class="quick-action approve" onclick="quickApprove(2)">✅ Aprovar</button>
+            <button class="quick-action review" onclick="openDetail(2)">👁️ Revisar</button>
+            <button class="quick-action reject" onclick="quickReject(2)">❌ Rejeitar</button>
+          </div>
+        </div>
+
+        <!-- Candidate 3 -->
+        <div class="verification-card" data-candidate="3">
+          <div class="verification-header">
+            <div class="candidate-avatar">👨</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Rafael Costa Lima</div>
+              <div class="candidate-id">#CAND-4780</div>
+              <div class="candidate-meta">
+                <span>📍 Belo Horizonte, MG</span>
+                <span>·</span>
+                <span>📅 Enviado há 8h</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-docs">
+            <span class="doc-badge verified">✓ CPF Verificado</span>
+            <span class="doc-badge missing">✗ Selfie Inválida</span>
+            <span class="doc-badge pending">⏳ Comprovante End.</span>
+            <span class="doc-badge pending">⏳ Antecedentes</span>
+          </div>
+
+          <div class="verification-actions">
+            <button class="quick-action approve" onclick="quickApprove(3)" disabled style="opacity:0.5;cursor:not-allowed;">✅ Aprovar</button>
+            <button class="quick-action review" onclick="openDetail(3)">👁️ Revisar</button>
+            <button class="quick-action reject" onclick="quickReject(3)">❌ Rejeitar</button>
+          </div>
+        </div>
+
+        <!-- Candidate 4 -->
+        <div class="verification-card urgent" data-candidate="4">
+          <div class="verification-header">
+            <div class="candidate-avatar">🧔</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Diego Alves Pereira</div>
+              <div class="candidate-id">#CAND-4779</div>
+              <div class="candidate-meta">
+                <span>📍 Curitiba, PR</span>
+                <span>·</span>
+                <span>📅 Enviado há 1d</span>
+                <span>·</span>
+                <span style="color:#EF4444;font-weight:900;">⚠️ > 24h</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-docs">
+            <span class="doc-badge verified">✓ CPF Verificado</span>
+            <span class="doc-badge verified">✓ Selfie com Doc</span>
+            <span class="doc-badge verified">✓ Comprovante End.</span>
+            <span class="doc-badge verified">✓ Antecedentes</span>
+          </div>
+
+          <div class="verification-actions">
+            <button class="quick-action approve" onclick="quickApprove(4)">✅ Aprovar</button>
+            <button class="quick-action review" onclick="openDetail(4)">👁️ Revisar</button>
+            <button class="quick-action reject" onclick="quickReject(4)">❌ Rejeitar</button>
+          </div>
+        </div>
+
+        <!-- Candidate 5 -->
+        <div class="verification-card" data-candidate="5">
+          <div class="verification-header">
+            <div class="candidate-avatar">👩</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Fernanda Lima Costa</div>
+              <div class="candidate-id">#CAND-4778</div>
+              <div class="candidate-meta">
+                <span>📍 Porto Alegre, RS</span>
+                <span>·</span>
+                <span>📅 Enviado há 1d</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-docs">
+            <span class="doc-badge verified">✓ CPF Verificado</span>
+            <span class="doc-badge verified">✓ Selfie com Doc</span>
+            <span class="doc-badge pending">⏳ Comprovante End.</span>
+            <span class="doc-badge pending">⏳ Antecedentes</span>
+          </div>
+
+          <div class="verification-actions">
+            <button class="quick-action approve" onclick="quickApprove(5)">✅ Aprovar</button>
+            <button class="quick-action review" onclick="openDetail(5)">👁️ Revisar</button>
+            <button class="quick-action reject" onclick="quickReject(5)">❌ Rejeitar</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Detail Modal -->
+<div class="verification-detail-overlay" id="detailOverlay">
+  <div class="verification-detail-panel">
+    <button class="detail-close" id="detailClose">×</button>
+
+    <div class="detail-header">
+      <div class="candidate-id">#CAND-4782</div>
+      <div class="detail-title">Marcos Oliveira Santos</div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <span class="doc-badge verified">✓ CPF Verificado</span>
+        <span class="doc-badge verified">✓ Selfie</span>
+        <span class="doc-badge verified">✓ Endereço</span>
+        <span class="doc-badge pending">⏳ Antecedentes</span>
+      </div>
+    </div>
+
+    <div class="detail-content">
+
+      <!-- Personal Info -->
+      <div class="detail-section">
+        <div class="detail-section-title">Informações Pessoais</div>
+        <div class="detail-grid">
+          <div class="detail-field">
+            <div class="detail-field-label">Nome Completo</div>
+            <div class="detail-field-value">Marcos Oliveira Santos</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">CPF</div>
+            <div class="detail-field-value">123.456.789-00</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Data Nascimento</div>
+            <div class="detail-field-value">15/03/1992 (32 anos)</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Telefone</div>
+            <div class="detail-field-value">(11) 98765-4321</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Email</div>
+            <div class="detail-field-value">marcos.oliveira@email.com</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Cidade</div>
+            <div class="detail-field-value">São Paulo, SP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents -->
+      <div class="detail-section">
+        <div class="detail-section-title">Documentos Enviados</div>
+        
+        <div class="doc-preview">
+          <div class="doc-preview-icon">📄</div>
+          <div class="doc-preview-name">CPF_frente.jpg</div>
+          <div class="doc-preview-info">Status: Verificado ✓ · Enviado há 2h</div>
+        </div>
+
+        <div class="doc-preview">
+          <div class="doc-preview-icon">🤳</div>
+          <div class="doc-preview-name">Selfie_com_documento.jpg</div>
+          <div class="doc-preview-info">Status: Verificado ✓ · Enviado há 2h</div>
+        </div>
+
+        <div class="doc-preview">
+          <div class="doc-preview-icon">🏠</div>
+          <div class="doc-preview-name">Comprovante_residencia.pdf</div>
+          <div class="doc-preview-info">Status: Verificado ✓ · Enviado há 2h</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="detail-section">
+        <div class="detail-section-title">Histórico de Verificação</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-time">18 fev, 14h30</div>
+            <div class="timeline-text">Candidatura enviada</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">18 fev, 14h32</div>
+            <div class="timeline-text">CPF verificado automaticamente</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">18 fev, 14h35</div>
+            <div class="timeline-text">Selfie aprovada pelo sistema</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">18 fev, 14h40</div>
+            <div class="timeline-text">Comprovante de endereço verificado</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">18 fev, 15h10</div>
+            <div class="timeline-text">Consulta de antecedentes em andamento</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="detail-actions">
+      <button class="action-btn action-approve" onclick="approveFromDetail()">
+        ✅ Aprovar Candidato
+      </button>
+      <button class="action-btn action-request" onclick="requestMoreDocs()">
+        📄 Solicitar Mais Documentos
+      </button>
+      <button class="action-btn action-reject" onclick="rejectFromDetail()">
+        ❌ Rejeitar Candidatura
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-fixed" id="toast"></div>
+
+<script src="../../assets/js/app-shell.js"></script>
+<script src="../../assets/js/admin-verificacoes.js"></script>
+</body>
+</html>

@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Admin Configurações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="admin-dashboard.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon" style="background: #818cf8">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text"
+            >seu<span>Mota</span>
+            <small
+              style="
+                font-size: 0.55rem;
+                background: #818cf8;
+                color: white;
+                padding: 2px 7px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: middle;
+              "
+              >ADMIN</small
+            ></span
+          >
+        </a>
+
+        <div class="nav-section">
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item"
+            ><span class="nav-icon">👥</span> Usuários<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >1.2k</span
+            ></a
+          >
+          <a href="admin-motas.html" class="nav-item"
+            ><span class="nav-icon">🏍️</span> Motas<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >348</span
+            ></a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Moderação</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações<span
+              class="nav-badge"
+              style="background: #f59e0b"
+              >7</span
+            ></a
+          >
+          <a href="admin-reportes.html" class="nav-item"
+            ><span class="nav-icon">⚠️</span> Reportes<span
+              class="nav-badge"
+              style="background: #ef4444"
+              >3</span
+            ></a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item active"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🛡️</div>
+            <div class="user-info">
+              <div class="user-name">Admin seuMota</div>
+              <div class="user-role">Administrador</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Configurações do Sistema</h2>
+              <p>Parâmetros e ajustes gerais da plataforma</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                background: #dcfce7;
+                border: 1.5px solid #bbf7d0;
+                border-radius: 50px;
+                padding: 6px 14px;
+                font-size: 0.78rem;
+                font-weight: 800;
+                color: #16a34a;
+              "
+            >
+              <span
+                style="
+                  width: 7px;
+                  height: 7px;
+                  border-radius: 50%;
+                  background: #22c55e;
+                  animation: pulse-green 1.5s infinite;
+                  display: inline-block;
+                "
+              ></span>
+              Sistema operacional
+            </div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="admin-wrap">
+            <!-- LEFT COLUMN -->
+            <div>
+              <!-- Taxas e Comissões -->
+              <div class="admin-table-wrap" style="margin-bottom: 20px">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">💰 Taxas e Comissões</div>
+                </div>
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Configuração</th>
+                      <th>Valor</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Taxa da plataforma
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Porcentagem cobrada sobre cada tarefa concluída
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="taxaPlataforma"
+                          value="15"
+                          min="0"
+                          max="50"
+                          step="0.5"
+                          style="width: 80px"
+                        />
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >%</span
+                        >
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('taxaPlataforma')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Taxa de saque
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Porcentagem cobrada sobre saques de Motas
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="taxaSaque"
+                          value="2"
+                          min="0"
+                          max="10"
+                          step="0.1"
+                          style="width: 80px"
+                        />
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >%</span
+                        >
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('taxaSaque')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Valor mínimo de saque
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Saldo mínimo para solicitar transferência
+                        </div>
+                      </td>
+                      <td>
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >R$</span
+                        >
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="saqueMinimo"
+                          value="20"
+                          min="10"
+                          max="100"
+                          style="width: 80px"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('saqueMinimo')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Limites de Tarefas -->
+              <div class="admin-table-wrap" style="margin-bottom: 20px">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">📋 Limites de Tarefas</div>
+                </div>
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Configuração</th>
+                      <th>Valor</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Valor mínimo por tarefa
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Menor valor permitido para uma tarefa
+                        </div>
+                      </td>
+                      <td>
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >R$</span
+                        >
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="tarefaMinima"
+                          value="5"
+                          min="1"
+                          max="50"
+                          style="width: 80px"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('tarefaMinima')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Valor máximo por tarefa
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Maior valor permitido para uma tarefa
+                        </div>
+                      </td>
+                      <td>
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >R$</span
+                        >
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="tarefaMaxima"
+                          value="500"
+                          min="100"
+                          max="5000"
+                          style="width: 80px"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('tarefaMaxima')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Raio máximo de busca
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Distância máxima para ofertas de tarefas
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="raioMaximo"
+                          value="10"
+                          min="1"
+                          max="50"
+                          style="width: 80px"
+                        />
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >km</span
+                        >
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('raioMaximo')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Tarefas simultâneas (Mota)
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Máximo de tarefas em andamento por Mota
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="tarefasSimultaneas"
+                          value="3"
+                          min="1"
+                          max="10"
+                          style="width: 80px"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('tarefasSimultaneas')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Moderação -->
+              <div class="admin-table-wrap">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">⚠️ Moderação</div>
+                </div>
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Configuração</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Auto-moderação de conteúdo
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Filtrar automaticamente mensagens ofensivas
+                        </div>
+                      </td>
+                      <td>
+                        <span class="pill-green" id="autoModeracaoStatus"
+                          >✓ Ativo</span
+                        >
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="toggleSetting('autoModeracao')"
+                        >
+                          🔄 Alternar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Limite de reportes para suspensão
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Número de reportes antes de suspender conta
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="limiteReportes"
+                          value="3"
+                          min="1"
+                          max="10"
+                          style="width: 80px"
+                        />
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('limiteReportes')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div
+                          style="
+                            font-weight: 800;
+                            color: var(--ink);
+                            margin-bottom: 2px;
+                          "
+                        >
+                          Duração suspensão temporária
+                        </div>
+                        <div
+                          style="font-size: 0.78rem; color: var(--ink-light)"
+                        >
+                          Tempo padrão para suspensões não permanentes
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="admin-input"
+                          id="duracaoSuspensao"
+                          value="7"
+                          min="1"
+                          max="90"
+                          style="width: 80px"
+                        />
+                        <span style="font-weight: 800; color: var(--ink-mid)"
+                          >dias</span
+                        >
+                      </td>
+                      <td>
+                        <button
+                          class="admin-action"
+                          onclick="saveSetting('duracaoSuspensao')"
+                        >
+                          💾 Salvar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div>
+              <!-- Verificação de Motas -->
+              <div class="admin-table-wrap" style="margin-bottom: 16px">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">🔍 Verificação de Motas</div>
+                </div>
+                <div style="padding: 8px 0">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Verificação obrigatória de CPF
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Exigir documento CPF para aprovação
+                      </div>
+                    </div>
+                    <span class="pill-green" id="verificacaoCPFStatus"
+                      >✓ Ativo</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Verificação de antecedentes
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Consultar registros criminais
+                      </div>
+                    </div>
+                    <span class="pill-gray" id="verificacaoAntecedentesStatus"
+                      >○ Inativo</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Selfie com documento
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Exigir foto segurando documento
+                      </div>
+                    </div>
+                    <span class="pill-green" id="verificacaoSelfieStatus"
+                      >✓ Ativo</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Tempo máximo de análise
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Prazo para aprovar ou rejeitar
+                      </div>
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        class="admin-input"
+                        id="tempoAnalise"
+                        value="48"
+                        min="1"
+                        max="168"
+                        style="width: 60px"
+                      />
+                      <span
+                        style="
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          color: var(--ink-mid);
+                        "
+                        >h</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notificações -->
+              <div class="admin-table-wrap" style="margin-bottom: 16px">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">🔔 Notificações e Alertas</div>
+                </div>
+                <div style="padding: 8px 0">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        Push notifications
+                      </div>
+                    </div>
+                    <span class="pill-green">✓ Ativo</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        Email de confirmação
+                      </div>
+                    </div>
+                    <span class="pill-green">✓ Ativo</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        Alertas de reporte (admins)
+                      </div>
+                    </div>
+                    <span class="pill-green">✓ Ativo</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Backup e Manutenção -->
+              <div class="admin-table-wrap">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">💾 Backup e Manutenção</div>
+                </div>
+                <div
+                  style="
+                    padding: 12px 20px;
+                    background: #fef3c7;
+                    border: 1.5px solid #fde68a;
+                    border-radius: 12px;
+                    margin: 12px 20px;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    color: #92400e;
+                  "
+                >
+                  ⚠️ Configurações sensíveis. Alterações podem afetar a
+                  disponibilidade.
+                </div>
+                <div style="padding: 8px 0">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Backup automático diário
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Backup completo às 03:00
+                      </div>
+                    </div>
+                    <span class="pill-green">✓ Ativo</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Modo manutenção
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Desabilitar acesso de usuários
+                      </div>
+                    </div>
+                    <span class="pill-gray" id="modoManutencaoStatus"
+                      >○ Inativo</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 14px 20px;
+                    "
+                  >
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                          margin-bottom: 2px;
+                        "
+                      >
+                        Retenção de logs
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Tempo para manter logs
+                      </div>
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        class="admin-input"
+                        id="retencaoLogs"
+                        value="90"
+                        min="7"
+                        max="365"
+                        style="width: 60px"
+                      />
+                      <span
+                        style="
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          color: var(--ink-mid);
+                        "
+                        >dias</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ações Perigosas -->
+              <div class="admin-table-wrap" style="margin-top: 16px">
+                <div class="admin-table-header">
+                  <div class="admin-table-title" style="color: #dc2626">
+                    ⚠️ Zona Perigosa
+                  </div>
+                </div>
+                <div
+                  style="
+                    padding: 16px 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                  "
+                >
+                  <button
+                    class="admin-action reject"
+                    id="modoManutencaoBtn"
+                    onclick="toggleMaintenance()"
+                  >
+                    🔧 Ativar modo manutenção
+                  </button>
+                  <button class="admin-action reject" onclick="confirmReset()">
+                    🗑️ Resetar configurações
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-configuracoes.js"></script>
+  </body>
+</html>

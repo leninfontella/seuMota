@@ -1,0 +1,29 @@
+/* ─── STATS BAR ──────────────────────────────────── */
+.stats-bar {
+  background: var(--ink);
+  padding: 28px 6vw;
+  display: flex;
+  justify-content: center;
+  gap: clamp(30px, 6vw, 100px);
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  animation: fadeIn 1s ease both;
+}
+
+.stat-number {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  margin-top: 4px;
+}

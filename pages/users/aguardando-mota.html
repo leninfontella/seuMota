@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Aguardando Motas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <style>
+      /* ── LAYOUT ── */
+      .wait-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      @media (max-width: 1000px) {
+        .wait-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── PULSE RING HERO ── */
+      .pulse-hero {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 40px 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pulse-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 100%,
+          rgba(240, 123, 29, 0.05) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .pulse-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .pulse-ring {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid var(--orange);
+        opacity: 0;
+        animation: pulseRing 2.4s ease-out infinite;
+      }
+
+      .pulse-ring:nth-child(2) {
+        animation-delay: 0.8s;
+      }
+      .pulse-ring:nth-child(3) {
+        animation-delay: 1.6s;
+      }
+
+      @keyframes pulseRing {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
+
+      .pulse-center {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 8px 28px rgba(240, 123, 29, 0.35);
+      }
+
+      .pulse-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+
+      .pulse-sub {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-bottom: 24px;
+      }
+
+      /* ── COUNTER ── */
+      .counter-row {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        margin-bottom: 24px;
+      }
+
+      .counter-item {
+        text-align: center;
+      }
+
+      .counter-value {
+        font-family: "Fraunces", serif;
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: var(--orange);
+        line-height: 1;
+        transition: all 0.3s;
+      }
+
+      .counter-value.bump {
+        animation: counterBump 0.3s ease;
+      }
+
+      @keyframes counterBump {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.25);
+          color: var(--orange-dark);
+        }
+      }
+
+      .counter-label {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-top: 4px;
+      }
+
+      /* ── CHOOSE BUTTON ── */
+      .choose-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 32px;
+        border-radius: 50px;
+        background: var(--orange);
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 1rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+
+      .choose-btn:hover {
+        background: var(--orange-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(240, 123, 29, 0.3);
+      }
+      .choose-btn:disabled {
+        background: var(--sand);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .choose-btn-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .waiting-hint {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      /* ── OFFER FEED ── */
+      .feed-section {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .feed-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .feed-title {
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #22c55e;
+        animation: livePulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes livePulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      .offer-list {
+        max-height: 360px;
+        overflow-y: auto;
+      }
+
+      .offer-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--sand);
+        animation: slideInOffer 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+        transition: background 0.2s;
+      }
+
+      .offer-item:last-child {
+        border-bottom: none;
+      }
+      .offer-item:hover {
+        background: var(--cream);
+      }
+
+      @keyframes slideInOffer {
+        from {
+          opacity: 0;
+          transform: translateY(-12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .offer-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        position: relative;
+      }
+
+      .offer-online {
+        position: absolute;
+        bottom: 1px;
+        right: 1px;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #22c55e;
+        border: 2px solid var(--white);
+      }
+
+      .offer-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .offer-name {
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 3px;
+      }
+      .offer-rating {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .offer-rating .stars {
+        color: var(--orange);
+      }
+      .offer-time {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .offer-cats {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .offer-cat {
+        font-size: 0.64rem;
+        font-weight: 800;
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+        padding: 2px 7px;
+        border-radius: 50px;
+      }
+
+      .offer-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex-shrink: 0;
+      }
+
+      .offer-quick-view {
+        padding: 6px 12px;
+        border-radius: 50px;
+        background: var(--orange);
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+
+      .offer-quick-view:hover {
+        background: var(--orange-dark);
+      }
+
+      /* ── TASK SUMMARY CARD ── */
+      .task-summary {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 22px;
+        margin-bottom: 16px;
+      }
+
+      .task-summary-title {
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--ink-light);
+        margin-bottom: 14px;
+      }
+
+      .task-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--sand);
+        font-size: 0.83rem;
+      }
+
+      .task-detail-row:last-of-type {
+        border-bottom: none;
+      }
+      .task-detail-label {
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .task-detail-value {
+        font-weight: 800;
+        color: var(--ink);
+        text-align: right;
+        max-width: 60%;
+      }
+
+      /* ── TIMER ── */
+      .elapsed-timer {
+        text-align: center;
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 18px;
+        margin-bottom: 16px;
+      }
+
+      .elapsed-label {
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ink-light);
+        margin-bottom: 8px;
+      }
+
+      .elapsed-value {
+        font-family: "Fraunces", serif;
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: 2px;
+      }
+
+      /* ── ACTIONS ── */
+      .task-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .action-btn {
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+
+      .action-btn:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      .action-btn-danger {
+        color: #dc2626;
+        border-color: #fecaca;
+      }
+
+      .action-btn-danger:hover {
+        background: #fef2f2;
+        border-color: #fca5a5;
+        color: #dc2626;
+      }
+
+      /* ── EMPTY FEED ── */
+      .feed-empty {
+        padding: 40px 20px;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink-light);
+      }
+
+      /* ── NOTIFICATION TOAST ── */
+      .offer-toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 16px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        z-index: 100;
+        max-width: 300px;
+      }
+
+      .offer-toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .toast-avatar {
+        font-size: 1.6rem;
+      }
+
+      .toast-name {
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+      .toast-text {
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="aguardando-mota.html" class="nav-item active"
+            ><span class="nav-icon">⏳</span> Aguardando Motas<span
+              class="nav-badge"
+              id="sidebarCount"
+              >0</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Favoritos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="chat.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Aguardando Motas</h2>
+              <p>Sua tarefa está visível para os Motas da sua região</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔<span class="dot"></span></button>
+            <div class="user-avatar">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="wait-layout">
+            <!-- ── LEFT COLUMN ── -->
+            <div>
+              <!-- Pulse hero -->
+              <div class="pulse-hero">
+                <div class="pulse-wrap">
+                  <div class="pulse-ring"></div>
+                  <div class="pulse-ring"></div>
+                  <div class="pulse-ring"></div>
+                  <div class="pulse-center">📡</div>
+                </div>
+                <div class="pulse-title">Procurando Motas próximos…</div>
+                <p class="pulse-sub">
+                  Sua tarefa foi publicada e está sendo exibida para Motas a até
+                  2km de você
+                </p>
+
+                <div class="counter-row">
+                  <div class="counter-item">
+                    <div class="counter-value" id="offerCount">0</div>
+                    <div class="counter-label">Motas interessados</div>
+                  </div>
+                  <div class="counter-item">
+                    <div class="counter-value" id="viewCount">1</div>
+                    <div class="counter-label">Visualizações</div>
+                  </div>
+                  <div class="counter-item">
+                    <div class="counter-value" id="nearbyCount">4</div>
+                    <div class="counter-label">Motas próximos</div>
+                  </div>
+                </div>
+
+                <div class="choose-btn-wrap">
+                  <button
+                    class="choose-btn"
+                    id="chooseBtn"
+                    onclick="window.location.href = 'escolher-mota.html'"
+                    disabled
+                  >
+                    👀 Escolher um Mota
+                  </button>
+                  <div class="waiting-hint" id="chooseHint">
+                    Aguardando pelo menos 1 Mota aceitar…
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live feed -->
+              <div class="feed-section">
+                <div class="feed-header">
+                  <div class="feed-title">
+                    <div class="live-dot"></div>
+                    Feed de ofertas em tempo real
+                  </div>
+                  <span
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 700;
+                      color: var(--ink-light);
+                    "
+                    id="feedTimestamp"
+                    >Agora</span
+                  >
+                </div>
+                <div class="offer-list" id="offerList">
+                  <div class="feed-empty" id="feedEmpty">
+                    <div style="font-size: 2rem; margin-bottom: 8px">📡</div>
+                    Enviando para Motas próximos…<br />As ofertas aparecerão
+                    aqui em instantes.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── RIGHT COLUMN ── -->
+            <div>
+              <!-- Elapsed timer -->
+              <div class="elapsed-timer">
+                <div class="elapsed-label">⏱️ Tarefa publicada há</div>
+                <div class="elapsed-value" id="elapsedTimer">00:00</div>
+              </div>
+
+              <!-- Task summary -->
+              <div class="task-summary">
+                <div class="task-summary-title">📋 Resumo da tarefa</div>
+                <div class="task-detail-row">
+                  <span class="task-detail-label">Categoria</span>
+                  <span class="task-detail-value">🛒 Compras no mercado</span>
+                </div>
+                <div class="task-detail-row">
+                  <span class="task-detail-label">Endereço</span>
+                  <span class="task-detail-value">Rua Augusta, 1200</span>
+                </div>
+                <div class="task-detail-row">
+                  <span class="task-detail-label">Horário</span>
+                  <span class="task-detail-value">Hoje, às 15h00</span>
+                </div>
+                <div class="task-detail-row">
+                  <span class="task-detail-label">Valor ofertado</span>
+                  <span
+                    class="task-detail-value"
+                    style="color: var(--orange); font-size: 0.95rem"
+                    >R$ 25,00</span
+                  >
+                </div>
+                <div class="task-detail-row">
+                  <span class="task-detail-label">Validade</span>
+                  <span class="task-detail-value" id="expiryTime"
+                    >Expira em <strong id="expiryCount">45</strong> min</span
+                  >
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="task-actions">
+                <a href="postar-tarefa.html" class="action-btn"
+                  >✏️ Editar tarefa</a
+                >
+                <button
+                  class="action-btn action-btn-danger"
+                  onclick="confirmCancel()"
+                >
+                  🗑️ Cancelar tarefa
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="offer-toast" id="offerToast">
+      <div class="toast-avatar" id="toastAvatar">🧑</div>
+      <div class="toast-body">
+        <div class="toast-name" id="toastName">—</div>
+        <div class="toast-text">aceitou sua tarefa! ⭐ 4.9</div>
+      </div>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/aguardando-mota.js"></script>
+  </body>
+</html>

@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Histórico de Tarefas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <style>
+      /* ── STAT SUMMARY CARDS ── */
+      .stat-summary-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        transition: all 0.2s;
+      }
+
+      .stat-summary-card:hover {
+        border-color: var(--orange);
+        transform: translateY(-2px);
+      }
+
+      .stat-summary-card .stat-icon {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+      }
+
+      .stat-summary-card .stat-value {
+        font-family: "Fraunces", serif;
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .stat-summary-card .stat-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      /* ── FILTER CHIPS ── */
+      .filter-chip {
+        padding: 8px 16px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .filter-chip:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      .filter-chip.active {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: white;
+      }
+
+      /* ── HISTORY MONTH DIVIDER ── */
+      .history-month-divider {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin: 28px 0 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--sand);
+      }
+
+      /* ── HISTORY ITEMS ── */
+      .history-item {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        transition: all 0.2s;
+      }
+
+      .history-item:hover {
+        border-color: var(--orange);
+        box-shadow: 0 4px 12px rgba(240, 123, 29, 0.08);
+      }
+
+      .history-item-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--orange-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+
+      .history-item-body {
+        flex: 1;
+      }
+
+      .history-item-title {
+        font-size: 0.92rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+
+      .history-item-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        flex-wrap: wrap;
+      }
+
+      .history-category-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 50px;
+        background: #ede9fe;
+        color: #5b21b6;
+        font-size: 0.7rem;
+        font-weight: 900;
+      }
+
+      .status-done {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 900px) {
+        div[style*="grid-template-columns:repeat(4,1fr)"] {
+          grid-template-columns: repeat(2, 1fr) !important;
+        }
+      }
+
+      @media (max-width: 600px) {
+        div[style*="grid-template-columns:repeat(4,1fr)"] {
+          grid-template-columns: 1fr !important;
+        }
+
+        .history-item {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Painel</a
+          >
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Ganhos</a
+          >
+          <a href="historico-mota.html" class="nav-item active"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="avaliacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Avaliações</a
+          >
+          <a href="editar-perfil-mota.html" class="nav-item"
+            ><span class="nav-icon">✏️</span> Editar perfil</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="notificacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="chat-mota.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="suporte.html" class="nav-item"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Histórico de tarefas</h2>
+              <p>Todas as tarefas que você realizou</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Stats strip -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 14px;
+              margin-bottom: 24px;
+            "
+          >
+            <div class="stat-summary-card">
+              <div class="stat-icon">✅</div>
+              <div class="stat-value">67</div>
+              <div class="stat-label">Concluídas</div>
+            </div>
+            <div class="stat-summary-card">
+              <div class="stat-icon">💰</div>
+              <div class="stat-value" style="font-size: 1.2rem">R$ 1.843</div>
+              <div class="stat-label">Total ganho</div>
+            </div>
+            <div class="stat-summary-card">
+              <div class="stat-icon">⭐</div>
+              <div class="stat-value">4.9</div>
+              <div class="stat-label">Nota média</div>
+            </div>
+            <div class="stat-summary-card">
+              <div class="stat-icon">🔁</div>
+              <div class="stat-value">38%</div>
+              <div class="stat-label">Clientes fixos</div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              margin-bottom: 16px;
+              flex-wrap: wrap;
+              align-items: center;
+            "
+          >
+            <button class="filter-chip active" data-filter="all">Todas</button>
+            <button class="filter-chip" data-filter="concluida">
+              Concluídas
+            </button>
+            <button class="filter-chip" data-filter="cancelada">
+              Canceladas
+            </button>
+            <button class="filter-chip" data-filter="mercado">
+              🛒 Mercado
+            </button>
+            <button class="filter-chip" data-filter="banco">🏦 Banco</button>
+            <button class="filter-chip" data-filter="farmacia">
+              💊 Farmácia
+            </button>
+            <div style="margin-left: auto; position: relative">
+              <span
+                style="
+                  position: absolute;
+                  left: 11px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  pointer-events: none;
+                  font-size: 0.85rem;
+                "
+                >🔍</span
+              >
+              <input
+                type="text"
+                id="motaHistSearch"
+                placeholder="Buscar tarefa ou cliente..."
+                style="
+                  border: 1.5px solid var(--sand);
+                  border-radius: 50px;
+                  padding: 8px 16px 8px 34px;
+                  font-family: &quot;Nunito&quot;, sans-serif;
+                  font-size: 0.82rem;
+                  font-weight: 600;
+                  color: var(--ink);
+                  outline: none;
+                  width: 230px;
+                  transition: border-color 0.2s;
+                "
+                onfocus="this.style.borderColor = 'var(--orange)'"
+                onblur="this.style.borderColor = 'var(--sand)'"
+              />
+            </div>
+          </div>
+
+          <!-- Task list -->
+          <div id="motaHistList">
+            <div class="history-month-divider">Fevereiro 2026</div>
+
+            <div
+              class="history-item"
+              data-cat="mercado"
+              data-status="concluida"
+              data-title="Compras no mercado Ana Paula"
+            >
+              <div class="history-item-icon">🛒</div>
+              <div class="history-item-body">
+                <div class="history-item-title">
+                  Compras no mercado · lista pequena
+                </div>
+                <div class="history-item-meta">
+                  <span>👩 Ana Paula</span>
+                  <span>📅 13 fev · 14h32</span>
+                  <span class="history-category-badge">Mercado</span>
+                </div>
+                <div class="history-item-meta" style="margin-top: 4px">
+                  <span>⏱️ 45 min</span>
+                  <span>📍 0.8km percorridos</span>
+                  <span style="color: var(--orange); font-weight: 800"
+                    >★ 5,0 recebida</span
+                  >
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: #16a34a;
+                    margin-bottom: 6px;
+                  "
+                >
+                  +R$ 25,00
+                </div>
+                <span class="status-badge status-done">Concluída</span>
+              </div>
+            </div>
+
+            <div
+              class="history-item"
+              data-cat="banco"
+              data-status="concluida"
+              data-title="Pagar boleto Roberto"
+            >
+              <div class="history-item-icon">🏦</div>
+              <div class="history-item-body">
+                <div class="history-item-title">Pagar boleto na lotérica</div>
+                <div class="history-item-meta">
+                  <span>👴 Roberto Santos</span>
+                  <span>📅 11 fev · 10h18</span>
+                  <span class="history-category-badge">Banco</span>
+                </div>
+                <div class="history-item-meta" style="margin-top: 4px">
+                  <span>⏱️ 28 min</span>
+                  <span>📍 1.2km percorridos</span>
+                  <span style="color: var(--orange); font-weight: 800"
+                    >★ 4,9 recebida</span
+                  >
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: #16a34a;
+                    margin-bottom: 6px;
+                  "
+                >
+                  +R$ 15,00
+                </div>
+                <span class="status-badge status-done">Concluída</span>
+              </div>
+            </div>
+
+            <div
+              class="history-item"
+              data-cat="farmacia"
+              data-status="concluida"
+              data-title="Buscar remedio Beatriz farmacia"
+            >
+              <div class="history-item-icon">💊</div>
+              <div class="history-item-body">
+                <div class="history-item-title">Buscar remédio na farmácia</div>
+                <div class="history-item-meta">
+                  <span>👩 Beatriz Lima</span>
+                  <span>📅 09 fev · 16h05</span>
+                  <span class="history-category-badge">Farmácia</span>
+                </div>
+                <div class="history-item-meta" style="margin-top: 4px">
+                  <span>⏱️ 33 min</span>
+                  <span>📍 0.5km percorridos</span>
+                  <span style="color: var(--orange); font-weight: 800"
+                    >★ 5,0 recebida</span
+                  >
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: #16a34a;
+                    margin-bottom: 6px;
+                  "
+                >
+                  +R$ 18,00
+                </div>
+                <span class="status-badge status-done">Concluída</span>
+              </div>
+            </div>
+
+            <div
+              class="history-item"
+              data-cat="banco"
+              data-status="cancelada"
+              data-title="Pagar conta agua Thiago"
+            >
+              <div class="history-item-icon" style="opacity: 0.5">🏦</div>
+              <div class="history-item-body">
+                <div class="history-item-title" style="color: var(--ink-light)">
+                  Pagar conta de água
+                </div>
+                <div class="history-item-meta">
+                  <span>👨 Thiago Alves</span>
+                  <span>📅 07 fev</span>
+                  <span class="history-category-badge">Banco</span>
+                </div>
+                <div
+                  class="history-item-meta"
+                  style="margin-top: 4px; color: var(--ink-light)"
+                >
+                  Cancelado pelo cliente antes do início
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: var(--ink-light);
+                    margin-bottom: 6px;
+                    text-decoration: line-through;
+                  "
+                >
+                  R$ 12,00
+                </div>
+                <span
+                  class="status-badge"
+                  style="background: var(--sand); color: var(--ink-mid)"
+                  >Cancelada</span
+                >
+              </div>
+            </div>
+
+            <div class="history-month-divider">Janeiro 2026</div>
+
+            <div
+              class="history-item"
+              data-cat="mercado"
+              data-status="concluida"
+              data-title="Compras supermercado Ana Paula"
+            >
+              <div class="history-item-icon">🛒</div>
+              <div class="history-item-body">
+                <div class="history-item-title">
+                  Compras supermercado · lista grande
+                </div>
+                <div class="history-item-meta">
+                  <span>👩 Ana Paula</span>
+                  <span>📅 29 jan · 11h40</span>
+                  <span class="history-category-badge">Mercado</span>
+                </div>
+                <div class="history-item-meta" style="margin-top: 4px">
+                  <span>⏱️ 68 min</span>
+                  <span>📍 1.1km percorridos</span>
+                  <span style="color: var(--orange); font-weight: 800"
+                    >★ 5,0 recebida</span
+                  >
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: #16a34a;
+                    margin-bottom: 6px;
+                  "
+                >
+                  +R$ 35,00
+                </div>
+                <span class="status-badge status-done">Concluída</span>
+              </div>
+            </div>
+
+            <div
+              class="history-item"
+              data-cat="farmacia"
+              data-status="concluida"
+              data-title="Farmacia receita Carlos"
+            >
+              <div class="history-item-icon">💊</div>
+              <div class="history-item-body">
+                <div class="history-item-title">Buscar receita e remédio</div>
+                <div class="history-item-meta">
+                  <span>👴 Carlos Neves</span>
+                  <span>📅 25 jan · 09h15</span>
+                  <span class="history-category-badge">Farmácia</span>
+                </div>
+                <div class="history-item-meta" style="margin-top: 4px">
+                  <span>⏱️ 41 min</span>
+                  <span>📍 0.9km percorridos</span>
+                  <span style="color: var(--orange); font-weight: 800"
+                    >★ 4,8 recebida</span
+                  >
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0">
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: #16a34a;
+                    margin-bottom: 6px;
+                  "
+                >
+                  +R$ 20,00
+                </div>
+                <span class="status-badge status-done">Concluída</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="motaHistEmpty"
+            style="display: none; text-align: center; padding: 50px 0"
+          >
+            <div style="font-size: 2.5rem; margin-bottom: 12px">📋</div>
+            <div
+              style="
+                font-family: &quot;Fraunces&quot;, serif;
+                font-size: 1.1rem;
+                font-weight: 900;
+                color: var(--ink);
+                margin-bottom: 6px;
+              "
+            >
+              Nenhuma tarefa encontrada
+            </div>
+            <div
+              style="
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: var(--ink-light);
+              "
+            >
+              Tente outros filtros
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/historico-mota.js"></script>
+  </body>
+</html>

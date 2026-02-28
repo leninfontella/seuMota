@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Suporte</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="suporte.html" class="nav-item active"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Central de ajuda</h2>
+              <p>Como podemos te ajudar?</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Search hero -->
+          <div class="support-search-hero">
+            <div class="support-search-title">Central de Ajuda</div>
+            <div class="support-search-sub">
+              Encontre respostas rápidas ou fale com a gente
+            </div>
+            <div class="support-search-box">
+              <span class="support-search-icon">🔍</span>
+              <input
+                type="text"
+                id="faqSearch"
+                placeholder="Ex: como cancelar uma tarefa, pagamento, cadastro..."
+              />
+            </div>
+          </div>
+
+          <div class="suporte-layout">
+            <!-- LEFT -->
+            <div>
+              <!-- Quick categories -->
+              <div class="support-cats" id="supportCats">
+                <button class="support-cat-btn active" data-cat="all">
+                  <div class="support-cat-icon">📚</div>
+                  <div class="support-cat-label">Todas</div>
+                  <div class="support-cat-count">18 artigos</div>
+                </button>
+                <button class="support-cat-btn" data-cat="tarefas">
+                  <div class="support-cat-icon">📋</div>
+                  <div class="support-cat-label">Tarefas</div>
+                  <div class="support-cat-count">6 artigos</div>
+                </button>
+                <button class="support-cat-btn" data-cat="pagamentos">
+                  <div class="support-cat-icon">💳</div>
+                  <div class="support-cat-label">Pagamentos</div>
+                  <div class="support-cat-count">4 artigos</div>
+                </button>
+                <button class="support-cat-btn" data-cat="conta">
+                  <div class="support-cat-icon">👤</div>
+                  <div class="support-cat-label">Conta</div>
+                  <div class="support-cat-count">5 artigos</div>
+                </button>
+                <button class="support-cat-btn" data-cat="motas">
+                  <div class="support-cat-icon">🏍️</div>
+                  <div class="support-cat-label">Motas</div>
+                  <div class="support-cat-count">3 artigos</div>
+                </button>
+              </div>
+
+              <!-- FAQ -->
+              <div
+                id="faqNotFound"
+                style="display: none; text-align: center; padding: 40px 20px"
+              >
+                <div style="font-size: 2.5rem; margin-bottom: 12px">🔍</div>
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 6px;
+                  "
+                >
+                  Não encontramos resultados
+                </div>
+                <div
+                  style="
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                  "
+                >
+                  Tente outros termos ou abra um ticket abaixo
+                </div>
+              </div>
+
+              <div class="faq-list" id="faqList">
+                <div
+                  class="faq-item"
+                  data-cat="tarefas"
+                  data-q="como postar tarefa criar solicitar"
+                >
+                  <div class="faq-question">
+                    Como postar uma tarefa? <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    No painel principal, clique em "Postar tarefa", escolha a
+                    categoria (mercado, banco, farmácia etc.), preencha os
+                    detalhes e defina o valor. Sua tarefa ficará visível para os
+                    Motas da sua região. Assim que um Mota aceitar, você será
+                    notificado para escolher entre os interessados.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="tarefas"
+                  data-q="cancelar tarefa desistir"
+                >
+                  <div class="faq-question">
+                    Posso cancelar uma tarefa depois de postada?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Sim! Você pode cancelar a tarefa a qualquer momento antes do
+                    Mota iniciar a execução sem custo. Se o Mota já estiver a
+                    caminho, uma taxa de cancelamento de R$ 5 pode ser aplicada
+                    para compensar o deslocamento. Após o início da execução,
+                    não é possível cancelar sem custo.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="tarefas"
+                  data-q="mota nao apareceu falta aceitou"
+                >
+                  <div class="faq-question">
+                    O Mota aceitou mas não apareceu. O que fazer?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Primeiro, tente entrar em contato pelo chat ou telefone
+                    disponível na tarefa em andamento. Se não conseguir contato,
+                    use o botão "Reportar problema" na tela de acompanhamento.
+                    Nossa equipe investigará e você não será cobrado por tarefas
+                    não realizadas.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="tarefas"
+                  data-q="repetir tarefa recorrente agendada"
+                >
+                  <div class="faq-question">
+                    Posso criar tarefas recorrentes?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Ainda não temos tarefas recorrentes automáticas, mas você
+                    pode usar o botão "Repetir tarefa" no histórico para recriar
+                    tarefas semelhantes rapidamente. Estamos desenvolvendo a
+                    funcionalidade de agendamento recorrente — em breve
+                    disponível!
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="pagamentos"
+                  data-q="pagamento cobrado debito credito"
+                >
+                  <div class="faq-question">
+                    Quando sou cobrado? <span class="faq-chavron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    O valor é reservado no seu cartão ou saldo quando você
+                    confirma a escolha de um Mota. A cobrança efetiva só ocorre
+                    quando o Mota marca a tarefa como concluída e você confirma
+                    a conclusão. Se a tarefa for cancelada, o valor é estornado
+                    em até 5 dias úteis.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="pagamentos"
+                  data-q="pix boleto cartao forma pagamento"
+                >
+                  <div class="faq-question">
+                    Quais formas de pagamento são aceitas?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Aceitamos cartões de crédito e débito (Visa, Mastercard,
+                    Elo, Amex), Pix e saldo seuMota (créditos de indicação). Em
+                    breve: Boleto bancário e carteiras digitais (PicPay, Mercado
+                    Pago).
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="pagamentos"
+                  data-q="reembolso estorno devolucao"
+                >
+                  <div class="faq-question">
+                    Como solicitar reembolso? <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Acesse o histórico de tarefas, selecione a tarefa em questão
+                    e toque em "Reportar problema". Descreva o motivo e nossa
+                    equipe analisará em até 48h. Reembolsos aprovados são
+                    processados em 5–7 dias úteis no seu cartão ou
+                    instantaneamente via Pix.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="conta"
+                  data-q="cadastro criar conta registrar"
+                >
+                  <div class="faq-question">
+                    Como criar uma conta? <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Clique em "Criar conta" na tela inicial. Você pode se
+                    cadastrar com e-mail e senha, ou usar Google/Apple. Informe
+                    seu nome, telefone e endereço principal. O processo leva
+                    menos de 2 minutos!
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="conta"
+                  data-q="senha esqueci redefinir trocar"
+                >
+                  <div class="faq-question">
+                    Esqueci minha senha. Como recuperar?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Na tela de login, clique em "Esqueceu a senha?". Informe seu
+                    e-mail cadastrado e enviaremos um código de 6 dígitos. Use o
+                    código para criar uma nova senha. O código expira em 10
+                    minutos por segurança.
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="motas"
+                  data-q="virar mota trabalhar prestador cadastrar"
+                >
+                  <div class="faq-question">
+                    Como me cadastrar como Mota?
+                    <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Acesse "Quero ser Mota" na página inicial ou no menu. Você
+                    precisará: CPF válido, foto de perfil, comprovante de
+                    endereço e dados bancários para recebimento. O processo de
+                    verificação leva até 24h. Após aprovado, você já pode
+                    aceitar tarefas!
+                  </div>
+                </div>
+
+                <div
+                  class="faq-item"
+                  data-cat="motas"
+                  data-q="mota confiavel seguro verificado"
+                >
+                  <div class="faq-question">
+                    Os Motas são verificados? <span class="faq-chevron">▼</span>
+                  </div>
+                  <div class="faq-answer">
+                    Sim! Todos os Motas passam por verificação de identidade
+                    (CPF), análise de antecedentes criminais e validação de
+                    endereço. Além disso, o sistema de avaliações da comunidade
+                    garante que apenas Motas com bom histórico permaneçam ativos
+                    na plataforma.
+                  </div>
+                </div>
+              </div>
+              <!-- /faqList -->
+
+              <!-- Contact form -->
+              <div class="section-box" style="margin-top: 24px">
+                <div class="section-box-title">
+                  📨 Não achou o que procurava?
+                </div>
+                <div id="contactForm">
+                  <div class="form-group">
+                    <label>Assunto</label>
+                    <select
+                      style="
+                        width: 100%;
+                        border: 1.5px solid var(--sand);
+                        border-radius: 12px;
+                        padding: 12px 14px;
+                        font-family: &quot;Nunito&quot;, sans-serif;
+                        font-size: 0.88rem;
+                        font-weight: 700;
+                        color: var(--ink);
+                        background: var(--cream);
+                        outline: none;
+                      "
+                      id="ticketSubject"
+                    >
+                      <option>Problema com tarefa</option>
+                      <option>Pagamento ou cobrança</option>
+                      <option>Conta e acesso</option>
+                      <option>Sugestão de melhoria</option>
+                      <option>Problema com Mota</option>
+                      <option>Outro</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Descreva seu problema</label>
+                    <div class="input-wrap">
+                      <span
+                        class="input-icon"
+                        style="top: 16px; transform: none"
+                        >💬</span
+                      >
+                      <textarea
+                        id="ticketMsg"
+                        style="padding-left: 42px"
+                        placeholder="Quanto mais detalhes, mais rápido podemos te ajudar..."
+                      ></textarea>
+                    </div>
+                  </div>
+                  <button
+                    class="btn-submit"
+                    id="sendTicketBtn"
+                    style="
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      border: none;
+                      cursor: pointer;
+                      padding: 14px 28px;
+                      border-radius: 50px;
+                      font-size: 0.92rem;
+                    "
+                  >
+                    Enviar para suporte →
+                  </button>
+                </div>
+                <div
+                  id="contactSuccess"
+                  style="display: none; text-align: center; padding: 24px 0"
+                >
+                  <div style="font-size: 2.5rem; margin-bottom: 12px">✅</div>
+                  <div
+                    style="
+                      font-family: &quot;Fraunces&quot;, serif;
+                      font-size: 1.1rem;
+                      font-weight: 900;
+                      color: var(--ink);
+                      margin-bottom: 6px;
+                    "
+                  >
+                    Ticket aberto!
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.85rem;
+                      font-weight: 600;
+                      color: var(--ink-light);
+                    "
+                  >
+                    Respondemos em até 24h. Você receberá um e-mail de
+                    confirmação.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT sidebar -->
+            <div>
+              <!-- Contact channels -->
+              <div class="section-box" style="margin-bottom: 16px">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 16px;
+                  "
+                >
+                  Fale conosco
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <a
+                    href="#"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 14px 16px;
+                      border-radius: 12px;
+                      border: 1.5px solid var(--sand);
+                      background: var(--white);
+                      text-decoration: none;
+                      transition: all 0.2s;
+                    "
+                    onmouseover="this.style.borderColor = 'var(--orange)'"
+                    onmouseout="this.style.borderColor = 'var(--sand)'"
+                  >
+                    <span style="font-size: 1.4rem">💬</span>
+                    <div>
+                      <div
+                        style="
+                          font-size: 0.88rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        Chat ao vivo
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: #22c55e;
+                        "
+                      >
+                        ● Disponível agora
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="https://wa.me/5511999999999"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 14px 16px;
+                      border-radius: 12px;
+                      border: 1.5px solid var(--sand);
+                      background: var(--white);
+                      text-decoration: none;
+                      transition: all 0.2s;
+                    "
+                    onmouseover="this.style.borderColor = '#22C55E'"
+                    onmouseout="this.style.borderColor = 'var(--sand)'"
+                  >
+                    <span style="font-size: 1.4rem">📱</span>
+                    <div>
+                      <div
+                        style="
+                          font-size: 0.88rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        WhatsApp
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        Resp. em até 2h
+                      </div>
+                    </div>
+                  </a>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 14px 16px;
+                      border-radius: 12px;
+                      border: 1.5px solid var(--sand);
+                      background: var(--white);
+                    "
+                  >
+                    <span style="font-size: 1.4rem">✉️</span>
+                    <div>
+                      <div
+                        style="
+                          font-size: 0.88rem;
+                          font-weight: 800;
+                          color: var(--ink);
+                        "
+                      >
+                        E-mail
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 600;
+                          color: var(--ink-light);
+                        "
+                      >
+                        suporte&#64;seumota.com.br
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Horário -->
+              <div class="section-box" style="margin-bottom: 16px">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Horário de atendimento
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    color: var(--ink-mid);
+                  "
+                >
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Seg – Sex</span
+                    ><span style="color: var(--ink)">08h – 22h</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Sábado</span
+                    ><span style="color: var(--ink)">09h – 18h</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span>Domingo</span
+                    ><span style="color: var(--ink-light)">Somente app</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tickets abertos -->
+              <div class="section-box">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Seus tickets
+                </div>
+
+                <div class="ticket-item">
+                  <div
+                    class="ticket-icon-wrap"
+                    style="background: var(--orange-soft)"
+                  >
+                    📋
+                  </div>
+                  <div class="ticket-info">
+                    <div class="ticket-title">Problema com pagamento #1042</div>
+                    <div class="ticket-preview">
+                      Cobrança duplicada na tarefa de compras
+                    </div>
+                    <div class="ticket-meta">
+                      🕐 Há 2 dias · <span class="pill-orange">Em análise</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ticket-item">
+                  <div class="ticket-icon-wrap" style="background: #dcfce7">
+                    ✅
+                  </div>
+                  <div class="ticket-info">
+                    <div class="ticket-title">Dúvida sobre cadastro #0987</div>
+                    <div class="ticket-preview">
+                      Como alterar meu endereço principal
+                    </div>
+                    <div class="ticket-meta">
+                      🕐 Há 8 dias · <span class="pill-green">Resolvido</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/suporte.js"></script>
+  </body>
+</html>

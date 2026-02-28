@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Meus ganhos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .period-tabs {
+        display: flex;
+        gap: 4px;
+        background: var(--sand);
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 24px;
+        width: fit-content;
+      }
+      .period-tab {
+        padding: 8px 20px;
+        border-radius: 9px;
+        border: none;
+        background: transparent;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .period-tab.active {
+        background: var(--white);
+        color: var(--ink);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .chart-area {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+      .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .chart-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .chart-subtitle {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-light);
+      }
+      /* Simple bar chart */
+      .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        height: 120px;
+      }
+      .bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        height: 100%;
+        justify-content: flex-end;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 6px 6px 0 0;
+        background: var(--sand);
+        transition: background 0.2s;
+        min-height: 4px;
+      }
+      .bar:hover {
+        background: var(--orange);
+      }
+      .bar.today {
+        background: #22c55e;
+      }
+      .bar-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .bar-val {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      /* Withdraw modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 300;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal-backdrop.open {
+        display: flex;
+      }
+      .modal {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 32px 28px;
+        max-width: 420px;
+        width: 100%;
+        animation: slideUp 0.3s ease both;
+      }
+      .modal-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      .modal-desc {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+      .modal-balance {
+        background: #f0fdf4;
+        border: 1.5px solid #bbf7d0;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .modal-balance-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #16a34a;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+      .modal-balance-value {
+        font-family: "Fraunces", serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #16a34a;
+      }
+      .modal-input-label {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 7px;
+        display: block;
+      }
+      .modal-input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid var(--sand);
+        border-radius: 12px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink);
+        background: var(--cream);
+        outline: none;
+        margin-bottom: 20px;
+      }
+      .modal-input:focus {
+        border-color: #22c55e;
+      }
+      .modal-btn-confirm {
+        width: 100%;
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 14px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+      }
+      .modal-btn-confirm:hover {
+        background: #16a34a;
+      }
+      .modal-btn-cancel {
+        width: 100%;
+        background: transparent;
+        color: var(--ink-mid);
+        border: 1.5px solid var(--sand);
+        border-radius: 50px;
+        padding: 13px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.88rem;
+        cursor: pointer;
+      }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      @media (max-width: 1000px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .earnings-header {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="online-toggle-wrap">
+          <div class="online-toggle-info">
+            <div class="online-toggle-label">Status</div>
+            <div class="online-toggle-status is-online">
+              <div class="online-dot is-online"></div>
+              Online
+            </div>
+          </div>
+          <label class="toggle-switch"
+            ><input type="checkbox" checked />
+            <div class="toggle-track"></div
+          ></label>
+        </div>
+        <div class="earning-pill">
+          <div>
+            <div
+              style="
+                font-size: 0.68rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                color: rgba(255, 255, 255, 0.35);
+              "
+            >
+              Disponível
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: rgba(255, 255, 255, 0.4);
+              "
+            >
+              Para saque
+            </div>
+          </div>
+          <div class="earning-pill-value">R$ 148</div>
+        </div>
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="detalhe-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas ativas</a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">✅</span> Histórico</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Financeiro</div>
+          <a href="ganhos-mota.html" class="nav-item active"
+            ><span class="nav-icon">💰</span> Meus ganhos</a
+          >
+          <a href="dados-bancarios.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Dados bancários</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-publico-mota.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Meus ganhos</h2>
+              <p>Extrato e saques</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar" style="cursor: pointer">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Period tabs -->
+          <div class="period-tabs">
+            <button class="period-tab" data-period="week">Esta semana</button>
+            <button class="period-tab active" data-period="month">
+              Este mês
+            </button>
+            <button class="period-tab" data-period="all">Geral</button>
+          </div>
+
+          <!-- Summary cards -->
+          <div class="earnings-header">
+            <div class="earnings-card highlight">
+              <div class="earnings-card-label">💳 Disponível para saque</div>
+              <div class="earnings-card-value">R$ 148</div>
+              <div class="earnings-card-sub">Última atualização: agora</div>
+              <button class="withdraw-btn" id="withdrawBtn">
+                💸 Solicitar saque
+              </button>
+            </div>
+            <div class="earnings-card">
+              <div class="earnings-card-label">📅 Ganho no período</div>
+              <div class="earnings-card-value" id="periodTotal">R$ 284</div>
+              <div class="earnings-card-sub" id="periodLabel">
+                Fevereiro 2026 · 12 tarefas
+              </div>
+            </div>
+            <div class="earnings-card">
+              <div class="earnings-card-label">🏆 Total acumulado</div>
+              <div class="earnings-card-value">R$ 1.240</div>
+              <div class="earnings-card-sub">Desde mai/2025 · 67 tarefas</div>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <!-- LEFT: chart + transactions -->
+            <div>
+              <!-- Bar chart -->
+              <div class="chart-area">
+                <div class="chart-header">
+                  <div>
+                    <div class="chart-title">Ganhos por dia</div>
+                    <div class="chart-subtitle" id="chartSubtitle">
+                      Fevereiro 2026
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      font-family: &quot;Fraunces&quot;, serif;
+                      font-size: 1.2rem;
+                      font-weight: 900;
+                      color: #16a34a;
+                    "
+                  >
+                    R$ 284
+                  </div>
+                </div>
+                <div class="bar-chart" id="barChart">
+                  <!-- Rendered by JS -->
+                </div>
+              </div>
+
+              <!-- Transactions -->
+              <div class="card" style="padding: 0; overflow: hidden">
+                <div
+                  style="
+                    padding: 18px 20px;
+                    border-bottom: 1px solid var(--sand);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 0.88rem;
+                      font-weight: 800;
+                      color: var(--ink);
+                    "
+                  >
+                    Transações
+                  </div>
+                  <select
+                    style="
+                      border: 1.5px solid var(--sand);
+                      border-radius: 8px;
+                      padding: 5px 10px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-size: 0.78rem;
+                      font-weight: 700;
+                      color: var(--ink-mid);
+                      background: var(--white);
+                      outline: none;
+                      cursor: pointer;
+                    "
+                  >
+                    <option>Todos</option>
+                    <option>Recebimentos</option>
+                    <option>Saques</option>
+                  </select>
+                </div>
+                <div class="tx-list" id="txList">
+                  <div class="tx-item">
+                    <div class="tx-icon in">💰</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Compras no mercado</div>
+                      <div class="tx-date">12 fev 2026 · Ana Paula</div>
+                    </div>
+                    <div class="tx-amount in">+R$ 25</div>
+                  </div>
+                  <div class="tx-item">
+                    <div class="tx-icon in">💰</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Pagar boleto na lotérica</div>
+                      <div class="tx-date">12 fev 2026 · Carlos M.</div>
+                    </div>
+                    <div class="tx-amount in">+R$ 15</div>
+                  </div>
+                  <div class="tx-item">
+                    <div class="tx-icon out">🏦</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Saque — Pix (***1234)</div>
+                      <div class="tx-date">10 fev 2026</div>
+                    </div>
+                    <div class="tx-amount out">-R$ 120</div>
+                  </div>
+                  <div class="tx-item">
+                    <div class="tx-icon in">💰</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Buscar roupa na lavanderia</div>
+                      <div class="tx-date">10 fev 2026 · Fernanda L.</div>
+                    </div>
+                    <div class="tx-amount in">+R$ 20</div>
+                  </div>
+                  <div class="tx-item">
+                    <div class="tx-icon in">💰</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Levar lixo e reciclagem</div>
+                      <div class="tx-date">08 fev 2026 · Rodrigo S.</div>
+                    </div>
+                    <div class="tx-amount in">+R$ 8</div>
+                  </div>
+                  <div class="tx-item">
+                    <div class="tx-icon in">💰</div>
+                    <div class="tx-info">
+                      <div class="tx-title">Buscar remédio na farmácia</div>
+                      <div class="tx-date">07 fev 2026 · Maria J.</div>
+                    </div>
+                    <div class="tx-amount in">+R$ 18</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: stats + bank -->
+            <div>
+              <div class="card" style="margin-bottom: 16px">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 16px;
+                  "
+                >
+                  Performance do mês
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 14px">
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 6px;
+                      "
+                    >
+                      <span
+                        style="
+                          font-size: 0.82rem;
+                          font-weight: 700;
+                          color: var(--ink-mid);
+                        "
+                        >Taxa de conclusão</span
+                      >
+                      <span
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 900;
+                          color: var(--ink);
+                        "
+                        >95%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        height: 7px;
+                        background: var(--sand);
+                        border-radius: 50px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 95%;
+                          height: 100%;
+                          background: #22c55e;
+                          border-radius: 50px;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 6px;
+                      "
+                    >
+                      <span
+                        style="
+                          font-size: 0.82rem;
+                          font-weight: 700;
+                          color: var(--ink-mid);
+                        "
+                        >Avaliação média</span
+                      >
+                      <span
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 900;
+                          color: var(--orange);
+                        "
+                        >★ 4.9</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        height: 7px;
+                        background: var(--sand);
+                        border-radius: 50px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 98%;
+                          height: 100%;
+                          background: var(--orange);
+                          border-radius: 50px;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 6px;
+                      "
+                    >
+                      <span
+                        style="
+                          font-size: 0.82rem;
+                          font-weight: 700;
+                          color: var(--ink-mid);
+                        "
+                        >Taxa de aceite</span
+                      >
+                      <span
+                        style="
+                          font-size: 0.85rem;
+                          font-weight: 900;
+                          color: var(--ink);
+                        "
+                        >87%</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        height: 7px;
+                        background: var(--sand);
+                        border-radius: 50px;
+                        overflow: hidden;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 87%;
+                          height: 100%;
+                          background: #3b82f6;
+                          border-radius: 50px;
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Conta para saque
+                </div>
+                <div
+                  style="
+                    background: var(--sand);
+                    border-radius: 12px;
+                    padding: 16px;
+                    margin-bottom: 14px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 0.72rem;
+                      font-weight: 700;
+                      color: var(--ink-light);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Pix · CPF
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.9rem;
+                      font-weight: 800;
+                      color: var(--ink);
+                    "
+                  >
+                    ***.***.678-90
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                      color: var(--ink-light);
+                      margin-top: 2px;
+                    "
+                  >
+                    João Pedro S.
+                  </div>
+                </div>
+                <a
+                  href="#"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    font-size: 0.82rem;
+                    font-weight: 800;
+                    color: var(--orange);
+                    text-decoration: none;
+                  "
+                  >✏️ Editar dados bancários</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Withdraw modal -->
+    <div class="modal-backdrop" id="withdrawModal">
+      <div class="modal">
+        <h2 class="modal-title">💸 Solicitar saque</h2>
+        <p class="modal-desc">
+          O valor será transferido via Pix em até 1 hora útil para sua chave
+          cadastrada.
+        </p>
+        <div class="modal-balance">
+          <div class="modal-balance-label">Disponível para saque</div>
+          <div class="modal-balance-value">R$ 148,00</div>
+        </div>
+        <label class="modal-input-label" for="withdrawAmount"
+          >Valor a sacar</label
+        >
+        <input
+          class="modal-input"
+          id="withdrawAmount"
+          type="number"
+          value="148"
+          min="10"
+          max="148"
+          placeholder="Ex: 100"
+        />
+        <button class="modal-btn-confirm" id="withdrawConfirm">
+          ✅ Confirmar saque
+        </button>
+        <button class="modal-btn-cancel" id="withdrawCancel">Cancelar</button>
+      </div>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/ganhos-mota.js"></script>
+  </body>
+</html>

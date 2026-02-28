@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Pagamentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <style>
+      .pay-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+      @media (max-width: 1000px) {
+        .pay-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Balance card */
+      .balance-card {
+        background: linear-gradient(135deg, #0f2318 0%, #1e4025 100%);
+        border-radius: var(--radius);
+        padding: 28px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .balance-label {
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 6px;
+      }
+      .balance-value {
+        font-family: "Fraunces", serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: white;
+        line-height: 1;
+      }
+      .balance-sub {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.45);
+        margin-top: 5px;
+      }
+      .balance-right {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .balance-btn {
+        padding: 11px 20px;
+        border-radius: 50px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+      .balance-btn-primary {
+        background: var(--orange);
+        color: white;
+      }
+      .balance-btn-primary:hover {
+        background: var(--orange-dark);
+      }
+      .balance-btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+      }
+      .balance-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      /* Payment method cards */
+      .method-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        margin-bottom: 10px;
+        transition: border-color 0.2s;
+        cursor: pointer;
+        position: relative;
+      }
+      .method-card:hover {
+        border-color: var(--orange);
+      }
+      .method-card.default {
+        border-color: var(--orange);
+      }
+      .method-card-icon {
+        width: 46px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .method-card-info {
+        flex: 1;
+      }
+      .method-card-name {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .method-card-sub {
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-top: 2px;
+      }
+      .method-default-badge {
+        font-size: 0.65rem;
+        font-weight: 900;
+        background: var(--orange);
+        color: white;
+        padding: 3px 9px;
+        border-radius: 50px;
+      }
+      .method-del-btn {
+        background: none;
+        border: none;
+        font-size: 0.9rem;
+        color: var(--ink-light);
+        cursor: pointer;
+        padding: 4px 6px;
+        transition: color 0.2s;
+      }
+      .method-del-btn:hover {
+        color: #ef4444;
+      }
+      .add-method-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        border-radius: 14px;
+        border: 2px dashed var(--sand);
+        background: transparent;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+      }
+      .add-method-btn:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      /* Transaction list */
+      .tx-filters {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .tx-filter-chip {
+        padding: 7px 16px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tx-filter-chip:hover {
+        border-color: var(--orange);
+      }
+      .tx-filter-chip.active {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+      }
+
+      .tx-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        margin-bottom: 8px;
+        transition: border-color 0.2s;
+        cursor: pointer;
+      }
+      .tx-item:hover {
+        border-color: rgba(240, 123, 29, 0.3);
+      }
+      .tx-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .tx-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .tx-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 3px;
+      }
+      .tx-meta {
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--ink-light);
+      }
+      .tx-amount {
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+      .tx-amount.debit {
+        color: var(--ink);
+      }
+      .tx-amount.credit {
+        color: #16a34a;
+      }
+      .tx-amount.refund {
+        color: #6366f1;
+      }
+
+      .tx-month-divider {
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--ink-light);
+        padding: 12px 0 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Favoritos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="chat.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="pagamentos.html" class="nav-item active"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+          <a href="configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="suporte.html" class="nav-item"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Pagamentos</h2>
+              <p>Métodos e histórico de transações</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Balance banner -->
+          <div class="balance-card">
+            <div class="balance-left">
+              <div class="balance-label">Saldo seuMota</div>
+              <div class="balance-value">R$ 30,00</div>
+              <div class="balance-sub">
+                Créditos de indicação · Válidos até 28/06/2026
+              </div>
+            </div>
+            <div class="balance-right">
+              <button
+                class="balance-btn balance-btn-primary"
+                onclick="showToast('💳 Selecione a forma de recarga')"
+              >
+                ➕ Adicionar crédito
+              </button>
+              <button
+                class="balance-btn balance-btn-secondary"
+                onclick="showToast('📊 Extrato em breve!')"
+              >
+                📊 Extrato
+              </button>
+            </div>
+          </div>
+
+          <div class="pay-layout">
+            <!-- LEFT: transactions -->
+            <div>
+              <!-- Filters -->
+              <div class="tx-filters">
+                <button class="tx-filter-chip active" data-filter="all">
+                  Todas
+                </button>
+                <button class="tx-filter-chip" data-filter="cobrado">
+                  Cobranças
+                </button>
+                <button class="tx-filter-chip" data-filter="credito">
+                  Créditos
+                </button>
+                <button class="tx-filter-chip" data-filter="reembolso">
+                  Reembolsos
+                </button>
+                <div style="margin-left: auto">
+                  <input
+                    type="month"
+                    id="monthFilter"
+                    value="2026-02"
+                    style="
+                      border: 1.5px solid var(--sand);
+                      border-radius: 10px;
+                      padding: 7px 12px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-size: 0.82rem;
+                      font-weight: 700;
+                      color: var(--ink);
+                      background: var(--white);
+                      outline: none;
+                      cursor: pointer;
+                    "
+                  />
+                </div>
+              </div>
+
+              <!-- Feb 2026 -->
+              <div class="tx-month-divider">Fevereiro 2026</div>
+
+              <div class="tx-item" data-type="cobrado">
+                <div class="tx-icon" style="background: #fff3e7">🛒</div>
+                <div class="tx-info">
+                  <div class="tx-title">Compras no mercado · João Pedro</div>
+                  <div class="tx-meta">
+                    13 fev · Cartão Visa •••• 4242 ·
+                    <span style="color: #16a34a; font-weight: 800"
+                      >Concluída</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-amount debit">–R$ 25,00</div>
+              </div>
+
+              <div class="tx-item" data-type="credito">
+                <div class="tx-icon" style="background: #dcfce7">🎁</div>
+                <div class="tx-info">
+                  <div class="tx-title">Bônus de indicação — Pedro Souza</div>
+                  <div class="tx-meta">12 fev · Crédito automático</div>
+                </div>
+                <div class="tx-amount credit">+R$ 10,00</div>
+              </div>
+
+              <div class="tx-item" data-type="cobrado">
+                <div class="tx-icon" style="background: #fff3e7">🏦</div>
+                <div class="tx-info">
+                  <div class="tx-title">Pagar boleto · Carlos Mendes</div>
+                  <div class="tx-meta">
+                    11 fev · Pix ·
+                    <span style="color: #16a34a; font-weight: 800"
+                      >Concluída</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-amount debit">–R$ 15,00</div>
+              </div>
+
+              <div class="tx-item" data-type="cobrado">
+                <div class="tx-icon" style="background: #fff3e7">💊</div>
+                <div class="tx-info">
+                  <div class="tx-title">Buscar remédio · Fernanda Lima</div>
+                  <div class="tx-meta">
+                    10 fev · Cartão Visa •••• 4242 ·
+                    <span style="color: #16a34a; font-weight: 800"
+                      >Concluída</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-amount debit">–R$ 18,00</div>
+              </div>
+
+              <div class="tx-item" data-type="reembolso">
+                <div class="tx-icon" style="background: #ede9fe">↩️</div>
+                <div class="tx-info">
+                  <div class="tx-title">Reembolso — Tarefa cancelada</div>
+                  <div class="tx-meta">
+                    08 fev · Estorno no Cartão Visa •••• 4242
+                  </div>
+                </div>
+                <div class="tx-amount refund">+R$ 12,00</div>
+              </div>
+
+              <!-- Jan 2026 -->
+              <div class="tx-month-divider">Janeiro 2026</div>
+
+              <div class="tx-item" data-type="cobrado">
+                <div class="tx-icon" style="background: #fff3e7">📦</div>
+                <div class="tx-info">
+                  <div class="tx-title">Retirar encomenda · Rodrigo Santos</div>
+                  <div class="tx-meta">
+                    30 jan · Saldo seuMota ·
+                    <span style="color: #16a34a; font-weight: 800"
+                      >Concluída</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-amount debit">–R$ 15,00</div>
+              </div>
+
+              <div class="tx-item" data-type="cobrado">
+                <div class="tx-icon" style="background: #fff3e7">👕</div>
+                <div class="tx-info">
+                  <div class="tx-title">
+                    Buscar roupa na lavanderia · Carlos Mendes
+                  </div>
+                  <div class="tx-meta">
+                    28 jan · Cartão Visa •••• 4242 ·
+                    <span style="color: #16a34a; font-weight: 800"
+                      >Concluída</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-amount debit">–R$ 20,00</div>
+              </div>
+
+              <div class="tx-item" data-type="credito">
+                <div class="tx-icon" style="background: #dcfce7">🎁</div>
+                <div class="tx-info">
+                  <div class="tx-title">Bônus de boas-vindas</div>
+                  <div class="tx-meta">15 jan · Crédito de cadastro</div>
+                </div>
+                <div class="tx-amount credit">+R$ 20,00</div>
+              </div>
+
+              <div
+                id="txEmpty"
+                style="display: none; text-align: center; padding: 40px 0"
+              >
+                <div style="font-size: 2.5rem; margin-bottom: 10px">💳</div>
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 6px;
+                  "
+                >
+                  Nenhuma transação
+                </div>
+                <div
+                  style="
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                  "
+                >
+                  Tente outro filtro ou período
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: methods + summary -->
+            <div>
+              <!-- Methods -->
+              <div
+                class="section-box"
+                style="
+                  background: var(--white);
+                  border: 1.5px solid var(--sand);
+                  border-radius: var(--radius);
+                  padding: 22px;
+                  margin-bottom: 16px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 16px;
+                  "
+                >
+                  Métodos de pagamento
+                </div>
+
+                <div class="method-card default" id="method-visa">
+                  <div class="method-card-icon">💳</div>
+                  <div class="method-card-info">
+                    <div class="method-card-name">Visa •••• 4242</div>
+                    <div class="method-card-sub">Expira 08/2027</div>
+                  </div>
+                  <span class="method-default-badge">Padrão</span>
+                </div>
+
+                <div class="method-card" id="method-pix">
+                  <div class="method-card-icon">⚡</div>
+                  <div class="method-card-info">
+                    <div class="method-card-name">Pix — CPF</div>
+                    <div class="method-card-sub">***.456.789-00</div>
+                  </div>
+                  <button
+                    class="method-del-btn"
+                    onclick="removeMethod('method-pix', 'Pix')"
+                  >
+                    🗑️
+                  </button>
+                </div>
+
+                <div class="method-card" id="method-saldo">
+                  <div class="method-card-icon">🪙</div>
+                  <div class="method-card-info">
+                    <div class="method-card-name">Saldo seuMota</div>
+                    <div class="method-card-sub">R$ 30,00 disponíveis</div>
+                  </div>
+                </div>
+
+                <button
+                  class="add-method-btn"
+                  onclick="showToast('💳 Adicionar método em breve!')"
+                >
+                  ➕ Adicionar método
+                </button>
+              </div>
+
+              <!-- Month summary -->
+              <div
+                class="section-box"
+                style="
+                  background: var(--white);
+                  border: 1.5px solid var(--sand);
+                  border-radius: var(--radius);
+                  padding: 22px;
+                  margin-bottom: 16px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Resumo de fevereiro
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Cobranças</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: var(--ink);
+                      "
+                      >R$ 58,00</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Créditos</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: #16a34a;
+                      "
+                      >+R$ 10,00</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Reembolsos</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: #6366f1;
+                      "
+                      >+R$ 12,00</span
+                    >
+                  </div>
+                  <div style="height: 1px; background: var(--sand)"></div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.88rem;
+                        font-weight: 800;
+                        color: var(--ink);
+                      "
+                      >Total gasto</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.05rem;
+                        font-weight: 900;
+                        color: var(--orange);
+                      "
+                      >R$ 46,00</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Referral -->
+              <div
+                style="
+                  background: linear-gradient(135deg, #fff8f2, #ffedda);
+                  border: 1.5px solid rgba(240, 123, 29, 0.2);
+                  border-radius: var(--radius);
+                  padding: 20px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 800;
+                    color: var(--ink);
+                    margin-bottom: 6px;
+                  "
+                >
+                  🎁 Ganhe mais créditos
+                </div>
+                <p
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                    color: var(--ink-mid);
+                    line-height: 1.6;
+                    margin-bottom: 14px;
+                  "
+                >
+                  Indique amigos e ganhe R$ 10 por cada um que completar a
+                  primeira tarefa.
+                </p>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: var(--white);
+                    border: 1.5px solid rgba(240, 123, 29, 0.2);
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                  "
+                >
+                  <span
+                    style="
+                      flex: 1;
+                      font-size: 0.85rem;
+                      font-weight: 800;
+                      color: var(--orange);
+                    "
+                    >ANAPAULA10</span
+                  >
+                  <button
+                    onclick="copyCode()"
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 800;
+                      color: var(--ink-mid);
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    "
+                  >
+                    📋 Copiar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/pagamentos.js"></script>
+  </body>
+</html>

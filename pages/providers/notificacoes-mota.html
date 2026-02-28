@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Notificações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .notif-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .notif-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .notif-tab {
+        padding: 8px 18px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .notif-tab:hover,
+      .notif-tab.active {
+        border-color: #22c55e;
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+
+      .notif-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-mark-read {
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-mark-read:hover {
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+
+      .notif-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .notif-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 14px;
+        padding: 16px 20px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        transition: all 0.2s;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .notif-card.unread {
+        border-color: #22c55e;
+        background: rgba(240, 253, 244, 0.3);
+      }
+
+      .notif-card.unread::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #22c55e;
+      }
+
+      .notif-card:hover {
+        border-color: #22c55e;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+      }
+
+      .notif-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .notif-icon.green {
+        background: #f0fdf4;
+      }
+      .notif-icon.blue {
+        background: #eff6ff;
+      }
+      .notif-icon.orange {
+        background: var(--orange-soft);
+      }
+      .notif-icon.purple {
+        background: #f3e8ff;
+      }
+
+      .notif-content {
+        flex: 1;
+      }
+
+      .notif-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 4px;
+        line-height: 1.4;
+      }
+
+      .notif-desc {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.5;
+        margin-bottom: 6px;
+      }
+
+      .notif-time {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .notif-action {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-end;
+      }
+
+      .notif-btn {
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .notif-btn-primary {
+        background: #22c55e;
+        color: white;
+      }
+
+      .notif-btn-primary:hover {
+        background: #16a34a;
+      }
+
+      .notif-btn-secondary {
+        background: var(--cream);
+        color: var(--ink-mid);
+        border: 1.5px solid var(--sand);
+      }
+
+      .notif-btn-secondary:hover {
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        opacity: 0.3;
+      }
+
+      .empty-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .empty-desc {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Painel</a
+          >
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Ganhos</a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="avaliacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Avaliações</a
+          >
+          <a href="editar-perfil-mota.html" class="nav-item"
+            ><span class="nav-icon">✏️</span> Editar perfil</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="notificacoes-mota.html" class="nav-item active"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >5</span
+            ></a
+          >
+          <a href="chat-mota.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="configuracoes-mota.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="suporte.html" class="nav-item"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Notificações</h2>
+              <p id="notifCount">5 notificações não lidas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Header -->
+          <div class="notif-header">
+            <div class="notif-tabs">
+              <button class="notif-tab active" data-filter="all">Todas</button>
+              <button class="notif-tab" data-filter="tarefas">Tarefas</button>
+              <button class="notif-tab" data-filter="pagamentos">
+                Pagamentos
+              </button>
+              <button class="notif-tab" data-filter="avaliacoes">
+                Avaliações
+              </button>
+              <button class="notif-tab" data-filter="sistema">Sistema</button>
+            </div>
+            <div class="notif-actions">
+              <button class="btn-mark-read" id="markAllRead">
+                ✓ Marcar todas como lidas
+              </button>
+            </div>
+          </div>
+
+          <!-- Notifications List -->
+          <div class="notif-list" id="notifList">
+            <!-- Nova tarefa próxima -->
+            <div class="notif-card unread" data-category="tarefas">
+              <div class="notif-icon green">📋</div>
+              <div class="notif-content">
+                <div class="notif-title">Nova tarefa a 320m de você</div>
+                <div class="notif-desc">
+                  Compras no mercado — R$ 25 • Hoje às 14h
+                </div>
+                <div class="notif-time">há 5 minutos</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-primary"
+                  onclick="window.location = 'detalhe-tarefa.html'"
+                >
+                  Ver tarefa
+                </button>
+              </div>
+            </div>
+
+            <!-- Pagamento recebido -->
+            <div class="notif-card unread" data-category="pagamentos">
+              <div class="notif-icon green">💰</div>
+              <div class="notif-content">
+                <div class="notif-title">Pagamento recebido</div>
+                <div class="notif-desc">
+                  R$ 25,00 da tarefa #8742 foi creditado na sua conta
+                </div>
+                <div class="notif-time">há 2 horas</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-secondary"
+                  onclick="window.location = 'ganhos-mota.html'"
+                >
+                  Ver extrato
+                </button>
+              </div>
+            </div>
+
+            <!-- Avaliação recebida -->
+            <div class="notif-card unread" data-category="avaliacoes">
+              <div class="notif-icon orange">⭐</div>
+              <div class="notif-content">
+                <div class="notif-title">Você recebeu uma avaliação</div>
+                <div class="notif-desc">
+                  Ana Paula te deu ★★★★★ (5,0): "Super pontual e educado!"
+                </div>
+                <div class="notif-time">há 3 horas</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-secondary"
+                  onclick="window.location = 'avaliacoes-mota.html'"
+                >
+                  Ver avaliações
+                </button>
+              </div>
+            </div>
+
+            <!-- Mensagem de cliente -->
+            <div class="notif-card unread" data-category="tarefas">
+              <div class="notif-icon blue">💬</div>
+              <div class="notif-content">
+                <div class="notif-title">Nova mensagem de Roberto Santos</div>
+                <div class="notif-desc">
+                  "Pode trazer troco de R$ 50? Obrigado!"
+                </div>
+                <div class="notif-time">há 5 horas</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-primary"
+                  onclick="window.location = 'chat.html'"
+                >
+                  Responder
+                </button>
+              </div>
+            </div>
+
+            <!-- Lembrete de tarefa -->
+            <div class="notif-card unread" data-category="tarefas">
+              <div class="notif-icon purple">⏰</div>
+              <div class="notif-content">
+                <div class="notif-title">Lembrete: Tarefa em 30 minutos</div>
+                <div class="notif-desc">
+                  Pagar boleto na lotérica • Cliente: Roberto Santos
+                </div>
+                <div class="notif-time">há 6 horas</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-primary"
+                  onclick="window.location = 'tarefa-em-andamento.html'"
+                >
+                  Iniciar tarefa
+                </button>
+              </div>
+            </div>
+
+            <!-- Tarefa cancelada -->
+            <div class="notif-card" data-category="tarefas">
+              <div class="notif-icon orange">❌</div>
+              <div class="notif-content">
+                <div class="notif-title">Tarefa cancelada pelo cliente</div>
+                <div class="notif-desc">
+                  Buscar remédio na farmácia • Você não será cobrado
+                </div>
+                <div class="notif-time">ontem às 18h</div>
+              </div>
+            </div>
+
+            <!-- Saque processado -->
+            <div class="notif-card" data-category="pagamentos">
+              <div class="notif-icon green">💳</div>
+              <div class="notif-content">
+                <div class="notif-title">Saque processado</div>
+                <div class="notif-desc">
+                  R$ 284,00 foi transferido para sua conta • Banco Inter
+                </div>
+                <div class="notif-time">ontem às 14h</div>
+              </div>
+            </div>
+
+            <!-- Atualização sistema -->
+            <div class="notif-card" data-category="sistema">
+              <div class="notif-icon blue">🎉</div>
+              <div class="notif-content">
+                <div class="notif-title">Nova funcionalidade disponível</div>
+                <div class="notif-desc">
+                  Agora você pode agendar sua disponibilidade para os próximos 7
+                  dias!
+                </div>
+                <div class="notif-time">2 dias atrás</div>
+              </div>
+              <div class="notif-action">
+                <button
+                  class="notif-btn notif-btn-secondary"
+                  onclick="window.location = 'configuracoes-mota.html'"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State (hidden by default) -->
+          <div class="empty-state" id="emptyState" style="display: none">
+            <div class="empty-icon">🔔</div>
+            <div class="empty-title">Nenhuma notificação</div>
+            <div class="empty-desc">
+              Você está em dia! Não há notificações no momento.
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/notificacoes-mota.js"></script>
+  </body>
+</html>

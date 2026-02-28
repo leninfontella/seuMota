@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Verificar e-mail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <style>
+      /* ── OTP INPUTS ── */
+      .otp-grid {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 28px 0 10px;
+      }
+
+      .otp-input {
+        width: 52px;
+        height: 60px;
+        border: 2px solid var(--sand);
+        border-radius: 14px;
+        font-family: "Fraunces", serif;
+        font-size: 1.6rem;
+        font-weight: 900;
+        text-align: center;
+        color: var(--ink);
+        background: var(--cream);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          background 0.2s,
+          transform 0.15s;
+        caret-color: var(--orange);
+      }
+
+      .otp-input:focus {
+        border-color: var(--orange);
+        background: var(--white);
+        transform: scale(1.06);
+        box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.1);
+      }
+
+      .otp-input.filled {
+        border-color: var(--orange);
+        background: var(--white);
+      }
+
+      .otp-input.error {
+        border-color: #ef4444;
+        background: #fef2f2;
+        animation: shake 0.4s ease;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px);
+        }
+        75% {
+          transform: translateX(6px);
+        }
+      }
+
+      /* ── EMAIL DISPLAY ── */
+      .email-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--orange-soft);
+        border: 1.5px solid rgba(240, 123, 29, 0.2);
+        border-radius: 50px;
+        padding: 8px 16px;
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--orange-dark);
+        margin-bottom: 6px;
+      }
+
+      /* ── TIMER ── */
+      .resend-area {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .resend-btn {
+        background: none;
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--orange);
+        cursor: pointer;
+        text-decoration: underline;
+        transition: color 0.2s;
+      }
+
+      .resend-btn:hover {
+        color: var(--orange-dark);
+      }
+      .resend-btn:disabled {
+        color: var(--ink-light);
+        text-decoration: none;
+        cursor: default;
+      }
+
+      .timer-count {
+        font-weight: 900;
+        color: var(--ink-mid);
+      }
+
+      /* ── PROGRESS DOTS ── */
+      .progress-steps {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 32px;
+      }
+
+      .progress-step {
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+
+      .step-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        font-weight: 900;
+        transition: all 0.3s;
+      }
+
+      .step-dot.done {
+        background: var(--orange);
+        color: white;
+      }
+      .step-dot.active {
+        background: var(--orange);
+        color: white;
+        box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.2);
+      }
+      .step-dot.future {
+        background: var(--sand);
+        color: var(--ink-light);
+      }
+
+      .step-label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        margin-top: 6px;
+        color: var(--ink-light);
+      }
+
+      .step-label.active {
+        color: var(--orange);
+      }
+      .step-label.done {
+        color: var(--ink-mid);
+      }
+
+      .step-connector {
+        width: 40px;
+        height: 2px;
+        background: var(--sand);
+        margin: 0 2px;
+        margin-bottom: 18px;
+        transition: background 0.3s;
+      }
+
+      .step-connector.done {
+        background: var(--orange);
+      }
+
+      .step-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ── SUCCESS STATE ── */
+      .success-screen {
+        display: none;
+        text-align: center;
+        padding: 20px 0;
+      }
+
+      .success-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #dcfce7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        margin: 0 auto 20px;
+        animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      /* ── RIGHT PANEL DECORATION ── */
+      .verify-deco {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 40px;
+        gap: 24px;
+      }
+
+      .deco-envelope {
+        font-size: 5rem;
+        animation: floatBob 3s ease-in-out infinite;
+        filter: drop-shadow(0 12px 24px rgba(240, 123, 29, 0.3));
+      }
+
+      @keyframes floatBob {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-3deg);
+        }
+        50% {
+          transform: translateY(-12px) rotate(3deg);
+        }
+      }
+
+      .deco-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: white;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      .deco-tip {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 16px 18px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.65;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .deco-tip-icon {
+        flex-shrink: 0;
+        font-size: 1rem;
+      }
+
+      /* ── FORM MAIN ── */
+      .auth-form-inner {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        text-decoration: none;
+        margin-bottom: 28px;
+        transition: color 0.2s;
+      }
+
+      .back-link:hover {
+        color: var(--orange);
+      }
+
+      .form-subtitle {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.65;
+        margin-bottom: 6px;
+        text-align: center;
+      }
+
+      .change-email-link {
+        background: none;
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--orange);
+        cursor: pointer;
+        text-decoration: underline;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 24px;
+        transition: color 0.2s;
+      }
+
+      .change-email-link:hover {
+        color: var(--orange-dark);
+      }
+
+      /* error msg */
+      .error-msg {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #ef4444;
+        text-align: center;
+        min-height: 20px;
+        margin-bottom: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-page">
+      <!-- FORM SIDE -->
+      <div class="auth-form-side">
+        <div class="auth-form-inner">
+          <a href="/pages/login/login.html" class="back-link"
+            >← Voltar ao login</a
+          >
+
+          <!-- Progress steps -->
+          <div class="progress-steps">
+            <div class="step-wrap">
+              <div class="step-dot done">✓</div>
+              <div class="step-label done">Cadastro</div>
+            </div>
+            <div class="step-connector done"></div>
+            <div class="step-wrap">
+              <div class="step-dot active">2</div>
+              <div class="step-label active">Verificação</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-wrap">
+              <div class="step-dot future">3</div>
+              <div class="step-label">Pronto!</div>
+            </div>
+          </div>
+
+          <!-- STEP: OTP -->
+          <div id="otpStep">
+            <div style="text-align: center; margin-bottom: 20px">
+              <h1 class="auth-title" style="margin-bottom: 12px">
+                Verifique seu e-mail
+              </h1>
+              <p class="form-subtitle">Enviamos um código de 6 dígitos para</p>
+              <div class="email-chip">
+                ✉️ <span id="emailDisplay">ana.paula&#64;gmail.com</span>
+              </div>
+              <p class="form-subtitle" style="margin-top: 6px">
+                Verifique também a pasta de spam.
+              </p>
+            </div>
+
+            <!-- OTP inputs -->
+            <div class="otp-grid" id="otpGrid">
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+              <input
+                class="otp-input"
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="error-msg" id="otpError">
+              Código inválido. Tente novamente.
+            </div>
+
+            <!-- Resend -->
+            <div class="resend-area" id="resendArea">
+              Não recebeu?
+              <button
+                class="resend-btn"
+                id="resendBtn"
+                disabled
+                onclick="resendCode()"
+              >
+                Reenviar
+              </button>
+              <span id="timerWrap"
+                >em <span class="timer-count" id="timerCount">60</span>s</span
+              >
+            </div>
+
+            <!-- Verify button -->
+            <button
+              class="btn-submit"
+              id="verifyBtn"
+              onclick="verifyCode()"
+              style="
+                width: 100%;
+                font-family: &quot;Nunito&quot;, sans-serif;
+                border: none;
+                cursor: pointer;
+              "
+            >
+              Verificar e-mail →
+            </button>
+
+            <!-- Change email -->
+            <button class="change-email-link" onclick="showChangeEmail()">
+              Usar outro e-mail?
+            </button>
+
+            <!-- Change email inline -->
+            <div
+              id="changeEmailArea"
+              style="display: none; margin-top: -12px; margin-bottom: 20px"
+            >
+              <div class="form-group">
+                <label>Novo e-mail</label>
+                <div class="input-wrap">
+                  <span class="input-icon">✉️</span>
+                  <input
+                    type="email"
+                    id="newEmailInput"
+                    placeholder="seuemail&#64;exemplo.com"
+                  />
+                </div>
+              </div>
+              <button
+                class="btn-submit"
+                onclick="updateEmail()"
+                style="
+                  width: 100%;
+                  font-family: &quot;Nunito&quot;, sans-serif;
+                  border: none;
+                  cursor: pointer;
+                  padding: 12px;
+                "
+              >
+                Enviar código para novo e-mail
+              </button>
+            </div>
+          </div>
+
+          <!-- SUCCESS STATE -->
+          <div class="success-screen" id="successScreen">
+            <div class="success-icon">✅</div>
+            <h2 class="auth-title" style="margin-bottom: 10px">
+              E-mail verificado!
+            </h2>
+            <p class="form-subtitle" style="margin-bottom: 28px">
+              Sua conta foi ativada com sucesso. Redirecionando para o painel...
+            </p>
+            <div
+              style="
+                background: var(--cream);
+                border-radius: 14px;
+                padding: 16px 20px;
+                margin-bottom: 24px;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.78rem;
+                  font-weight: 700;
+                  color: var(--ink-light);
+                  margin-bottom: 8px;
+                "
+              >
+                ✨ Bônus de boas-vindas aplicado
+              </div>
+              <div
+                style="
+                  font-family: &quot;Fraunces&quot;, serif;
+                  font-size: 1.4rem;
+                  font-weight: 900;
+                  color: var(--orange);
+                "
+              >
+                R$ 20,00 de crédito
+              </div>
+              <div
+                style="
+                  font-size: 0.75rem;
+                  font-weight: 600;
+                  color: var(--ink-light);
+                  margin-top: 4px;
+                "
+              >
+                Válido para sua primeira tarefa
+              </div>
+            </div>
+            <a
+              href="/pages/users/dashboard-usuario.html"
+              class="btn-submit"
+              style="
+                display: block;
+                width: 100%;
+                text-align: center;
+                text-decoration: none;
+                font-family: &quot;Nunito&quot;, sans-serif;
+                padding: 14px;
+              "
+            >
+              Ir para o painel →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DECO SIDE -->
+      <div
+        class="auth-panel"
+        style="
+          background: linear-gradient(
+            160deg,
+            #0f2318 0%,
+            #1e4025 60%,
+            #2d5a3a 100%
+          );
+        "
+      >
+        <div class="verify-deco">
+          <div class="deco-envelope">📬</div>
+
+          <div class="deco-title">Quase lá!<br />Só mais um passo</div>
+
+          <div
+            style="
+              font-size: 0.88rem;
+              font-weight: 600;
+              color: rgba(255, 255, 255, 0.55);
+              text-align: center;
+              line-height: 1.7;
+              max-width: 280px;
+            "
+          >
+            Verificamos e-mails para garantir que só você acessa sua conta e
+            para enviar notificações importantes sobre suas tarefas.
+          </div>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              width: 100%;
+            "
+          >
+            <div class="deco-tip">
+              <span class="deco-tip-icon">📁</span>
+              <span
+                >Não encontrou o e-mail? Verifique a pasta
+                <strong>Spam</strong> ou <strong>Promoções</strong>.</span
+              >
+            </div>
+            <div class="deco-tip">
+              <span class="deco-tip-icon">⏰</span>
+              <span
+                >O código é válido por <strong>10 minutos</strong>. Após isso,
+                solicite um novo.</span
+              >
+            </div>
+            <div class="deco-tip">
+              <span class="deco-tip-icon">🔒</span>
+              <span
+                >Nunca compartilhe este código. O seuMota jamais pedirá seu
+                código por telefone.</span
+              >
+            </div>
+          </div>
+
+          <!-- Mini stats -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+              width: 100%;
+              margin-top: 8px;
+            "
+          >
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 14px;
+                padding: 16px;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: &quot;Fraunces&quot;, serif;
+                  font-size: 1.4rem;
+                  font-weight: 900;
+                  color: var(--orange);
+                "
+              >
+                1.247
+              </div>
+              <div
+                style="
+                  font-size: 0.7rem;
+                  font-weight: 700;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-top: 2px;
+                "
+              >
+                usuários ativos
+              </div>
+            </div>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 14px;
+                padding: 16px;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: &quot;Fraunces&quot;, serif;
+                  font-size: 1.4rem;
+                  font-weight: 900;
+                  color: var(--orange);
+                "
+              >
+                4.9★
+              </div>
+              <div
+                style="
+                  font-size: 0.7rem;
+                  font-weight: 700;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-top: 2px;
+                "
+              >
+                nota dos Motas
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/verificacao-email.js"></script>
+  </body>
+</html>

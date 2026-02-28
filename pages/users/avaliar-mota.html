@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Avaliar Mota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <style>
+      .review-container {
+        max-width: 580px;
+        margin: 0 auto;
+      }
+      .tip-bubble {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tip-bubble:hover {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+      }
+      .tip-amount {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--orange);
+        white-space: nowrap;
+      }
+      .tip-info {
+        flex: 1;
+      }
+      .tip-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 2px;
+      }
+      .tip-desc {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-light);
+      }
+      .tip-check {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid var(--sand);
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .tip-bubble.selected .tip-check {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: white;
+        content: "✓";
+      }
+      .tip-bubble.selected {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+      }
+      .tip-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .tip-opt {
+        padding: 14px;
+        text-align: center;
+        background: var(--white);
+        border: 2px solid var(--sand);
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tip-opt:hover,
+      .tip-opt.selected {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+      }
+      .tip-opt-amount {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 2px;
+      }
+      .tip-opt.selected .tip-opt-amount {
+        color: var(--orange);
+      }
+      .tip-opt-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .tip-opt-none {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-top: 6px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="historico-usuario.html" class="nav-item active"
+            ><span class="nav-icon">⭐</span>Avaliar</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Avaliar Mota</h2>
+              <p>Sua avaliação ajuda a comunidade</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <a
+              href="historico-usuario.html"
+              style="
+                font-size: 0.83rem;
+                font-weight: 800;
+                color: var(--ink-mid);
+                text-decoration: none;
+              "
+              >Pular →</a
+            >
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="review-container">
+            <!-- Mota hero -->
+            <div class="review-hero">
+              <div class="review-hero-avatar">🧑</div>
+              <div class="review-hero-name">João Pedro</div>
+              <div class="review-hero-task">
+                Compras no mercado — lista pequena
+              </div>
+              <div class="review-hero-price">✅ Concluído · R$ 25 pago</div>
+
+              <!-- Stars -->
+              <div class="star-widget" id="starWidget">
+                <button class="star-btn" data-star="1">⭐</button>
+                <button class="star-btn" data-star="2">⭐</button>
+                <button class="star-btn" data-star="3">⭐</button>
+                <button class="star-btn" data-star="4">⭐</button>
+                <button class="star-btn" data-star="5">⭐</button>
+              </div>
+              <div class="star-rating-label" id="starLabel">
+                Toque para avaliar
+              </div>
+            </div>
+
+            <!-- Quick badges — shown after rating -->
+            <div id="badgeSection" style="display: none">
+              <div class="card" style="padding: 22px; margin-bottom: 16px">
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 800;
+                    color: var(--ink);
+                    margin-bottom: 14px;
+                  "
+                >
+                  O que você destacaria?
+                </div>
+                <div class="badge-grid" id="badgeGrid">
+                  <button class="badge-pill" data-badge="pontual">
+                    ⏰ Pontual
+                  </button>
+                  <button class="badge-pill" data-badge="comunicativo">
+                    💬 Comunicativo
+                  </button>
+                  <button class="badge-pill" data-badge="cuidadoso">
+                    🎯 Cuidadoso
+                  </button>
+                  <button class="badge-pill" data-badge="rapido">
+                    ⚡ Rápido
+                  </button>
+                  <button class="badge-pill" data-badge="educado">
+                    😊 Educado
+                  </button>
+                  <button class="badge-pill" data-badge="confiavel">
+                    🔒 Confiável
+                  </button>
+                </div>
+              </div>
+
+              <!-- Comment -->
+              <div class="card" style="padding: 22px; margin-bottom: 16px">
+                <div class="form-group" style="margin-bottom: 0">
+                  <label for="reviewText"
+                    >Deixe um comentário
+                    <span style="font-weight: 600; color: var(--ink-light)"
+                      >(opcional)</span
+                    ></label
+                  >
+                  <div class="input-wrap">
+                    <span class="input-icon" style="top: 16px; transform: none"
+                      >✏️</span
+                    >
+                    <textarea
+                      id="reviewText"
+                      style="padding-left: 42px"
+                      placeholder="Conte como foi a experiência com o João Pedro..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add to favorites -->
+              <div class="fav-row" id="favRow">
+                <div class="fav-row-left">
+                  <span style="font-size: 1.3rem">⭐</span>
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.9rem;
+                        font-weight: 800;
+                        color: var(--ink);
+                      "
+                    >
+                      Adicionar João Pedro aos favoritos
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        color: var(--ink-light);
+                        margin-top: 2px;
+                      "
+                    >
+                      Ele aparecerá primeiro nas próximas tarefas
+                    </div>
+                  </div>
+                </div>
+                <div
+                  id="favToggle"
+                  style="
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    border: 2px solid var(--sand);
+                    background: var(--white);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.75rem;
+                    transition: all 0.2s;
+                  "
+                ></div>
+              </div>
+
+              <!-- Tip section -->
+              <div class="card" style="padding: 22px; margin-bottom: 20px">
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 800;
+                    color: var(--ink);
+                    margin-bottom: 6px;
+                  "
+                >
+                  Enviar gorjeta?
+                  <span
+                    style="
+                      font-weight: 600;
+                      font-size: 0.78rem;
+                      color: var(--ink-light);
+                    "
+                    >(opcional)</span
+                  >
+                </div>
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  100% vai direto para João Pedro
+                </div>
+                <div class="tip-options">
+                  <div class="tip-opt" data-tip="5">
+                    <div class="tip-opt-amount">R$ 5</div>
+                    <div class="tip-opt-label">☕ Um café</div>
+                  </div>
+                  <div class="tip-opt" data-tip="10">
+                    <div class="tip-opt-amount">R$ 10</div>
+                    <div class="tip-opt-label">🍕 Um lanche</div>
+                  </div>
+                  <div class="tip-opt" data-tip="0" id="noTipOpt">
+                    <div
+                      class="tip-opt-amount"
+                      style="font-size: 0.9rem; color: var(--ink-light)"
+                    >
+                      Não
+                    </div>
+                    <span class="tip-opt-none">Pular gorjeta</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button
+                class="btn-submit"
+                id="submitReview"
+                style="
+                  width: 100%;
+                  font-family: &quot;Nunito&quot;, sans-serif;
+                  font-size: 1rem;
+                  border-radius: 14px;
+                  padding: 16px;
+                  border: none;
+                  cursor: pointer;
+                "
+              >
+                Enviar avaliação →
+              </button>
+            </div>
+
+            <!-- Success screen -->
+            <div
+              id="reviewSuccess"
+              style="display: none; text-align: center; padding: 40px 20px"
+            >
+              <div style="font-size: 4rem; margin-bottom: 20px">🎉</div>
+              <h2
+                style="
+                  font-family: &quot;Fraunces&quot;, serif;
+                  font-size: 1.8rem;
+                  font-weight: 900;
+                  color: var(--ink);
+                  margin-bottom: 10px;
+                "
+              >
+                Obrigada, Ana Paula!
+              </h2>
+              <p
+                style="
+                  font-size: 0.9rem;
+                  font-weight: 600;
+                  color: var(--ink-mid);
+                  line-height: 1.65;
+                  max-width: 340px;
+                  margin: 0 auto 28px;
+                "
+              >
+                Sua avaliação ajuda João Pedro a crescer e outros clientes a
+                fazerem escolhas melhores.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  max-width: 280px;
+                  margin: 0 auto;
+                "
+              >
+                <a
+                  href="postar-tarefa.html"
+                  class="btn-submit"
+                  style="
+                    display: block;
+                    text-decoration: none;
+                    text-align: center;
+                    padding: 14px;
+                    border-radius: 50px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                  "
+                >
+                  ➕ Postar nova tarefa
+                </a>
+                <a
+                  href="historico-usuario.html"
+                  style="
+                    display: block;
+                    text-align: center;
+                    font-size: 0.85rem;
+                    font-weight: 800;
+                    color: var(--ink-mid);
+                    text-decoration: none;
+                    padding: 12px;
+                  "
+                  >Ver histórico →</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/avaliar-mota.js"></script>
+  </body>
+</html>

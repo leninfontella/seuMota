@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Tarefas recorrentes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <style>
+      /* ── RECURRENCE CARD ── */
+      .recurrence-card {
+        background: var(--white);
+        border: 2px solid var(--sand);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.2s;
+      }
+
+      .recurrence-card:hover {
+        border-color: var(--orange);
+        box-shadow: 0 4px 12px rgba(240, 123, 29, 0.08);
+      }
+
+      .recurrence-card.paused {
+        opacity: 0.6;
+        border-color: var(--sand);
+      }
+
+      .rec-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        gap: 12px;
+      }
+
+      .rec-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        flex: 1;
+      }
+
+      .rec-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: var(--orange-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .rec-info {
+        flex: 1;
+      }
+
+      .rec-title {
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .rec-schedule {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .rec-frequency {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #ede9fe;
+        color: #5b21b6;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-size: 0.72rem;
+        font-weight: 900;
+      }
+
+      .rec-toggle {
+        flex-shrink: 0;
+      }
+
+      /* ── TOGGLE SWITCH ── */
+      .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        cursor: pointer;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--sand);
+        border-radius: 50px;
+        transition: 0.3s;
+      }
+
+      .toggle-track::before {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+
+      .toggle-switch input:checked + .toggle-track {
+        background: var(--orange);
+      }
+
+      .toggle-switch input:checked + .toggle-track::before {
+        transform: translateX(22px);
+      }
+
+      /* ── DETAILS BOX ── */
+      .rec-details {
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        line-height: 1.6;
+      }
+
+      .rec-details strong {
+        color: var(--ink);
+      }
+
+      /* ── STATS ROW ── */
+      .rec-stats {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+
+      .rec-stat {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .rec-stat-val {
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      /* ── ACTIONS ── */
+      .rec-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .rec-action-btn {
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .rec-action-primary {
+        background: var(--orange);
+        color: white;
+      }
+
+      .rec-action-primary:hover {
+        background: var(--orange-dark);
+      }
+
+      .rec-action-secondary {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        color: var(--ink-mid);
+      }
+
+      .rec-action-secondary:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      .rec-action-danger {
+        background: transparent;
+        border: 1.5px solid #fecaca;
+        color: #dc2626;
+      }
+
+      .rec-action-danger:hover {
+        background: #fef2f2;
+        border-color: #f87171;
+      }
+
+      /* ── EMPTY STATE ── */
+      .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .empty-icon {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        opacity: 0.2;
+      }
+
+      .empty-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 10px;
+      }
+
+      .empty-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-bottom: 28px;
+        line-height: 1.7;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .empty-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 28px;
+        border-radius: 14px;
+        background: var(--orange);
+        color: white;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .empty-cta:hover {
+        background: var(--orange-dark);
+        transform: translateY(-2px);
+      }
+
+      /* ── INFO BOX ── */
+      .info-box {
+        background: #eff6ff;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #1e40af;
+        line-height: 1.6;
+        display: flex;
+        gap: 12px;
+      }
+
+      .info-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <div class="sidebar-logo-text">seu<span>Mota</span></div>
+        </a>
+
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item">
+            <span class="nav-icon">🏠</span> Início
+          </a>
+          <a href="postar-tarefa.html" class="nav-item">
+            <span class="nav-icon">📋</span> Postar tarefa
+          </a>
+          <a href="minhas-tarefas.html" class="nav-item">
+            <span class="nav-icon">🔍</span> Minhas tarefas
+            <span class="nav-badge">3</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item">
+            <span class="nav-icon">⭐</span> Motas favoritos
+          </a>
+          <a href="tarefas-recorrentes.html" class="nav-item active">
+            <span class="nav-icon">🔁</span> Tarefas recorrentes
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item">
+            <span class="nav-icon">👤</span> Meu perfil
+          </a>
+          <a href="notificacoes.html" class="nav-item">
+            <span class="nav-icon">🔔</span> Notificações
+            <span class="nav-badge">1</span>
+          </a>
+          <a href="historico-usuario.html" class="nav-item">
+            <span class="nav-icon">📜</span> Histórico
+          </a>
+          <a href="pagamentos.html" class="nav-item">
+            <span class="nav-icon">💳</span> Pagamentos
+          </a>
+          <a href="configuracoes.html" class="nav-item">
+            <span class="nav-icon">⚙️</span> Configurações
+          </a>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">👩</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Ana Paula</div>
+              <div class="sidebar-user-role">Cliente</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main-content">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Tarefas recorrentes</h2>
+              <p>Automatize suas tarefas do dia a dia</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button
+              class="icon-btn"
+              style="
+                padding: 10px 20px;
+                border-radius: 12px;
+                background: var(--orange);
+                color: white;
+                font-family: &quot;Nunito&quot;, sans-serif;
+                font-size: 0.85rem;
+                font-weight: 800;
+                border: none;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.2s;
+              "
+              onmouseover="this.style.background = 'var(--orange-dark)'"
+              onmouseout="this.style.background = 'var(--orange)'"
+            >
+              ➕ Nova recorrência
+            </button>
+          </div>
+        </div>
+
+        <div class="content-container">
+          <!-- Info box -->
+          <div class="info-box">
+            <div class="info-icon">💡</div>
+            <div>
+              <strong>Como funciona:</strong> Configure tarefas que se repetem
+              automaticamente. Quando chegar o dia, o seuMota criará a tarefa e
+              você receberá uma notificação para confirmar e escolher o Mota.
+            </div>
+          </div>
+
+          <!-- Recurrence 1: Active -->
+          <div class="recurrence-card">
+            <div class="rec-header">
+              <div class="rec-left">
+                <div class="rec-icon">🛒</div>
+                <div class="rec-info">
+                  <div class="rec-title">
+                    Compras no mercado Super Econômico
+                  </div>
+                  <div class="rec-schedule">
+                    <span class="rec-frequency">🔁 Toda segunda-feira</span>
+                    <span>·</span>
+                    <span>🕐 18h30</span>
+                    <span>·</span>
+                    <span>📍 Zona Sul</span>
+                  </div>
+                </div>
+              </div>
+              <label class="rec-toggle toggle-switch">
+                <input type="checkbox" checked />
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+
+            <div class="rec-details">
+              <strong>Detalhes:</strong> Lista de compras básica (arroz, feijão,
+              leite, pão). Mota favorito: João Pedro.
+            </div>
+
+            <div class="rec-stats">
+              <div class="rec-stat">
+                📊 Executadas: <span class="rec-stat-val">12 vezes</span>
+              </div>
+              <div class="rec-stat">
+                💰 Valor médio: <span class="rec-stat-val">R$ 25</span>
+              </div>
+              <div class="rec-stat">
+                🗓️ Próxima:
+                <span class="rec-stat-val">Segunda, 23 fev, 18h30</span>
+              </div>
+            </div>
+
+            <div class="rec-actions">
+              <button class="rec-action-btn rec-action-primary">
+                📋 Criar agora
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                ✏️ Editar
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                📜 Ver histórico
+              </button>
+              <button class="rec-action-btn rec-action-danger">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+
+          <!-- Recurrence 2: Active -->
+          <div class="recurrence-card">
+            <div class="rec-header">
+              <div class="rec-left">
+                <div class="rec-icon">👕</div>
+                <div class="rec-info">
+                  <div class="rec-title">
+                    Buscar roupa na lavanderia Express
+                  </div>
+                  <div class="rec-schedule">
+                    <span class="rec-frequency">🔁 Toda sexta-feira</span>
+                    <span>·</span>
+                    <span>🕐 17h</span>
+                    <span>·</span>
+                    <span>📍 Centro</span>
+                  </div>
+                </div>
+              </div>
+              <label class="rec-toggle toggle-switch">
+                <input type="checkbox" checked />
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+
+            <div class="rec-details">
+              <strong>Detalhes:</strong> Buscar roupas lavadas e passadas.
+              Observação: trazer cabide extra.
+            </div>
+
+            <div class="rec-stats">
+              <div class="rec-stat">
+                📊 Executadas: <span class="rec-stat-val">8 vezes</span>
+              </div>
+              <div class="rec-stat">
+                💰 Valor médio: <span class="rec-stat-val">R$ 20</span>
+              </div>
+              <div class="rec-stat">
+                🗓️ Próxima: <span class="rec-stat-val">Sexta, 20 fev, 17h</span>
+              </div>
+            </div>
+
+            <div class="rec-actions">
+              <button class="rec-action-btn rec-action-primary">
+                📋 Criar agora
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                ✏️ Editar
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                📜 Ver histórico
+              </button>
+              <button class="rec-action-btn rec-action-danger">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+
+          <!-- Recurrence 3: Paused -->
+          <div class="recurrence-card paused">
+            <div class="rec-header">
+              <div class="rec-left">
+                <div class="rec-icon">🗑️</div>
+                <div class="rec-info">
+                  <div class="rec-title">Levar lixo e reciclagem</div>
+                  <div class="rec-schedule">
+                    <span class="rec-frequency">🔁 Ter, Qui, Sáb</span>
+                    <span>·</span>
+                    <span>🕐 19h</span>
+                    <span>·</span>
+                    <span>⏸️ <strong>Pausada</strong></span>
+                  </div>
+                </div>
+              </div>
+              <label class="rec-toggle toggle-switch">
+                <input type="checkbox" />
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+
+            <div class="rec-details">
+              <strong>Detalhes:</strong> Descer com lixo e separar reciclagem.
+              Mota deve deixar na caçamba.
+            </div>
+
+            <div class="rec-stats">
+              <div class="rec-stat">
+                📊 Executadas: <span class="rec-stat-val">24 vezes</span>
+              </div>
+              <div class="rec-stat">
+                💰 Valor médio: <span class="rec-stat-val">R$ 8</span>
+              </div>
+              <div class="rec-stat">
+                ⏸️ Status: <span class="rec-stat-val">Pausada</span>
+              </div>
+            </div>
+
+            <div class="rec-actions">
+              <button
+                class="rec-action-btn rec-action-primary"
+                disabled
+                style="opacity: 0.5; cursor: not-allowed"
+              >
+                📋 Criar agora
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                ✏️ Editar
+              </button>
+              <button class="rec-action-btn rec-action-secondary">
+                📜 Ver histórico
+              </button>
+              <button class="rec-action-btn rec-action-danger">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty state (hidden, show via JS when no recurrences) -->
+          <!-- <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon">🔁</div>
+        <div class="empty-title">Nenhuma tarefa recorrente</div>
+        <div class="empty-text">
+          Automatize suas tarefas do dia a dia! Configure tarefas que se repetem semanalmente ou mensalmente e nunca mais se preocupe em lembrar.
+        </div>
+        <a href="#" class="empty-cta" id="createRecurrence">
+          ➕ Criar primeira recorrência
+        </a>
+      </div> -->
+        </div>
+      </main>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/tarefas-recorrentes.js"></script>
+  </body>
+</html>

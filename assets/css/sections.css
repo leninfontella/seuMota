@@ -1,0 +1,171 @@
+/* ─── SHARED SECTION PADDING ─────────────────────── */
+.section {
+  padding: 80px 6vw;
+}
+
+/* ─── HOW IT WORKS — STEPS ───────────────────────── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.step-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  position: relative;
+  border: 1.5px solid var(--sand);
+  transition: all .3s;
+}
+.step-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--orange);
+  box-shadow: 0 16px 40px rgba(240,123,29,0.12);
+}
+
+.step-number {
+  font-family: 'Fraunces', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--orange-soft);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.step-icon {
+  font-size: 2rem;
+  margin-bottom: 14px;
+}
+
+.step-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.step-desc {
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  line-height: 1.65;
+  font-weight: 600;
+}
+
+/* ─── TASK CATEGORIES ────────────────────────────── */
+.categories-section {
+  padding: 80px 6vw;
+  background: var(--sand);
+}
+
+.cats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.cat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .3s;
+  border: 1.5px solid transparent;
+}
+.cat-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(240,123,29,0.15);
+}
+
+.cat-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.cat-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.cat-desc {
+  font-size: 0.8rem;
+  color: var(--ink-light);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ─── TESTIMONIALS ───────────────────────────────── */
+.testimonials {
+  padding: 80px 6vw;
+  background: var(--cream);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.review-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 28px;
+  border: 1.5px solid var(--sand);
+}
+
+.review-stars {
+  color: var(--orange);
+  font-size: 1rem;
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+}
+
+.review-text {
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  font-weight: 600;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.review-name {
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.review-role {
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  font-weight: 600;
+}

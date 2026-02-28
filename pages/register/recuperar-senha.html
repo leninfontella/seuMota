@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Recuperar senha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <link rel="stylesheet" href="../../assets/css/compartilhado.css" />
+    <style>
+      /* Full-page auth layout — matches login */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Nunito", sans-serif;
+        background: var(--cream);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .reset-wrap {
+        width: 100%;
+        max-width: 480px;
+      }
+
+      /* Logo row */
+      .reset-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 32px;
+        text-decoration: none;
+      }
+
+      .reset-logo-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--orange);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(240, 123, 29, 0.4);
+        overflow: hidden;
+      }
+
+      .reset-logo-icon svg {
+        width: 34px;
+      }
+
+      .reset-logo-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .reset-logo-text span {
+        color: var(--orange);
+      }
+
+      /* Progress dots */
+      .reset-progress {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 32px;
+      }
+
+      .rp-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid var(--sand);
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        font-weight: 900;
+        color: var(--ink-light);
+        transition: all 0.3s;
+        flex-shrink: 0;
+      }
+
+      .rp-dot.active {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: white;
+        box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.15);
+      }
+      .rp-dot.done {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: white;
+      }
+
+      .rp-line {
+        width: 56px;
+        height: 2px;
+        background: var(--sand);
+        transition: background 0.3s;
+        flex-shrink: 0;
+      }
+
+      .rp-line.done {
+        background: #22c55e;
+      }
+
+      /* Card */
+      .reset-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 36px 32px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      }
+
+      .reset-step {
+        display: none;
+      }
+      .reset-step.active {
+        display: block;
+        animation: slideUp 0.3s ease both;
+      }
+
+      .reset-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        background: var(--orange-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .reset-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .reset-desc {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+
+      .reset-desc strong {
+        color: var(--ink);
+      }
+
+      /* OTP input row */
+      .otp-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+
+      .otp-input {
+        width: 52px;
+        height: 60px;
+        border: 2px solid var(--sand);
+        border-radius: 14px;
+        font-family: "Fraunces", serif;
+        font-size: 1.4rem;
+        font-weight: 900;
+        text-align: center;
+        color: var(--ink);
+        background: var(--cream);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .otp-input:focus {
+        border-color: var(--orange);
+        background: var(--white);
+      }
+
+      /* Resend timer */
+      .resend-row {
+        text-align: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 20px;
+      }
+
+      .resend-link {
+        color: var(--orange);
+        cursor: pointer;
+        font-weight: 800;
+        background: none;
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        transition: opacity 0.2s;
+      }
+
+      .resend-link:hover {
+        opacity: 0.7;
+      }
+      .resend-link:disabled {
+        color: var(--ink-light);
+        cursor: default;
+        opacity: 1;
+      }
+
+      /* Password strength bar */
+      .pwd-strength {
+        height: 4px;
+        border-radius: 50px;
+        background: var(--sand);
+        overflow: hidden;
+        margin-top: -10px;
+        margin-bottom: 10px;
+      }
+
+      .pwd-strength-fill {
+        height: 100%;
+        border-radius: 50px;
+        transition:
+          width 0.3s,
+          background 0.3s;
+        width: 0%;
+      }
+
+      .pwd-strength-label {
+        font-size: 0.72rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+
+      /* Success screen */
+      .reset-success {
+        text-align: center;
+        padding: 8px 0;
+      }
+
+      .success-anim {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #dcfce7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        margin: 0 auto 20px;
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .back-to-login {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .back-to-login:hover {
+        color: var(--orange);
+      }
+
+      /* Alert */
+      .alert-error {
+        background: #fef2f2;
+        border: 1.5px solid #fecaca;
+        border-radius: 10px;
+        padding: 11px 14px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #dc2626;
+        margin-bottom: 16px;
+        display: none;
+      }
+
+      .alert-error.show {
+        display: block;
+        animation: slideUp 0.25s ease both;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reset-wrap">
+      <!-- Logo -->
+      <a href="login.html" class="reset-logo">
+        <div class="reset-logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+            <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+            <rect
+              x="24"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <rect
+              x="54"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <circle cx="35" cy="57" r="5" fill="#4A3728" />
+            <circle cx="65" cy="57" r="5" fill="#4A3728" />
+            <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+            <path
+              d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        <span class="reset-logo-text">seu<span>Mota</span></span>
+      </a>
+
+      <!-- Progress -->
+      <div class="reset-progress" id="resetProgress">
+        <div class="rp-dot active" id="rp1">1</div>
+        <div class="rp-line" id="rl1"></div>
+        <div class="rp-dot" id="rp2">2</div>
+        <div class="rp-line" id="rl2"></div>
+        <div class="rp-dot" id="rp3">3</div>
+      </div>
+
+      <!-- Card with 3 steps + success -->
+      <div class="reset-card">
+        <!-- ── STEP 1: E-mail ── -->
+        <div class="reset-step active" id="step1">
+          <div class="reset-icon">📧</div>
+          <h1 class="reset-title">Esqueceu a senha?</h1>
+          <p class="reset-desc">
+            Sem problema! Digite seu e-mail cadastrado e enviaremos um código de
+            verificação para você.
+          </p>
+
+          <div class="alert-error" id="errorEmail">
+            E-mail não encontrado na nossa base. Tente novamente.
+          </div>
+
+          <div class="form-group">
+            <label for="emailInput">E-mail cadastrado</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="emailInput" placeholder="seu@email.com" />
+            </div>
+          </div>
+
+          <button
+            class="btn-submit"
+            id="sendCodeBtn"
+            style="
+              width: 100%;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              border: none;
+              cursor: pointer;
+              font-size: 0.95rem;
+              padding: 15px;
+              border-radius: 50px;
+              margin-top: 4px;
+            "
+          >
+            Enviar código →
+          </button>
+
+          <a href="/pages/login/login.html" class="back-to-login"
+            >← Voltar para o login</a
+          >
+        </div>
+
+        <!-- ── STEP 2: OTP code ── -->
+        <div class="reset-step" id="step2">
+          <div class="reset-icon">🔑</div>
+          <h1 class="reset-title">Digite o código</h1>
+          <p class="reset-desc" id="step2Desc">
+            Enviamos um código de 6 dígitos para
+            <strong id="emailDisplay"></strong>.<br />
+            Confira sua caixa de entrada (e o spam).
+          </p>
+
+          <div class="alert-error" id="errorOtp">
+            Código inválido ou expirado. Tente novamente.
+          </div>
+
+          <div class="otp-row" id="otpRow">
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+            <input
+              class="otp-input"
+              maxlength="1"
+              type="text"
+              inputmode="numeric"
+            />
+          </div>
+
+          <div class="resend-row">
+            Não recebeu?
+            <button class="resend-link" id="resendBtn" disabled>
+              Reenviar em <span id="countdown">60</span>s
+            </button>
+          </div>
+
+          <button
+            class="btn-submit"
+            id="verifyCodeBtn"
+            style="
+              width: 100%;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              border: none;
+              cursor: pointer;
+              font-size: 0.95rem;
+              padding: 15px;
+              border-radius: 50px;
+            "
+          >
+            Verificar código →
+          </button>
+
+          <button
+            id="backStep1"
+            style="
+              display: block;
+              width: 100%;
+              margin-top: 12px;
+              background: transparent;
+              border: 1.5px solid var(--sand);
+              border-radius: 50px;
+              padding: 13px;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              font-weight: 800;
+              font-size: 0.88rem;
+              color: var(--ink-mid);
+              cursor: pointer;
+            "
+          >
+            ← Trocar e-mail
+          </button>
+        </div>
+
+        <!-- ── STEP 3: New password ── -->
+        <div class="reset-step" id="step3">
+          <div class="reset-icon">🔒</div>
+          <h1 class="reset-title">Nova senha</h1>
+          <p class="reset-desc">
+            Escolha uma senha forte com pelo menos 8 caracteres.
+          </p>
+
+          <div class="alert-error" id="errorPwd">
+            As senhas não coincidem ou são muito curtas.
+          </div>
+
+          <div class="form-group">
+            <label for="newPwd">Nova senha</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="newPwd"
+                placeholder="Mínimo 8 caracteres"
+              />
+              <button class="pwd-toggle" id="toggleNewPwd" type="button">
+                👁️
+              </button>
+            </div>
+          </div>
+          <div class="pwd-strength">
+            <div class="pwd-strength-fill" id="strengthBar"></div>
+          </div>
+          <div
+            class="pwd-strength-label"
+            id="strengthLabel"
+            style="color: var(--ink-light)"
+          >
+            Força da senha
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPwd">Confirmar senha</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="confirmPwd"
+                placeholder="Repita a nova senha"
+              />
+              <button class="pwd-toggle" id="toggleConfirmPwd" type="button">
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <button
+            class="btn-submit"
+            id="saveNewPwdBtn"
+            style="
+              width: 100%;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              border: none;
+              cursor: pointer;
+              font-size: 0.95rem;
+              padding: 15px;
+              border-radius: 50px;
+              margin-top: 4px;
+            "
+          >
+            Salvar nova senha →
+          </button>
+        </div>
+
+        <!-- ── SUCCESS ── -->
+        <div class="reset-step" id="stepSuccess">
+          <div class="reset-success">
+            <div class="success-anim">✅</div>
+            <h2
+              style="
+                font-family: &quot;Fraunces&quot;, serif;
+                font-size: 1.6rem;
+                font-weight: 900;
+                color: var(--ink);
+                margin-bottom: 10px;
+              "
+            >
+              Senha redefinida!
+            </h2>
+            <p
+              style="
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--ink-light);
+                line-height: 1.65;
+                max-width: 300px;
+                margin: 0 auto 28px;
+              "
+            >
+              Sua senha foi alterada com sucesso. Agora é só fazer o login com a
+              nova senha.
+            </p>
+            <a
+              href="/pages/login/login.html"
+              class="btn-submit"
+              style="
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                padding: 15px;
+                border-radius: 50px;
+                font-family: &quot;Nunito&quot;, sans-serif;
+                font-weight: 800;
+                font-size: 0.95rem;
+              "
+            >
+              Entrar agora →
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- /reset-card -->
+    </div>
+    <!-- /reset-wrap -->
+
+    <script src="../../assets/js/recuperar-senha.js"></script>
+  </body>
+</html>

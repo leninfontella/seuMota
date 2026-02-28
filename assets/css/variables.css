@@ -1,0 +1,30 @@
+/* ─── RESET ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+/* ─── DESIGN TOKENS ──────────────────────────────── */
+:root {
+  --orange:      #F07B1D;
+  --orange-dark: #D96A0A;
+  --orange-soft: #FFF0E0;
+  --cream:       #FAF5ED;
+  --sand:        #F0E8D8;
+  --ink:         #1C1810;
+  --ink-mid:     #5C4F3A;
+  --ink-light:   #A0907A;
+  --white:       #FFFFFF;
+  --radius:      16px;
+}
+
+/* ─── BASE ───────────────────────────────────────── */
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}

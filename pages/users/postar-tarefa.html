@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Postar tarefa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <style>
+      /* ─── POST TASK SPECIFICS ─────────────────────── */
+
+      /* Centered narrow form */
+      .task-form-wrap {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      /* Step header */
+      .step-hero {
+        text-align: center;
+        margin-bottom: 36px;
+      }
+
+      .step-hero h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .step-hero p {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+      }
+
+      /* Inline stepper (horizontal) */
+      .task-stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 40px;
+      }
+
+      .ts-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .ts-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid var(--sand);
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        flex-shrink: 0;
+        transition: all 0.3s;
+      }
+
+      .ts-circle.active {
+        border-color: var(--orange);
+        background: var(--orange);
+        color: var(--white);
+        box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.15);
+      }
+
+      .ts-circle.done {
+        border-color: #22c55e;
+        background: #22c55e;
+        color: var(--white);
+      }
+
+      .ts-label {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-light);
+      }
+
+      .ts-label.active {
+        color: var(--orange);
+      }
+      .ts-label.done {
+        color: #22c55e;
+      }
+
+      .ts-line {
+        flex: 1;
+        height: 2px;
+        background: var(--sand);
+        min-width: 40px;
+        max-width: 80px;
+        margin: 0 4px;
+        transition: background 0.3s;
+      }
+
+      .ts-line.done {
+        background: #22c55e;
+      }
+
+      /* ─── CATEGORY PICKER ────────────────────────── */
+      .cat-picker {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .cat-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 12px;
+        background: var(--white);
+        border: 2px solid var(--sand);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .cat-option:hover {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+        transform: translateY(-2px);
+      }
+
+      .cat-option.selected {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+        box-shadow: 0 0 0 3px rgba(240, 123, 29, 0.12);
+      }
+
+      .cat-option.selected::after {
+        content: "✓";
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        font-size: 0.75rem;
+        font-weight: 900;
+        color: var(--orange);
+      }
+
+      .cat-option-emoji {
+        font-size: 2rem;
+      }
+      .cat-option-name {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--ink);
+        text-align: center;
+      }
+      .cat-option-desc {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      /* ─── PRICE SELECTOR ─────────────────────────── */
+      .price-suggestions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .price-pill {
+        padding: 8px 18px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .price-pill:hover,
+      .price-pill.selected {
+        border-color: var(--orange);
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+      }
+
+      .price-input-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .price-prefix {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink-mid);
+        flex-shrink: 0;
+      }
+
+      .price-input {
+        font-family: "Fraunces", serif !important;
+        font-size: 2rem !important;
+        font-weight: 900 !important;
+        text-align: center;
+        padding: 14px 20px !important;
+        border-radius: 14px !important;
+        max-width: 200px;
+      }
+
+      .price-hint {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-top: 10px;
+      }
+
+      /* ─── SUMMARY CARD ───────────────────────────── */
+      .summary-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .summary-header {
+        background: var(--sand);
+        padding: 14px 20px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--ink-mid);
+      }
+
+      .summary-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--sand);
+        gap: 16px;
+      }
+
+      .summary-row:last-child {
+        border-bottom: none;
+      }
+
+      .summary-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        flex-shrink: 0;
+      }
+
+      .summary-value {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+        text-align: right;
+      }
+
+      .summary-price {
+        font-family: "Fraunces", serif;
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: var(--orange);
+      }
+
+      /* Tip box */
+      .tip-box {
+        background: var(--orange-soft);
+        border: 1.5px solid rgba(240, 123, 29, 0.2);
+        border-radius: 12px;
+        padding: 14px 16px;
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .tip-icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+
+      .tip-text {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.6;
+      }
+
+      .tip-text strong {
+        color: var(--orange-dark);
+      }
+
+      @media (max-width: 640px) {
+        .cat-picker {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <path
+                d="M28 48 Q36 43 44 47"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M56 47 Q64 43 72 48"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <line
+                x1="46"
+                y1="57"
+                x2="54"
+                y2="57"
+                stroke="#4A3728"
+                stroke-width="2.5"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item">
+            <span class="nav-icon">🏠</span> Início
+          </a>
+          <a href="postar-tarefa.html" class="nav-item active">
+            <span class="nav-icon">📋</span> Postar tarefa
+          </a>
+          <a href="minhas-tarefas.html" class="nav-item">
+            <span class="nav-icon">🔍</span> Minhas tarefas
+            <span class="nav-badge">2</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item">
+            <span class="nav-icon">⭐</span> Motas favoritos
+          </a>
+          <a href="tarefas-recorrentes.html" class="nav-item">
+            <span class="nav-icon">🔁</span> Tarefas recorrentes
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item">
+            <span class="nav-icon">👤</span> Meu perfil
+          </a>
+          <a href="notificacoes.html" class="nav-item">
+            <span class="nav-icon">🔔</span> Notificações
+            <span class="nav-badge">3</span>
+          </a>
+          <a href="pagamentos.html" class="nav-item">
+            <span class="nav-icon">💳</span> Pagamentos
+          </a>
+          <a href="configuracoes.html" class="nav-item">
+            <span class="nav-icon">⚙️</span> Configurações
+          </a>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- ═══ MAIN ═══ -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Postar tarefa</h2>
+              <p>Leva menos de 2 minutos</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <a
+              href="dashboard-usuario.html"
+              style="
+                font-size: 0.85rem;
+                font-weight: 800;
+                color: var(--ink-mid);
+                text-decoration: none;
+              "
+              >← Voltar ao painel</a
+            >
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="task-form-wrap">
+            <!-- Stepper -->
+            <div class="task-stepper">
+              <div class="ts-item">
+                <div class="ts-circle active" id="ts1">1</div>
+                <span class="ts-label active" id="tl1">Categoria</span>
+              </div>
+              <div class="ts-line" id="tline1"></div>
+              <div class="ts-item">
+                <div class="ts-circle" id="ts2">2</div>
+                <span class="ts-label" id="tl2">Detalhes</span>
+              </div>
+              <div class="ts-line" id="tline2"></div>
+              <div class="ts-item">
+                <div class="ts-circle" id="ts3">3</div>
+                <span class="ts-label" id="tl3">Valor & Confirmar</span>
+              </div>
+            </div>
+
+            <form id="taskForm" novalidate>
+              <!-- ────── STEP 1: CATEGORIA ────── -->
+              <div class="form-step active" id="tstep1">
+                <div class="step-hero">
+                  <h2>Qual tarefa você precisa?</h2>
+                  <p>Escolha uma categoria para começar</p>
+                </div>
+
+                <div class="cat-picker" id="catPicker">
+                  <div class="cat-option" data-cat="lixo">
+                    <span class="cat-option-emoji">🗑️</span>
+                    <span class="cat-option-name">Levar o lixo</span>
+                    <span class="cat-option-desc"
+                      >Descer e levar até o ponto</span
+                    >
+                  </div>
+                  <div class="cat-option" data-cat="lavanderia">
+                    <span class="cat-option-emoji">👕</span>
+                    <span class="cat-option-name">Lavanderia</span>
+                    <span class="cat-option-desc"
+                      >Levar e/ou buscar roupas</span
+                    >
+                  </div>
+                  <div class="cat-option" data-cat="mercado">
+                    <span class="cat-option-emoji">🛒</span>
+                    <span class="cat-option-name">Mercado</span>
+                    <span class="cat-option-desc">Compras leves com lista</span>
+                  </div>
+                  <div class="cat-option" data-cat="banco">
+                    <span class="cat-option-emoji">🏦</span>
+                    <span class="cat-option-name">Banco / Lotérica</span>
+                    <span class="cat-option-desc">Pagar, sacar, depositar</span>
+                  </div>
+                  <div class="cat-option" data-cat="farmacia">
+                    <span class="cat-option-emoji">💊</span>
+                    <span class="cat-option-name">Farmácia</span>
+                    <span class="cat-option-desc">Buscar medicamentos</span>
+                  </div>
+                  <div class="cat-option" data-cat="encomenda">
+                    <span class="cat-option-emoji">📦</span>
+                    <span class="cat-option-name">Encomenda</span>
+                    <span class="cat-option-desc"
+                      >Retirar nos correios/loja</span
+                    >
+                  </div>
+                  <div class="cat-option" data-cat="pet">
+                    <span class="cat-option-emoji">🐕</span>
+                    <span class="cat-option-name">Pet</span>
+                    <span class="cat-option-desc">Passeio rápido</span>
+                  </div>
+                  <div class="cat-option" data-cat="outro">
+                    <span class="cat-option-emoji">➕</span>
+                    <span class="cat-option-name">Outro</span>
+                    <span class="cat-option-desc">Descreva o que precisa</span>
+                  </div>
+                </div>
+
+                <span
+                  class="field-error"
+                  id="catErr"
+                  style="
+                    display: block;
+                    text-align: center;
+                    margin-bottom: 16px;
+                  "
+                  >Selecione uma categoria</span
+                >
+
+                <div class="form-actions">
+                  <button type="button" class="btn-next" id="tnext1">
+                    Próximo: Detalhes →
+                  </button>
+                </div>
+              </div>
+
+              <!-- ────── STEP 2: DETALHES ────── -->
+              <div class="form-step" id="tstep2">
+                <div class="step-hero">
+                  <h2>Conte os detalhes</h2>
+                  <p>Quanto mais claro, mais rápido um Mota aceita</p>
+                </div>
+
+                <div class="form-group">
+                  <label for="t_title"
+                    >Título da tarefa
+                    <span style="color: #ef4444">*</span></label
+                  >
+                  <div class="input-wrap">
+                    <span class="input-icon">📝</span>
+                    <input
+                      type="text"
+                      id="t_title"
+                      placeholder="Ex: Comprar 5 itens no mercado da esquina"
+                      maxlength="80"
+                    />
+                  </div>
+                  <span class="field-error" id="t_titleErr"
+                    >Informe um título</span
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="t_desc">Descrição</label>
+                  <div class="input-wrap">
+                    <span class="input-icon" style="top: 16px; transform: none"
+                      >📋</span
+                    >
+                    <textarea
+                      id="t_desc"
+                      class="no-icon"
+                      style="padding-left: 42px"
+                      placeholder="Descreva o que precisa ser feito, lista de itens, instruções especiais, ponto de referência..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="t_date"
+                      >Data <span style="color: #ef4444">*</span></label
+                    >
+                    <div class="input-wrap">
+                      <span class="input-icon">📅</span>
+                      <input type="date" id="t_date" />
+                    </div>
+                    <span class="field-error" id="t_dateErr"
+                      >Selecione uma data</span
+                    >
+                  </div>
+                  <div class="form-group">
+                    <label for="t_time"
+                      >Horário <span style="color: #ef4444">*</span></label
+                    >
+                    <div class="input-wrap">
+                      <span class="input-icon">⏰</span>
+                      <input type="time" id="t_time" />
+                    </div>
+                    <span class="field-error" id="t_timeErr"
+                      >Selecione um horário</span
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="t_address"
+                    >Endereço para a tarefa
+                    <span style="color: #ef4444">*</span></label
+                  >
+                  <div class="input-wrap">
+                    <span class="input-icon">📍</span>
+                    <input
+                      type="text"
+                      id="t_address"
+                      placeholder="Rua, número — ou use o endereço salvo no perfil"
+                    />
+                  </div>
+                  <span class="field-error" id="t_addressErr"
+                    >Informe o endereço</span
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label
+                    >Fotos ou comprovantes
+                    <span style="font-weight: 600; color: var(--ink-light)"
+                      >(opcional)</span
+                    ></label
+                  >
+                  <div class="photo-upload">
+                    <div class="photo-upload-icon">📎</div>
+                    <div class="photo-upload-label">
+                      Anexar imagem ou documento
+                    </div>
+                    <div class="photo-upload-hint">
+                      Ex: lista de compras, boleto, foto do local — máx. 3
+                      arquivos
+                    </div>
+                    <input
+                      type="file"
+                      id="t_files"
+                      accept="image/*,application/pdf"
+                      multiple
+                    />
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn-back" id="tback2">
+                    ← Voltar
+                  </button>
+                  <button type="button" class="btn-next" id="tnext2">
+                    Próximo: Valor →
+                  </button>
+                </div>
+              </div>
+
+              <!-- ────── STEP 3: VALOR E CONFIRMAÇÃO ────── -->
+              <div class="form-step" id="tstep3">
+                <div class="step-hero">
+                  <h2>Defina o valor</h2>
+                  <p>Você define o quanto quer pagar pelo serviço</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Sugestões para esta categoria</label>
+                  <div class="price-suggestions">
+                    <button type="button" class="price-pill" data-price="8">
+                      R$ 8
+                    </button>
+                    <button type="button" class="price-pill" data-price="15">
+                      R$ 15
+                    </button>
+                    <button
+                      type="button"
+                      class="price-pill selected"
+                      data-price="25"
+                    >
+                      R$ 25
+                    </button>
+                    <button type="button" class="price-pill" data-price="40">
+                      R$ 40
+                    </button>
+                    <button type="button" class="price-pill" data-price="60">
+                      R$ 60
+                    </button>
+                  </div>
+
+                  <div class="price-input-row">
+                    <span class="price-prefix">R$</span>
+                    <input
+                      type="number"
+                      id="t_price"
+                      class="price-input no-icon"
+                      value="25"
+                      min="5"
+                      max="500"
+                      step="1"
+                    />
+                  </div>
+                  <p class="price-hint">
+                    💡 Valores mais altos atraem Motas mais rápido. Mínimo: R$
+                    5.
+                  </p>
+                  <span class="field-error" id="t_priceErr"
+                    >Valor mínimo é R$ 5</span
+                  >
+                </div>
+
+                <!-- Summary -->
+                <div class="summary-card">
+                  <div class="summary-header">Resumo da tarefa</div>
+                  <div class="summary-row">
+                    <span class="summary-label">Categoria</span>
+                    <span class="summary-value" id="sum_cat">—</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Título</span>
+                    <span class="summary-value" id="sum_title">—</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Quando</span>
+                    <span class="summary-value" id="sum_when">—</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Endereço</span>
+                    <span class="summary-value" id="sum_addr">—</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Valor</span>
+                    <span class="summary-value summary-price" id="sum_price"
+                      >R$ 25</span
+                    >
+                  </div>
+                </div>
+
+                <div class="tip-box">
+                  <span class="tip-icon">💳</span>
+                  <p class="tip-text">
+                    O pagamento só é
+                    <strong>debitado quando um Mota aceitar</strong> sua tarefa.
+                    Se ninguém aceitar em 2h, você não paga nada.
+                  </p>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn-back" id="tback3">
+                    ← Voltar
+                  </button>
+                  <button type="submit" class="btn-submit">
+                    ✅ Publicar tarefa
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Success -->
+            <div class="success-screen" id="taskSuccess">
+              <div class="success-icon">🎉</div>
+              <h2 class="success-title">Tarefa publicada!</h2>
+              <p class="success-desc">
+                Sua tarefa já está visível para os Motas próximos a você. Você
+                receberá uma notificação assim que alguém aceitar.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  max-width: 320px;
+                  margin: 0 auto;
+                "
+              >
+                <a
+                  href="dashboard-usuario.html"
+                  class="btn-submit"
+                  style="display: inline-flex; text-decoration: none"
+                >
+                  Ver minhas tarefas →
+                </a>
+                <button
+                  type="button"
+                  onclick="location.reload()"
+                  style="
+                    background: transparent;
+                    border: 1.5px solid var(--sand);
+                    border-radius: 50px;
+                    padding: 13px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    color: var(--ink-mid);
+                  "
+                >
+                  Postar outra tarefa
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/postar-tarefa.js"></script>
+  </body>
+</html>

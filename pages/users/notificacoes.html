@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Notificações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <link rel="stylesheet" href="../../assets/css/compartilhado.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="minhas-tarefas.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Minhas tarefas</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item active"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >3</span
+            ></a
+          >
+          <a href="chat.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens<span class="nav-badge"
+              >2</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+          <a href="configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Notificações</h2>
+              <p id="notifCount">3 não lidas</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button
+              class="icon-btn"
+              id="markAllRead"
+              title="Marcar todas como lidas"
+            >
+              ✓ Lidas
+            </button>
+            <div class="user-avatar" style="cursor: pointer">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="notif-layout">
+            <!-- LEFT: notification list -->
+            <div>
+              <!-- Tabs -->
+              <div class="notif-tabs">
+                <button class="notif-tab active" data-tab="all">
+                  Todas <span class="notif-tab-count" id="tabCountAll">3</span>
+                </button>
+                <button class="notif-tab" data-tab="tarefas">Tarefas</button>
+                <button class="notif-tab" data-tab="pagamentos">
+                  Pagamentos
+                </button>
+                <button class="notif-tab" data-tab="sistema">Sistema</button>
+              </div>
+
+              <!-- List -->
+              <div class="notif-list" id="notifList">
+                <div class="notif-divider">Hoje</div>
+
+                <div class="notif-item unread" data-type="tarefas" data-id="n1">
+                  <div class="notif-icon-wrap orange">🛒</div>
+                  <div class="notif-content">
+                    <div class="notif-title">João Pedro chegou no mercado!</div>
+                    <div class="notif-desc">
+                      Ele está coletando os itens da sua lista agora
+                    </div>
+                  </div>
+                  <div class="notif-time">agora</div>
+                </div>
+
+                <div class="notif-item unread" data-type="tarefas" data-id="n2">
+                  <div class="notif-icon-wrap green">✅</div>
+                  <div class="notif-content">
+                    <div class="notif-title">
+                      Nova tarefa aceita por 4 Motas
+                    </div>
+                    <div class="notif-desc">
+                      Escolha um Mota para sua tarefa de hoje às 14h
+                    </div>
+                  </div>
+                  <div class="notif-time">12min</div>
+                </div>
+
+                <div class="notif-item unread" data-type="sistema" data-id="n3">
+                  <div class="notif-icon-wrap blue">⭐</div>
+                  <div class="notif-content">
+                    <div class="notif-title">
+                      João Pedro é seu novo favorito!
+                    </div>
+                    <div class="notif-desc">
+                      Ele aparecerá primeiro nas próximas tarefas similares
+                    </div>
+                  </div>
+                  <div class="notif-time">38min</div>
+                </div>
+
+                <div class="notif-divider">Ontem</div>
+
+                <div class="notif-item" data-type="pagamentos" data-id="n4">
+                  <div class="notif-icon-wrap green">💳</div>
+                  <div class="notif-content">
+                    <div class="notif-title">Pagamento confirmado — R$ 25</div>
+                    <div class="notif-desc">
+                      Compras no mercado · João Pedro · 12 fev
+                    </div>
+                  </div>
+                  <div class="notif-time">ontem</div>
+                </div>
+
+                <div class="notif-item" data-type="tarefas" data-id="n5">
+                  <div class="notif-icon-wrap orange">🎉</div>
+                  <div class="notif-content">
+                    <div class="notif-title">Tarefa concluída com sucesso!</div>
+                    <div class="notif-desc">
+                      Compras no mercado · Avalie João Pedro
+                    </div>
+                  </div>
+                  <div class="notif-time">ontem</div>
+                </div>
+
+                <div class="notif-item" data-type="tarefas" data-id="n6">
+                  <div class="notif-icon-wrap orange">🏍️</div>
+                  <div class="notif-content">
+                    <div class="notif-title">João Pedro está a caminho</div>
+                    <div class="notif-desc">
+                      Previsão de chegada ao mercado: 5 minutos
+                    </div>
+                  </div>
+                  <div class="notif-time">ontem</div>
+                </div>
+
+                <div class="notif-divider">Esta semana</div>
+
+                <div class="notif-item" data-type="sistema" data-id="n7">
+                  <div class="notif-icon-wrap blue">🎁</div>
+                  <div class="notif-content">
+                    <div class="notif-title">
+                      Seu amigo Pedro ganhou R$ 10 de crédito!
+                    </div>
+                    <div class="notif-desc">
+                      Convide mais amigos e ganhe R$ 10 para cada um que
+                      completar a primeira tarefa
+                    </div>
+                  </div>
+                  <div class="notif-time">2 dias</div>
+                </div>
+
+                <div class="notif-item" data-type="sistema" data-id="n8">
+                  <div class="notif-icon-wrap gray">🔒</div>
+                  <div class="notif-content">
+                    <div class="notif-title">Novo login detectado</div>
+                    <div class="notif-desc">
+                      iPhone · São Paulo, SP · Se não foi você, troque sua senha
+                    </div>
+                  </div>
+                  <div class="notif-time">3 dias</div>
+                </div>
+
+                <div class="notif-item" data-type="pagamentos" data-id="n9">
+                  <div class="notif-icon-wrap green">💳</div>
+                  <div class="notif-content">
+                    <div class="notif-title">Pagamento confirmado — R$ 20</div>
+                    <div class="notif-desc">
+                      Buscar roupa na lavanderia · Carlos Mendes · 10 fev
+                    </div>
+                  </div>
+                  <div class="notif-time">3 dias</div>
+                </div>
+              </div>
+              <!-- /notifList -->
+
+              <div
+                id="notifEmpty"
+                style="display: none; text-align: center; padding: 60px 20px"
+              >
+                <div style="font-size: 3rem; margin-bottom: 14px">🔔</div>
+                <div
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.2rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 8px;
+                  "
+                >
+                  Nenhuma notificação aqui
+                </div>
+                <div
+                  style="
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                  "
+                >
+                  Tudo em dia por aqui!
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: settings panel -->
+            <div>
+              <div
+                class="card"
+                style="padding: 0; overflow: hidden; margin-bottom: 16px"
+              >
+                <div
+                  style="
+                    padding: 16px 18px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 0.78rem;
+                      font-weight: 800;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                      color: var(--ink-light);
+                    "
+                  >
+                    Preferências de notificação
+                  </div>
+                </div>
+                <div
+                  class="notif-settings-card"
+                  style="border: none; border-radius: 0"
+                >
+                  <div class="notif-setting-row">
+                    <div>
+                      <div class="notif-setting-label">
+                        Atualizações de tarefa
+                      </div>
+                      <div class="notif-setting-sub">
+                        Aceite, chegada, conclusão
+                      </div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+
+                  <div class="notif-setting-row">
+                    <div>
+                      <div class="notif-setting-label">Mensagens de chat</div>
+                      <div class="notif-setting-sub">Novos msgs dos Motas</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+
+                  <div class="notif-setting-row">
+                    <div>
+                      <div class="notif-setting-label">
+                        Confirmação de pagamento
+                      </div>
+                      <div class="notif-setting-sub">Débito e créditos</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+
+                  <div class="notif-setting-row">
+                    <div>
+                      <div class="notif-setting-label">
+                        Promoções e novidades
+                      </div>
+                      <div class="notif-setting-sub">Ofertas e cupons</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+
+                  <div class="notif-setting-row">
+                    <div>
+                      <div class="notif-setting-label">Push no celular</div>
+                      <div class="notif-setting-sub">Notificações do app</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+
+                  <div class="notif-setting-row" style="border-bottom: none">
+                    <div>
+                      <div class="notif-setting-label">E-mail semanal</div>
+                      <div class="notif-setting-sub">Resumo de atividades</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" />
+                      <div class="toggle-track"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stats -->
+              <div class="card" style="padding: 20px">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Esta semana
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Total recebido</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: var(--ink);
+                      "
+                      >9</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Tarefas</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: var(--orange);
+                      "
+                      >4</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: space-between">
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Pagamentos</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 0.95rem;
+                        font-weight: 900;
+                        color: #16a34a;
+                      "
+                      >2</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/notificacoes.js"></script>
+  </body>
+</html>

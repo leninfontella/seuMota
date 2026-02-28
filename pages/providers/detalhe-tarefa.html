@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Detalhe da tarefa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .expiry-bar {
+        background: #fef9ec;
+        border: 1.5px solid #fde68a;
+        border-radius: 12px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .expiry-icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .expiry-text {
+        font-size: 0.83rem;
+        font-weight: 700;
+        color: #92400e;
+        flex: 1;
+      }
+      .expiry-timer {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: #b45309;
+        flex-shrink: 0;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        text-decoration: none;
+        margin-bottom: 20px;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--ink);
+      }
+      /* Confirm modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 300;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal-backdrop.open {
+        display: flex;
+      }
+      .modal {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 32px 28px;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        animation: slideUp 0.3s ease both;
+      }
+      .modal-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+      }
+      .modal-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 10px;
+      }
+      .modal-desc {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+      .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .modal-btn-confirm {
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 14px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .modal-btn-confirm:hover {
+        background: #16a34a;
+      }
+      .modal-btn-cancel {
+        background: transparent;
+        color: var(--ink-mid);
+        border: 1.5px solid var(--sand);
+        border-radius: 50px;
+        padding: 13px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.88rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .modal-btn-cancel:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <path
+                d="M28 48 Q36 43 44 47"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M56 47 Q64 43 72 48"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <line
+                x1="46"
+                y1="57"
+                x2="54"
+                y2="57"
+                stroke="#4A3728"
+                stroke-width="2.5"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="online-toggle-wrap">
+          <div class="online-toggle-info">
+            <div class="online-toggle-label">Status</div>
+            <div class="online-toggle-status is-online">
+              <div class="online-dot is-online"></div>
+              Online
+            </div>
+          </div>
+          <label class="toggle-switch"
+            ><input type="checkbox" checked />
+            <div class="toggle-track"></div
+          ></label>
+        </div>
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="detalhe-tarefa.html" class="nav-item active"
+            ><span class="nav-icon">📋</span> Tarefas ativas<span
+              class="nav-badge"
+              >1</span
+            ></a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">✅</span> Histórico</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Financeiro</div>
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Meus ganhos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-publico-mota.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >2</span
+            ></a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- ═══ MAIN ═══ -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Detalhe da tarefa</h2>
+              <p>Leia com atenção antes de aceitar</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔<span class="dot"></span></button>
+            <div class="user-avatar" style="cursor: pointer">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <a href="dashboard-mota.html" class="back-link"
+            >← Voltar às tarefas</a
+          >
+
+          <!-- Expiry countdown -->
+          <div class="expiry-bar">
+            <span class="expiry-icon">⏰</span>
+            <span class="expiry-text"
+              >Esta tarefa expira se ninguém aceitar em breve</span
+            >
+            <span class="expiry-timer" id="expiryTimer">14:32</span>
+          </div>
+
+          <div class="detail-wrap">
+            <!-- LEFT: task info -->
+            <div>
+              <div class="detail-card">
+                <div class="detail-section">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 14px;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 56px;
+                        height: 56px;
+                        border-radius: 16px;
+                        background: var(--orange-soft);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.8rem;
+                        flex-shrink: 0;
+                      "
+                    >
+                      🛒
+                    </div>
+                    <div>
+                      <div
+                        style="
+                          font-size: 0.72rem;
+                          font-weight: 800;
+                          text-transform: uppercase;
+                          letter-spacing: 1px;
+                          color: var(--ink-light);
+                          margin-bottom: 4px;
+                        "
+                      >
+                        Mercado
+                      </div>
+                      <h1
+                        class="detail-title"
+                        style="font-size: 1.3rem; margin: 0"
+                      >
+                        Compras no mercado — lista pequena
+                      </h1>
+                    </div>
+                  </div>
+                  <p class="detail-desc">
+                    Preciso de alguém para comprar alguns itens no Pão de Açúcar
+                    da Av. Paulista. A lista é pequena, aproximadamente 8 itens.
+                    Tudo fácil de encontrar.
+                    <br /><br />
+                    <strong>Lista:</strong><br />
+                    • 1 caixa de leite integral (1L)<br />
+                    • 2 iogurtes naturais (Danone)<br />
+                    • Pão de forma integral<br />
+                    • 1 dúzia de ovos<br />
+                    • Manteiga sem sal (200g)<br />
+                    • Suco de laranja (1L)<br />
+                    • Sabão em pó (500g)
+                  </p>
+                </div>
+
+                <div class="detail-section">
+                  <div class="detail-section-title">Informações da tarefa</div>
+                  <div class="detail-meta-grid">
+                    <div class="detail-meta-item">
+                      <div class="detail-meta-label">Data e hora</div>
+                      <div class="detail-meta-value">📅 Hoje, 14h00</div>
+                    </div>
+                    <div class="detail-meta-item">
+                      <div class="detail-meta-label">Distância</div>
+                      <div class="detail-meta-value">📍 320m de você</div>
+                    </div>
+                    <div class="detail-meta-item">
+                      <div class="detail-meta-label">Endereço de entrega</div>
+                      <div class="detail-meta-value">
+                        🏠 Rua das Flores, 142 · Ap 51
+                      </div>
+                    </div>
+                    <div class="detail-meta-item">
+                      <div class="detail-meta-label">Tempo estimado</div>
+                      <div class="detail-meta-value">⏱ ~40 minutos</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="detail-section">
+                  <div class="detail-section-title">Quem pediu</div>
+                  <div class="client-row">
+                    <div class="client-avatar">👩</div>
+                    <div>
+                      <div class="client-name">Ana Paula</div>
+                      <div class="client-meta">
+                        ★ 4.8 como cliente · 14 tarefas concluídas · Membro
+                        desde 2024
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="detail-section">
+                  <div class="detail-section-title">Local no mapa</div>
+                  <div class="map-placeholder">
+                    <span>🗺️</span>
+                    Mapa disponível após aceitar (Google Maps API)
+                  </div>
+                  <p
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 600;
+                      color: var(--ink-light);
+                    "
+                  >
+                    📍 Pão de Açúcar — Av. Paulista, 1374 · entrega em Rua das
+                    Flores, 142
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: action panel -->
+            <div>
+              <div class="action-panel">
+                <div class="action-price">
+                  <div class="action-price-label">Você receberá</div>
+                  <div class="action-price-value">R$ 25</div>
+                  <div class="action-price-hint">
+                    Pago imediatamente após confirmação da entrega
+                  </div>
+                </div>
+
+                <div class="action-checklist">
+                  <div class="action-check-item">
+                    <div class="check-dot">✓</div>
+                    Pagamento garantido pela plataforma
+                  </div>
+                  <div class="action-check-item">
+                    <div class="check-dot">✓</div>
+                    Cliente verificado com avaliação ★ 4.8
+                  </div>
+                  <div class="action-check-item">
+                    <div class="check-dot">✓</div>
+                    Suporte disponível durante a tarefa
+                  </div>
+                </div>
+
+                <button
+                  class="btn-accept"
+                  style="
+                    width: 100%;
+                    padding: 14px;
+                    font-size: 0.95rem;
+                    border-radius: 12px;
+                    margin-bottom: 10px;
+                  "
+                  id="acceptBtn"
+                >
+                  ✅ Aceitar esta tarefa
+                </button>
+                <button
+                  class="btn-decline"
+                  style="width: 100%; padding: 13px; border-radius: 12px"
+                  id="declineBtn"
+                >
+                  Recusar e voltar
+                </button>
+
+                <p
+                  style="
+                    font-size: 0.73rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                    text-align: center;
+                    margin-top: 14px;
+                    line-height: 1.55;
+                  "
+                >
+                  Ao aceitar você se compromete a realizar a tarefa no horário
+                  combinado.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- /detail-wrap -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Confirm modal -->
+    <div class="modal-backdrop" id="confirmModal">
+      <div class="modal">
+        <div class="modal-icon">🤝</div>
+        <h2 class="modal-title">Confirmar aceite?</h2>
+        <p class="modal-desc">
+          Você está aceitando a tarefa
+          <strong>"Compras no mercado"</strong> para hoje às 14h.<br />
+          O cliente será notificado imediatamente.
+        </p>
+        <div class="modal-actions">
+          <button class="modal-btn-confirm" id="confirmYes">
+            ✅ Sim, aceitar tarefa
+          </button>
+          <button class="modal-btn-cancel" id="confirmNo">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/detalhe-tarefa.js"></script>
+  </body>
+</html>

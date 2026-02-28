@@ -1,0 +1,89 @@
+/* ─── CTA FINAL ──────────────────────────────────── */
+.cta-section {
+  background: var(--ink);
+  padding: 80px 6vw;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240,123,29,0.12) 0%, transparent 70%);
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cta-section h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.cta-section h2 em {
+  color: var(--orange);
+  font-style: italic;
+}
+
+.cta-section p {
+  color: rgba(255,255,255,0.6);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 36px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── FOOTER ─────────────────────────────────────── */
+footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 28px 6vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo {
+  color: var(--white);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+.footer-logo span { color: var(--orange); }
+
+footer p {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--orange); }

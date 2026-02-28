@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Meu Perfil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <link rel="stylesheet" href="../../assets/css/compartilhado.css" />
+    <style>
+      .section-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+      .section-card-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .section-edit-btn {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--orange);
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: opacity 0.2s;
+      }
+      .section-edit-btn:hover {
+        opacity: 0.7;
+      }
+      /* Form grid */
+      .form-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      /* Saved cards */
+      .saved-card-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1.5px solid var(--sand);
+        margin-bottom: 10px;
+        background: var(--white);
+        transition: border-color 0.2s;
+      }
+      .saved-card-item:last-of-type {
+        margin-bottom: 0;
+      }
+      .saved-card-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+      .saved-card-info {
+        flex: 1;
+      }
+      .saved-card-label {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .saved-card-num {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-top: 2px;
+      }
+      .saved-card-del {
+        background: none;
+        border: none;
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        cursor: pointer;
+        padding: 4px;
+        transition: color 0.2s;
+      }
+      .saved-card-del:hover {
+        color: #ef4444;
+      }
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: var(--ink);
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 12px 24px;
+        border-radius: 50px;
+        transition: transform 0.3s;
+        z-index: 500;
+        white-space: nowrap;
+      }
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+      @media (max-width: 640px) {
+        .form-row-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="minhas-tarefas.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Minhas tarefas</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Motas favoritos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item active"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >3</span
+            ></a
+          >
+          <a href="chat.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens<span class="nav-badge"
+              >2</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+          <a href="configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Meu perfil</h2>
+              <p>Gerencie seus dados e endereços</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔<span class="dot"></span></button>
+            <div class="user-avatar" style="cursor: pointer">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="profile-layout">
+            <!-- LEFT col -->
+            <div>
+              <!-- Photo + name header -->
+              <div class="profile-pic-section">
+                <div
+                  class="profile-pic-avatar"
+                  id="picAvatar"
+                  title="Trocar foto"
+                >
+                  👩
+                  <div class="profile-pic-overlay">📷</div>
+                </div>
+                <div class="profile-pic-info">
+                  <h3>Ana Paula Ferreira</h3>
+                  <p>Cliente desde Janeiro 2025 · 16 tarefas postadas</p>
+                  <button class="profile-pic-btn" id="changePicBtn">
+                    📷 Trocar foto
+                  </button>
+                </div>
+              </div>
+
+              <!-- Personal data -->
+              <div class="section-card">
+                <div class="section-card-title">
+                  Dados pessoais
+                  <button class="section-edit-btn" id="editPersonalBtn">
+                    ✏️ Editar
+                  </button>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Nome</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">👤</span>
+                      <input
+                        type="text"
+                        id="fieldNome"
+                        value="Ana Paula"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Sobrenome</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">👤</span>
+                      <input
+                        type="text"
+                        id="fieldSobrenome"
+                        value="Ferreira"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>CPF</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">🪪</span>
+                      <input type="text" value="***.456.789-00" disabled />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Data de nascimento</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">📅</span>
+                      <input
+                        type="text"
+                        id="fieldNasc"
+                        value="15/03/1990"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  id="personalActions"
+                  style="
+                    display: none;
+                    margin-top: 4px;
+                    display: none;
+                    gap: 10px;
+                  "
+                >
+                  <button
+                    class="btn-submit"
+                    id="savePersonalBtn"
+                    style="
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      border: none;
+                      cursor: pointer;
+                      padding: 12px 24px;
+                      border-radius: 50px;
+                      font-size: 0.88rem;
+                    "
+                  >
+                    💾 Salvar alterações
+                  </button>
+                  <button
+                    id="cancelPersonalBtn"
+                    style="
+                      background: transparent;
+                      border: 1.5px solid var(--sand);
+                      border-radius: 50px;
+                      padding: 11px 20px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.88rem;
+                      color: var(--ink-mid);
+                      cursor: pointer;
+                    "
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Contact info -->
+              <div class="section-card">
+                <div class="section-card-title">
+                  Contato
+                  <button class="section-edit-btn" id="editContactBtn">
+                    ✏️ Editar
+                  </button>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>E-mail</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">✉️</span>
+                      <input
+                        type="email"
+                        id="fieldEmail"
+                        value="ana.paula@email.com"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Telefone / WhatsApp</label>
+                    <div class="input-wrap">
+                      <span class="input-icon">📱</span>
+                      <input
+                        type="tel"
+                        id="fieldTel"
+                        value="(11) 99999-0000"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  id="contactActions"
+                  style="display: none; gap: 10px; margin-top: 4px"
+                >
+                  <button
+                    class="btn-submit"
+                    id="saveContactBtn"
+                    style="
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      border: none;
+                      cursor: pointer;
+                      padding: 12px 24px;
+                      border-radius: 50px;
+                      font-size: 0.88rem;
+                    "
+                  >
+                    💾 Salvar
+                  </button>
+                  <button
+                    id="cancelContactBtn"
+                    style="
+                      background: transparent;
+                      border: 1.5px solid var(--sand);
+                      border-radius: 50px;
+                      padding: 11px 20px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.88rem;
+                      color: var(--ink-mid);
+                      cursor: pointer;
+                    "
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Saved addresses -->
+              <div class="section-card">
+                <div class="section-card-title">Endereços salvos</div>
+
+                <div class="address-list" id="addressList">
+                  <div class="address-card default" data-addr="home">
+                    <div class="address-icon">🏠</div>
+                    <div class="address-info">
+                      <div class="address-label">Casa</div>
+                      <div class="address-full">
+                        Rua das Flores, 142 · Ap 51 · Vila Madalena · São Paulo
+                      </div>
+                    </div>
+                    <span class="address-default-badge">Padrão</span>
+                  </div>
+
+                  <div class="address-card" data-addr="work">
+                    <div class="address-icon">💼</div>
+                    <div class="address-info">
+                      <div class="address-label">Trabalho</div>
+                      <div class="address-full">
+                        Av. Paulista, 1374 · Bela Vista · São Paulo
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  class="add-address-btn"
+                  id="addAddressBtn"
+                  style="margin-top: 12px"
+                >
+                  ➕ Adicionar endereço
+                </button>
+              </div>
+
+              <!-- Saved payment methods -->
+              <div class="section-card">
+                <div class="section-card-title">
+                  Métodos de pagamento
+                  <button class="section-edit-btn">➕ Adicionar</button>
+                </div>
+                <div class="saved-card-item">
+                  <div class="saved-card-icon">💳</div>
+                  <div class="saved-card-info">
+                    <div class="saved-card-label">Cartão Visa · •••• 4242</div>
+                    <div class="saved-card-num">Expira 08/2027 · Padrão</div>
+                  </div>
+                  <button class="saved-card-del">🗑️</button>
+                </div>
+                <div class="saved-card-item">
+                  <div class="saved-card-icon">🏦</div>
+                  <div class="saved-card-info">
+                    <div class="saved-card-label">Pix — CPF cadastrado</div>
+                    <div class="saved-card-num">***.456.789-00</div>
+                  </div>
+                  <button class="saved-card-del">🗑️</button>
+                </div>
+              </div>
+
+              <!-- Danger zone -->
+              <div class="danger-zone">
+                <div class="danger-title">⚠️ Zona de risco</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <button class="danger-btn" id="deactivateBtn">
+                    😴 Desativar conta
+                  </button>
+                  <button class="danger-btn" id="deleteBtn">
+                    🗑️ Excluir conta
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- /left col -->
+
+            <!-- RIGHT col -->
+            <div>
+              <!-- Security -->
+              <div class="section-card">
+                <div class="section-card-title">Segurança</div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <a
+                    href="recuperar-senha.html"
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 12px 0;
+                      border-bottom: 1px solid var(--sand);
+                      text-decoration: none;
+                      color: var(--ink);
+                      transition: color 0.2s;
+                    "
+                    onmouseover="this.style.color = 'var(--orange)'"
+                    onmouseout="this.style.color = 'var(--ink)'"
+                  >
+                    <div style="display: flex; align-items: center; gap: 10px">
+                      <span>🔑</span>
+                      <div>
+                        <div style="font-size: 0.88rem; font-weight: 800">
+                          Trocar senha
+                        </div>
+                        <div
+                          style="
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: var(--ink-light);
+                          "
+                        >
+                          Última troca há 45 dias
+                        </div>
+                      </div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: var(--ink-light)"
+                      >→</span
+                    >
+                  </a>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 12px 0;
+                      border-bottom: 1px solid var(--sand);
+                    "
+                  >
+                    <div style="display: flex; align-items: center; gap: 10px">
+                      <span>📱</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 0.88rem;
+                            font-weight: 800;
+                            color: var(--ink);
+                          "
+                        >
+                          Autenticação 2 fatores
+                        </div>
+                        <div
+                          style="
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: var(--ink-light);
+                          "
+                        >
+                          SMS para (11) 99999-0000
+                        </div>
+                      </div>
+                    </div>
+                    <span class="badge badge-green" style="font-size: 0.68rem"
+                      >Ativo</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 12px 0;
+                    "
+                  >
+                    <div style="display: flex; align-items: center; gap: 10px">
+                      <span>📋</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 0.88rem;
+                            font-weight: 800;
+                            color: var(--ink);
+                          "
+                        >
+                          Sessões ativas
+                        </div>
+                        <div
+                          style="
+                            font-size: 0.72rem;
+                            font-weight: 600;
+                            color: var(--ink-light);
+                          "
+                        >
+                          2 dispositivos
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      style="
+                        font-size: 0.78rem;
+                        font-weight: 800;
+                        color: #dc2626;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                      "
+                    >
+                      Encerrar todas
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stats card -->
+              <div class="section-card">
+                <div class="section-card-title">Sua atividade</div>
+                <div style="display: flex; flex-direction: column; gap: 14px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Tarefas postadas</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.1rem;
+                        font-weight: 900;
+                        color: var(--ink);
+                      "
+                      >16</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Concluídas</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.1rem;
+                        font-weight: 900;
+                        color: #16a34a;
+                      "
+                      >14</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Total gasto</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.1rem;
+                        font-weight: 900;
+                        color: var(--orange);
+                      "
+                      >R$ 312</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Motas favoritos</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.1rem;
+                        font-weight: 900;
+                        color: var(--ink);
+                      "
+                      >2</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        color: var(--ink-mid);
+                      "
+                      >Nota média dada</span
+                    >
+                    <span
+                      style="
+                        font-family: &quot;Fraunces&quot;, serif;
+                        font-size: 1.1rem;
+                        font-weight: 900;
+                        color: var(--orange);
+                      "
+                      >★ 4.8</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Referral -->
+              <div
+                class="section-card"
+                style="
+                  background: linear-gradient(135deg, #fff8f2, #ffedda);
+                  border-color: rgba(240, 123, 29, 0.2);
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 800;
+                    color: var(--ink);
+                    margin-bottom: 6px;
+                  "
+                >
+                  🎁 Indique amigos
+                </div>
+                <p
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                    color: var(--ink-mid);
+                    line-height: 1.6;
+                    margin-bottom: 14px;
+                  "
+                >
+                  Você e seu amigo ganham R$ 10 de crédito na primeira tarefa
+                  concluída!
+                </p>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: var(--white);
+                    border: 1.5px solid rgba(240, 123, 29, 0.2);
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                  "
+                >
+                  <span
+                    style="
+                      flex: 1;
+                      font-size: 0.85rem;
+                      font-weight: 800;
+                      color: var(--orange);
+                    "
+                    >ANAPAULA10</span
+                  >
+                  <button
+                    id="copyRefBtn"
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 800;
+                      color: var(--ink-mid);
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                      transition: color 0.2s;
+                    "
+                    onmouseover="this.style.color = 'var(--orange)'"
+                    onmouseout="this.style.color = 'var(--ink-mid)'"
+                  >
+                    📋 Copiar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- /right col -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Add address modal -->
+    <div
+      class="modal-backdrop"
+      id="addressModal"
+      style="
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 300;
+      "
+    >
+      <div
+        style="
+          background: var(--white);
+          border-radius: 20px;
+          padding: 28px;
+          max-width: 440px;
+          width: 100%;
+          animation: slideUp 0.3s ease both;
+        "
+      >
+        <h3
+          style="
+            font-family: &quot;Fraunces&quot;, serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--ink);
+            margin-bottom: 20px;
+          "
+        >
+          Adicionar endereço
+        </h3>
+        <div class="form-group">
+          <label>Apelido (ex: Casa, Trabalho)</label>
+          <div class="input-wrap">
+            <span class="input-icon">🏷️</span
+            ><input type="text" id="newAddrLabel" placeholder="Casa" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Endereço completo</label>
+          <div class="input-wrap">
+            <span class="input-icon">📍</span
+            ><input
+              type="text"
+              id="newAddrFull"
+              placeholder="Rua, número, complemento, bairro"
+            />
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 8px">
+          <button
+            class="btn-submit"
+            id="saveAddrBtn"
+            style="
+              flex: 1;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              border: none;
+              cursor: pointer;
+              padding: 13px;
+              border-radius: 50px;
+              font-size: 0.9rem;
+            "
+          >
+            Salvar endereço
+          </button>
+          <button
+            id="cancelAddrBtn"
+            style="
+              flex: 1;
+              background: transparent;
+              border: 1.5px solid var(--sand);
+              border-radius: 50px;
+              padding: 12px;
+              font-family: &quot;Nunito&quot;, sans-serif;
+              font-weight: 800;
+              font-size: 0.88rem;
+              color: var(--ink-mid);
+              cursor: pointer;
+            "
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/perfil-usuario.js"></script>
+  </body>
+</html>

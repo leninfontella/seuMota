@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/compartilhado.css" />
+    <style>
+      /* Stretch main to avoid scroll on chat */
+      .main {
+        display: flex;
+        flex-direction: column;
+      }
+      .page-content {
+        padding: 0;
+        flex: 1;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <path
+                d="M28 48 Q36 43 44 47"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M56 47 Q64 43 72 48"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <line
+                x1="46"
+                y1="57"
+                x2="54"
+                y2="57"
+                stroke="#4A3728"
+                stroke-width="2.5"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="minhas-tarefas.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Minhas tarefas</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Motas favoritos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >3</span
+            ></a
+          >
+          <a href="chat.html" class="nav-item active"
+            ><span class="nav-icon">💬</span> Mensagens<span class="nav-badge"
+              >2</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- MAIN -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Mensagens</h2>
+              <p>2 conversas não lidas</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔<span class="dot"></span></button>
+            <div class="user-avatar" style="cursor: pointer">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="chat-layout">
+            <!-- LEFT: conversation list -->
+            <div class="conv-panel">
+              <div class="conv-panel-header">
+                <div class="conv-panel-title">Conversas</div>
+                <div class="conv-search">
+                  <span class="conv-search-icon">🔍</span>
+                  <input
+                    type="text"
+                    id="convSearch"
+                    placeholder="Buscar conversa..."
+                  />
+                </div>
+              </div>
+
+              <div class="conv-list" id="convList">
+                <div class="conv-item unread active" data-conv="joao">
+                  <div class="conv-avatar">
+                    🧑
+                    <div class="conv-online-dot"></div>
+                  </div>
+                  <div class="conv-info">
+                    <div class="conv-name">João Pedro</div>
+                    <div class="conv-preview">Já cheguei no mercado! 🛒</div>
+                  </div>
+                  <div class="conv-meta">
+                    <span class="conv-time">agora</span>
+                    <span class="conv-badge">2</span>
+                  </div>
+                </div>
+
+                <div class="conv-item unread" data-conv="carlos">
+                  <div class="conv-avatar">👨</div>
+                  <div class="conv-info">
+                    <div class="conv-name">Carlos Mendes</div>
+                    <div class="conv-preview">
+                      Posso passar às 15h, tudo bem?
+                    </div>
+                  </div>
+                  <div class="conv-meta">
+                    <span class="conv-time">14min</span>
+                    <span class="conv-badge">1</span>
+                  </div>
+                </div>
+
+                <div class="conv-item" data-conv="fernanda">
+                  <div class="conv-avatar">
+                    👩
+                    <div class="conv-online-dot"></div>
+                  </div>
+                  <div class="conv-info">
+                    <div class="conv-name">Fernanda Lima</div>
+                    <div class="conv-preview">
+                      Remédio entregue! Até mais 😊
+                    </div>
+                  </div>
+                  <div class="conv-meta">
+                    <span class="conv-time">ontem</span>
+                  </div>
+                </div>
+
+                <div class="conv-item" data-conv="rodrigo">
+                  <div class="conv-avatar">🧔</div>
+                  <div class="conv-info">
+                    <div class="conv-name">Rodrigo Santos</div>
+                    <div class="conv-preview">Você: Obrigada pelo serviço!</div>
+                  </div>
+                  <div class="conv-meta">
+                    <span class="conv-time">seg</span>
+                  </div>
+                </div>
+              </div>
+              <!-- /conv-list -->
+            </div>
+
+            <!-- RIGHT: chat window -->
+            <div class="chat-window" id="chatWindow">
+              <!-- Header -->
+              <div class="chat-win-header">
+                <div class="chat-win-avatar">🧑</div>
+                <div>
+                  <div class="chat-win-name" id="chatWinName">João Pedro</div>
+                  <div class="chat-win-status" id="chatWinStatus">
+                    ● Online · Realizando sua tarefa
+                  </div>
+                </div>
+                <div class="chat-win-actions">
+                  <button class="chat-action-btn" title="Ligar">📞</button>
+                  <button class="chat-action-btn" title="Ver tarefa">📋</button>
+                  <button class="chat-action-btn" title="Opções">⋯</button>
+                </div>
+              </div>
+
+              <!-- Messages -->
+              <div class="chat-win-messages" id="chatMessages">
+                <div class="chat-date-divider">Hoje · 13 de Fevereiro</div>
+
+                <!-- Task chip -->
+                <div class="task-chip">
+                  🛒 Compras no mercado — lista pequena · R$ 25
+                </div>
+
+                <div class="msg-row">
+                  <div class="msg-avatar-small">🧑</div>
+                  <div>
+                    <div class="msg-bubble">
+                      Oi, Ana! Acabei de sair. Estou a caminho do mercado. 👋
+                    </div>
+                    <div class="msg-time">13:46</div>
+                  </div>
+                </div>
+
+                <div class="msg-row me">
+                  <div>
+                    <div class="msg-bubble">
+                      Oi João! Obrigada. O iogurte pode ser Natural Grego
+                      Activia se não tiver o Danone. 😊
+                    </div>
+                    <div class="msg-time">13:48 ✓✓</div>
+                  </div>
+                </div>
+
+                <div class="msg-row">
+                  <div class="msg-avatar-small">🧑</div>
+                  <div>
+                    <div class="msg-bubble">
+                      Entendido! Anotado aqui. Em uns 5 minutinhos chego lá.
+                    </div>
+                    <div class="msg-time">13:49</div>
+                  </div>
+                </div>
+
+                <div class="msg-row">
+                  <div class="msg-avatar-small">🧑</div>
+                  <div>
+                    <div class="msg-bubble">Já cheguei no mercado! 🛒</div>
+                    <div class="msg-time">13:54</div>
+                  </div>
+                </div>
+
+                <div id="typingIndicator" style="display: none">
+                  <div class="msg-row">
+                    <div class="msg-avatar-small">🧑</div>
+                    <div class="msg-bubble" style="padding: 10px 16px">
+                      <span
+                        style="
+                          display: inline-flex;
+                          gap: 4px;
+                          align-items: center;
+                        "
+                      >
+                        <span
+                          class="typing-dot"
+                          style="
+                            width: 7px;
+                            height: 7px;
+                            border-radius: 50%;
+                            background: var(--ink-light);
+                            animation: typingBounce 0.6s infinite;
+                          "
+                        ></span>
+                        <span
+                          class="typing-dot"
+                          style="
+                            width: 7px;
+                            height: 7px;
+                            border-radius: 50%;
+                            background: var(--ink-light);
+                            animation: typingBounce 0.6s 0.15s infinite;
+                          "
+                        ></span>
+                        <span
+                          class="typing-dot"
+                          style="
+                            width: 7px;
+                            height: 7px;
+                            border-radius: 50%;
+                            background: var(--ink-light);
+                            animation: typingBounce 0.6s 0.3s infinite;
+                          "
+                        ></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Input -->
+              <div class="chat-win-input-area">
+                <button class="chat-attach-btn" title="Anexar foto">📎</button>
+                <input
+                  class="chat-win-input"
+                  id="chatInput"
+                  type="text"
+                  placeholder="Escreva uma mensagem..."
+                />
+                <button class="chat-send-btn" id="chatSendBtn">➤</button>
+              </div>
+            </div>
+            <!-- /chat-window -->
+          </div>
+          <!-- /chat-layout -->
+        </div>
+      </main>
+    </div>
+
+    <style>
+      @keyframes typingBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(-4px);
+          opacity: 1;
+        }
+      }
+    </style>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/chat.js"></script>
+  </body>
+</html>

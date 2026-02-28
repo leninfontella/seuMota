@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Perfil do Mota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .profile-layout {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+      .edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .edit-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .rating-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .rating-row-stars {
+        font-size: 0.78rem;
+        color: var(--ink-mid);
+        font-weight: 700;
+        min-width: 30px;
+      }
+      .rating-bar-wrap {
+        flex: 1;
+        height: 7px;
+        background: var(--sand);
+        border-radius: 50px;
+        overflow: hidden;
+      }
+      .rating-bar-fill {
+        height: 100%;
+        background: var(--orange);
+        border-radius: 50px;
+      }
+      .rating-row-count {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        min-width: 24px;
+        text-align: right;
+      }
+      /* Availability */
+      .availability-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+      }
+      .avail-day {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      .avail-day-name {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        text-transform: uppercase;
+      }
+      .avail-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid var(--sand);
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        font-weight: 800;
+        color: var(--ink-light);
+      }
+      .avail-dot.available {
+        background: #dcfce7;
+        border-color: #22c55e;
+        color: #16a34a;
+      }
+      @media (max-width: 1000px) {
+        .profile-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="online-toggle-wrap">
+          <div class="online-toggle-info">
+            <div class="online-toggle-label">Status</div>
+            <div class="online-toggle-status is-online">
+              <div class="online-dot is-online"></div>
+              Online
+            </div>
+          </div>
+          <label class="toggle-switch"
+            ><input type="checkbox" checked />
+            <div class="toggle-track"></div
+          ></label>
+        </div>
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="detalhe-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas ativas</a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">✅</span> Histórico</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Financeiro</div>
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Meus ganhos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-publico-mota.html" class="nav-item active"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="/pages/providers/notificacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="/pages/providers/configuracoes-mota.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Meu perfil</h2>
+              <p>Veja como os clientes te enxergam</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar" style="cursor: pointer">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Profile hero -->
+          <div class="profile-hero">
+            <div class="profile-avatar-large">
+              🧑
+              <div class="profile-online-badge"></div>
+            </div>
+            <div class="profile-hero-info">
+              <h1 class="profile-hero-name">João Pedro Silva</h1>
+              <div class="profile-hero-meta">
+                <span class="profile-meta-pill">★ 4.9</span>
+                <span class="profile-meta-pill">📍 Vila Madalena, SP</span>
+                <span class="profile-meta-pill">✅ 67 tarefas</span>
+                <span class="profile-meta-pill">🏅 Membro desde mai/2025</span>
+              </div>
+              <p class="profile-hero-bio">
+                Oi! Sou o João, moro na Vila Madalena e adoro ajudar os
+                vizinhos. Estou disponível na maioria dos dias de semana e
+                finais de semana de manhã. Pontual, comunicativo e com 0
+                cancelamentos.
+              </p>
+            </div>
+            <button class="edit-btn" id="editProfileBtn">
+              ✏️ Editar perfil
+            </button>
+          </div>
+
+          <!-- Stats -->
+          <div class="profile-stats-row">
+            <div class="profile-stat">
+              <div class="profile-stat-value" style="color: var(--orange)">
+                ★ 4.9
+              </div>
+              <div class="profile-stat-label">Avaliação média</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">67</div>
+              <div class="profile-stat-label">Tarefas concluídas</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value" style="color: #16a34a">0%</div>
+              <div class="profile-stat-label">Taxa de cancelamento</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-value">9 meses</div>
+              <div class="profile-stat-label">Tempo ativo</div>
+            </div>
+          </div>
+
+          <div class="profile-layout">
+            <!-- LEFT: categories + reviews -->
+            <div>
+              <!-- Categories -->
+              <div class="card" style="margin-bottom: 20px">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 16px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 0.9rem;
+                      font-weight: 800;
+                      color: var(--ink);
+                    "
+                  >
+                    Categorias que atendo
+                  </div>
+                  <button
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 800;
+                      color: var(--orange);
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    "
+                  >
+                    ✏️ Editar
+                  </button>
+                </div>
+                <div class="tag-list">
+                  <span class="cat-tag">🛒 Mercado</span>
+                  <span class="cat-tag">🏦 Banco / Lotérica</span>
+                  <span class="cat-tag">💊 Farmácia</span>
+                  <span class="cat-tag">🗑️ Levar o lixo</span>
+                  <span class="cat-tag">📦 Encomenda</span>
+                  <span class="cat-tag">👕 Lavanderia</span>
+                </div>
+              </div>
+
+              <!-- Reviews -->
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 14px;
+                  "
+                >
+                  <h3
+                    style="
+                      font-family: &quot;Fraunces&quot;, serif;
+                      font-size: 1.05rem;
+                      font-weight: 900;
+                      color: var(--ink);
+                    "
+                  >
+                    Avaliações recebidas
+                  </h3>
+                  <span
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 700;
+                      color: var(--ink-light);
+                    "
+                    >42 avaliações</span
+                  >
+                </div>
+                <div class="review-list">
+                  <div class="review-item">
+                    <div class="review-item-header">
+                      <div class="review-item-author">
+                        <div class="review-item-avatar">👩</div>
+                        <div>
+                          <div class="review-item-name">Ana Paula</div>
+                          <div class="review-item-date">
+                            12 fev 2026 · Mercado
+                          </div>
+                        </div>
+                      </div>
+                      <div class="review-item-stars">★★★★★</div>
+                    </div>
+                    <p class="review-item-text">
+                      "João foi super rápido e trouxe tudo certinho. Já é meu
+                      Mota favorito para compras! Recomendo demais."
+                    </p>
+                  </div>
+
+                  <div class="review-item">
+                    <div class="review-item-header">
+                      <div class="review-item-author">
+                        <div class="review-item-avatar">👨</div>
+                        <div>
+                          <div class="review-item-name">Carlos Mendes</div>
+                          <div class="review-item-date">
+                            10 fev 2026 · Banco
+                          </div>
+                        </div>
+                      </div>
+                      <div class="review-item-stars">★★★★★</div>
+                    </div>
+                    <p class="review-item-text">
+                      "Precisava pagar um boleto com urgência e ele foi na hora.
+                      Comunicativo e pontual. Nota 10!"
+                    </p>
+                  </div>
+
+                  <div class="review-item">
+                    <div class="review-item-header">
+                      <div class="review-item-author">
+                        <div class="review-item-avatar">👩‍🦳</div>
+                        <div>
+                          <div class="review-item-name">Dona Maria</div>
+                          <div class="review-item-date">
+                            07 fev 2026 · Farmácia
+                          </div>
+                        </div>
+                      </div>
+                      <div class="review-item-stars">★★★★★</div>
+                    </div>
+                    <p class="review-item-text">
+                      "Muito atencioso. Foi na farmácia e ainda me avisou que o
+                      remédio estava com desconto. Prestativo demais."
+                    </p>
+                  </div>
+
+                  <div class="review-item">
+                    <div class="review-item-header">
+                      <div class="review-item-author">
+                        <div class="review-item-avatar">🧑</div>
+                        <div>
+                          <div class="review-item-name">Rodrigo</div>
+                          <div class="review-item-date">03 fev 2026 · Lixo</div>
+                        </div>
+                      </div>
+                      <div class="review-item-stars">★★★★☆</div>
+                    </div>
+                    <p class="review-item-text">
+                      "Cumpriu bem a tarefa, só chegou uns 10 minutos atrasado.
+                      Mas no geral ótimo serviço."
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  style="
+                    display: block;
+                    width: 100%;
+                    margin-top: 14px;
+                    background: transparent;
+                    border: 1.5px solid var(--sand);
+                    border-radius: 12px;
+                    padding: 13px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.88rem;
+                    color: var(--ink-mid);
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="
+                    this.style.borderColor = 'var(--orange)';
+                    this.style.color = 'var(--orange)';
+                  "
+                  onmouseout="
+                    this.style.borderColor = 'var(--sand)';
+                    this.style.color = 'var(--ink-mid)';
+                  "
+                >
+                  Ver todas as 42 avaliações →
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT: rating breakdown + availability -->
+            <div>
+              <div class="card" style="margin-bottom: 16px">
+                <div style="text-align: center; margin-bottom: 20px">
+                  <div
+                    style="
+                      font-family: &quot;Fraunces&quot;, serif;
+                      font-size: 3.5rem;
+                      font-weight: 900;
+                      color: var(--orange);
+                      line-height: 1;
+                    "
+                  >
+                    4.9
+                  </div>
+                  <div
+                    style="
+                      color: var(--orange);
+                      font-size: 1.2rem;
+                      letter-spacing: 3px;
+                      margin: 6px 0;
+                    "
+                  >
+                    ★★★★★
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 600;
+                      color: var(--ink-light);
+                    "
+                  >
+                    Baseado em 42 avaliações
+                  </div>
+                </div>
+                <div class="rating-breakdown">
+                  <div class="rating-row">
+                    <span class="rating-row-stars">5 ★</span>
+                    <div class="rating-bar-wrap">
+                      <div class="rating-bar-fill" style="width: 90%"></div>
+                    </div>
+                    <span class="rating-row-count">38</span>
+                  </div>
+                  <div class="rating-row">
+                    <span class="rating-row-stars">4 ★</span>
+                    <div class="rating-bar-wrap">
+                      <div
+                        class="rating-bar-fill"
+                        style="width: 10%; background: var(--sand)"
+                      ></div>
+                    </div>
+                    <span class="rating-row-count">4</span>
+                  </div>
+                  <div class="rating-row">
+                    <span class="rating-row-stars">3 ★</span>
+                    <div class="rating-bar-wrap">
+                      <div class="rating-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-row-count">0</span>
+                  </div>
+                  <div class="rating-row">
+                    <span class="rating-row-stars">2 ★</span>
+                    <div class="rating-bar-wrap">
+                      <div class="rating-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-row-count">0</span>
+                  </div>
+                  <div class="rating-row">
+                    <span class="rating-row-stars">1 ★</span>
+                    <div class="rating-bar-wrap">
+                      <div class="rating-bar-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="rating-row-count">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  "
+                >
+                  Disponibilidade
+                  <button
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 800;
+                      color: var(--orange);
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                      text-transform: none;
+                      letter-spacing: 0;
+                    "
+                  >
+                    ✏️ Editar
+                  </button>
+                </div>
+                <div class="availability-grid">
+                  <div class="avail-day">
+                    <span class="avail-day-name">Dom</span>
+                    <div class="avail-dot">–</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Seg</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Ter</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Qua</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Qui</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Sex</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                  <div class="avail-day">
+                    <span class="avail-day-name">Sáb</span>
+                    <div class="avail-dot available">✓</div>
+                  </div>
+                </div>
+                <p
+                  style="
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    color: var(--ink-light);
+                    margin-top: 12px;
+                    text-align: center;
+                  "
+                >
+                  Disponível seg–sáb · Geralmente 8h às 19h
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/perfil-publico-mota.js"></script>
+  </body>
+</html>

@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Minhas tarefas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <style>
+      /* ── TABS ── */
+      .task-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid var(--sand);
+        padding-bottom: 0;
+      }
+
+      .task-tab {
+        padding: 12px 20px;
+        border: none;
+        background: transparent;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .task-tab:hover {
+        color: var(--ink);
+        background: var(--cream);
+      }
+
+      .task-tab.active {
+        color: var(--orange);
+        background: var(--orange-soft);
+      }
+
+      .task-tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--orange);
+      }
+
+      .tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        border-radius: 50px;
+        background: var(--orange);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 900;
+        margin-left: 6px;
+        padding: 0 6px;
+      }
+
+      .task-tab.active .tab-badge {
+        background: var(--orange-dark);
+      }
+
+      /* ── TAB CONTENT ── */
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s;
+      }
+
+      /* ── TASK CARD EXPANDED ── */
+      .active-task-card {
+        background: var(--white);
+        border: 2px solid var(--sand);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .active-task-card:hover {
+        border-color: var(--orange);
+        box-shadow: 0 4px 12px rgba(240, 123, 29, 0.08);
+      }
+
+      .task-card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        gap: 12px;
+      }
+
+      .task-card-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        flex: 1;
+      }
+
+      .task-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: var(--orange-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .task-card-info {
+        flex: 1;
+      }
+
+      .task-card-title {
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .task-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        flex-wrap: wrap;
+      }
+
+      .task-card-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .task-meta-dot {
+        opacity: 0.4;
+      }
+
+      .task-card-price {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--orange);
+        flex-shrink: 0;
+      }
+
+      /* ── STATUS BAR ── */
+      .task-status-bar {
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .status-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+      }
+
+      .status-icon {
+        font-size: 1.1rem;
+        animation: pulse 2s ease infinite;
+      }
+
+      .status-text {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .status-sub {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-top: 2px;
+      }
+
+      .status-time {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--orange);
+      }
+
+      /* ── MOTA INFO (when assigned) ── */
+      .task-mota-info {
+        background: var(--cream);
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mota-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--orange-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .mota-info-text {
+        flex: 1;
+      }
+      .mota-name {
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 3px;
+      }
+      .mota-detail {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .mota-rating {
+        font-size: 0.85rem;
+        font-weight: 900;
+        color: var(--orange);
+      }
+
+      /* ── ACTIONS ── */
+      .task-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .task-action-btn {
+        flex: 1;
+        min-width: 140px;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+      }
+
+      .task-action-primary {
+        background: var(--orange);
+        color: white;
+      }
+
+      .task-action-primary:hover {
+        background: var(--orange-dark);
+        transform: translateY(-1px);
+      }
+
+      .task-action-secondary {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        color: var(--ink-mid);
+      }
+
+      .task-action-secondary:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      .task-action-danger {
+        background: transparent;
+        border: 1.5px solid #fecaca;
+        color: #dc2626;
+      }
+
+      .task-action-danger:hover {
+        background: #fef2f2;
+        border-color: #f87171;
+      }
+
+      /* ── EMPTY STATE ── */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        opacity: 0.3;
+      }
+
+      .empty-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .empty-text {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      .empty-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        background: var(--orange);
+        color: white;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 800;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .empty-cta:hover {
+        background: var(--orange-dark);
+        transform: translateY(-2px);
+      }
+
+      /* ── LIVE INDICATOR ── */
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #22c55e;
+        animation: pulse 2s ease infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <div class="sidebar-logo-text">seu<span>Mota</span></div>
+        </a>
+
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item">
+            <span class="nav-icon">🏠</span> Início
+          </a>
+          <a href="postar-tarefa.html" class="nav-item">
+            <span class="nav-icon">📋</span> Postar tarefa
+          </a>
+          <a href="minhas-tarefas.html" class="nav-item active">
+            <span class="nav-icon">🔍</span> Minhas tarefas
+            <span class="nav-badge">3</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item">
+            <span class="nav-icon">⭐</span> Motas favoritos
+          </a>
+          <a href="tarefas-recorrentes.html" class="nav-item">
+            <span class="nav-icon">🔁</span> Tarefas recorrentes
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item">
+            <span class="nav-icon">👤</span> Meu perfil
+          </a>
+          <a href="notificacoes.html" class="nav-item">
+            <span class="nav-icon">🔔</span> Notificações
+            <span class="nav-badge">1</span>
+          </a>
+          <a href="historico-usuario.html" class="nav-item">
+            <span class="nav-icon">📜</span> Histórico
+          </a>
+          <a href="pagamentos.html" class="nav-item">
+            <span class="nav-icon">💳</span> Pagamentos
+          </a>
+          <a href="configuracoes.html" class="nav-item">
+            <span class="nav-icon">⚙️</span> Configurações
+          </a>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">👩</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Ana Paula</div>
+              <div class="sidebar-user-role">Cliente</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main-content">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Minhas tarefas</h2>
+              <p>Acompanhe suas tarefas ativas</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <a
+              href="postar-tarefa.html"
+              style="
+                padding: 10px 20px;
+                border-radius: 12px;
+                background: var(--orange);
+                color: white;
+                font-family: &quot;Nunito&quot;, sans-serif;
+                font-size: 0.85rem;
+                font-weight: 800;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.2s;
+              "
+              onmouseover="
+                this.style.background = 'var(--orange-dark)';
+                this.style.transform = 'translateY(-1px)';
+              "
+              onmouseout="
+                this.style.background = 'var(--orange)';
+                this.style.transform = 'translateY(0)';
+              "
+            >
+              📋 Nova tarefa
+            </a>
+          </div>
+        </div>
+
+        <div class="content-container">
+          <!-- Tabs -->
+          <div class="task-tabs">
+            <button class="task-tab active" data-tab="aguardando">
+              ⏳ Aguardando Mota
+              <span class="tab-badge">2</span>
+            </button>
+            <button class="task-tab" data-tab="andamento">
+              🚀 Em andamento
+              <span class="tab-badge">1</span>
+            </button>
+          </div>
+
+          <!-- Tab: Aguardando Mota -->
+          <div class="tab-content active" id="tab-aguardando">
+            <!-- Task 1: Aguardando -->
+            <div class="active-task-card">
+              <div class="task-card-header">
+                <div class="task-card-left">
+                  <div class="task-card-icon">🏦</div>
+                  <div class="task-card-info">
+                    <div class="task-card-title">Pagar boleto na lotérica</div>
+                    <div class="task-card-meta">
+                      <span>📍 Zona Sul, Porto Alegre</span>
+                      <span class="task-meta-dot">·</span>
+                      <span>Hoje às 16h</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-card-price">R$ 15</div>
+              </div>
+
+              <div class="task-status-bar">
+                <div class="status-bar-left">
+                  <div class="live-dot"></div>
+                  <div>
+                    <div class="status-text">4 Motas visualizaram</div>
+                    <div class="status-sub">Aguardando ofertas</div>
+                  </div>
+                </div>
+                <div class="status-time">⏱️ Expira em 42min</div>
+              </div>
+
+              <div class="task-actions">
+                <a
+                  href="aguardando-mota.html"
+                  class="task-action-btn task-action-primary"
+                >
+                  👀 Ver ofertas
+                </a>
+                <button class="task-action-btn task-action-secondary">
+                  ✏️ Editar
+                </button>
+                <button class="task-action-btn task-action-danger">
+                  ❌ Cancelar
+                </button>
+              </div>
+            </div>
+
+            <!-- Task 2: Aguardando -->
+            <div class="active-task-card">
+              <div class="task-card-header">
+                <div class="task-card-left">
+                  <div class="task-card-icon">👕</div>
+                  <div class="task-card-info">
+                    <div class="task-card-title">
+                      Buscar roupa na lavanderia Express
+                    </div>
+                    <div class="task-card-meta">
+                      <span>📍 Centro, Porto Alegre</span>
+                      <span class="task-meta-dot">·</span>
+                      <span>Amanhã às 10h</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-card-price">R$ 20</div>
+              </div>
+
+              <div class="task-status-bar">
+                <div class="status-bar-left">
+                  <div class="live-dot"></div>
+                  <div>
+                    <div class="status-text">8 Motas visualizaram</div>
+                    <div class="status-sub">Aguardando ofertas</div>
+                  </div>
+                </div>
+                <div class="status-time">⏱️ Expira em 2h 18min</div>
+              </div>
+
+              <div class="task-actions">
+                <a
+                  href="aguardando-mota.html"
+                  class="task-action-btn task-action-primary"
+                >
+                  👀 Ver ofertas
+                </a>
+                <button class="task-action-btn task-action-secondary">
+                  ✏️ Editar
+                </button>
+                <button class="task-action-btn task-action-danger">
+                  ❌ Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /tab-aguardando -->
+
+          <!-- Tab: Em andamento -->
+          <div class="tab-content" id="tab-andamento">
+            <!-- Task 1: Em andamento -->
+            <div class="active-task-card">
+              <div class="task-card-header">
+                <div class="task-card-left">
+                  <div class="task-card-icon">🛒</div>
+                  <div class="task-card-info">
+                    <div class="task-card-title">
+                      Compras no mercado — lista pequena
+                    </div>
+                    <div class="task-card-meta">
+                      <span>📍 Super Econômico</span>
+                      <span class="task-meta-dot">·</span>
+                      <span>Hoje às 14h</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-card-price">R$ 25</div>
+              </div>
+
+              <div class="task-mota-info">
+                <div class="mota-avatar">🧑</div>
+                <div class="mota-info-text">
+                  <div class="mota-name">João Pedro</div>
+                  <div class="mota-detail">
+                    📍 500m de você · A caminho do mercado
+                  </div>
+                </div>
+                <div class="mota-rating">★ 4.9</div>
+              </div>
+
+              <div class="task-status-bar">
+                <div class="status-bar-left">
+                  <div class="status-icon">🚀</div>
+                  <div>
+                    <div class="status-text">Tarefa em andamento</div>
+                    <div class="status-sub">Mota está fazendo as compras</div>
+                  </div>
+                </div>
+                <div class="status-time">⏱️ 14min</div>
+              </div>
+
+              <div class="task-actions">
+                <a
+                  href="acompanhar-tarefa.html"
+                  class="task-action-btn task-action-primary"
+                >
+                  📍 Acompanhar
+                </a>
+                <a
+                  href="chat.html"
+                  class="task-action-btn task-action-secondary"
+                >
+                  💬 Chat
+                </a>
+                <button class="task-action-btn task-action-danger">
+                  🚫 Cancelar
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state (when no tasks) - hidden by default, show via JS -->
+            <!-- <div class="empty-state" id="emptyAndamento" style="display:none;">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">Nenhuma tarefa em andamento</div>
+          <div class="empty-text">Suas tarefas aceitas aparecerão aqui</div>
+        </div> -->
+          </div>
+          <!-- /tab-andamento -->
+
+          <!-- Empty state for "Aguardando" (hidden, show via JS) -->
+          <!-- <div class="empty-state" id="emptyAguardando" style="display:none;">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">Nenhuma tarefa aguardando</div>
+        <div class="empty-text">Que tal postar uma nova tarefa?<br>Motas próximos podem aceitá-la em minutos.</div>
+        <a href="postar-tarefa.html" class="empty-cta">
+          📋 Postar nova tarefa
+        </a>
+      </div> -->
+        </div>
+        <!-- /content-container -->
+      </main>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/minhas-tarefas.js"></script>
+  </body>
+</html>

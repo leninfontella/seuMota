@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Política de Privacidade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <style>
+      body {
+        background: var(--cream);
+        font-family: "Nunito", sans-serif;
+        color: var(--ink);
+        min-height: 100vh;
+      }
+
+      /* Topbar */
+      .topbar {
+        background: var(--white);
+        border-bottom: 1.5px solid var(--sand);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--orange);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+      .logo-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+      .logo-text span {
+        color: var(--orange);
+      }
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-back {
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-back:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+      .btn-print {
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: none;
+        background: var(--orange);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-print:hover {
+        background: var(--orange-dark);
+      }
+
+      /* Layout */
+      .layout {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .toc {
+          display: none;
+        }
+      }
+
+      /* TOC */
+      .toc {
+        position: sticky;
+        top: 72px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 16px;
+        padding: 20px;
+      }
+      .toc-title {
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        color: var(--ink-light);
+        margin-bottom: 14px;
+      }
+      .toc-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .toc-list a {
+        display: block;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        text-decoration: none;
+        transition: all 0.2s;
+        line-height: 1.4;
+      }
+      .toc-list a:hover {
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+      .toc-list a.active {
+        background: #ede9fe;
+        color: #5b21b6;
+        font-weight: 900;
+      }
+
+      /* Content */
+      .content {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 20px;
+        padding: 48px 52px;
+      }
+      @media (max-width: 600px) {
+        .content {
+          padding: 28px 22px;
+        }
+      }
+
+      .doc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ede9fe;
+        color: #5b21b6;
+        font-size: 0.72rem;
+        font-weight: 900;
+        padding: 5px 14px;
+        border-radius: 50px;
+        margin-bottom: 20px;
+      }
+      .doc-title {
+        font-family: "Fraunces", serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--ink);
+        line-height: 1.15;
+        margin-bottom: 12px;
+      }
+      .doc-meta {
+        display: flex;
+        gap: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 2px solid var(--sand);
+        flex-wrap: wrap;
+      }
+      .doc-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* LGPD Badge */
+      .lgpd-badge {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: linear-gradient(135deg, #1e1b4b, #312e81);
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 32px;
+      }
+
+      .lgpd-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .lgpd-text {
+        color: white;
+      }
+      .lgpd-title {
+        font-family: "Fraunces", serif;
+        font-size: 0.95rem;
+        font-weight: 900;
+        margin-bottom: 3px;
+      }
+      .lgpd-sub {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.5;
+      }
+
+      /* Sections */
+      .section {
+        margin-bottom: 40px;
+        scroll-margin-top: 80px;
+      }
+      .section-num {
+        font-size: 0.68rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #7c3aed;
+        margin-bottom: 6px;
+      }
+      .section h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1.5px solid var(--sand);
+      }
+      .section p {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .section ul,
+      .section ol {
+        margin: 10px 0 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .section li {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.7;
+      }
+      .section li strong {
+        color: var(--ink);
+      }
+
+      /* Data table */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0 24px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1.5px solid var(--sand);
+      }
+      .data-table th {
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: var(--ink-light);
+        padding: 10px 16px;
+        background: var(--cream);
+        border-bottom: 1px solid var(--sand);
+      }
+      .data-table td {
+        padding: 12px 16px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        border-bottom: 1px solid var(--sand);
+        vertical-align: top;
+        line-height: 1.6;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-table tr:hover td {
+        background: #f5f3ff;
+      }
+      .data-table td:first-child {
+        font-weight: 900;
+        color: var(--ink);
+        width: 30%;
+      }
+
+      /* Rights grid */
+      .rights-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 16px 0;
+      }
+      @media (max-width: 600px) {
+        .rights-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .right-card {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+      .right-icon {
+        font-size: 1.3rem;
+        margin-bottom: 6px;
+      }
+      .right-title {
+        font-size: 0.82rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+      .right-desc {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.5;
+      }
+
+      /* DPO box */
+      .dpo-box {
+        background: #ede9fe;
+        border: 1.5px solid #ddd6fe;
+        border-radius: 14px;
+        padding: 22px 26px;
+        margin: 20px 0;
+      }
+      .dpo-title {
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        font-weight: 900;
+        color: #3730a3;
+        margin-bottom: 14px;
+      }
+      .dpo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      @media (max-width: 600px) {
+        .dpo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .dpo-item {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #4338ca;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Highlight boxes */
+      .highlight-box {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        border-left: 4px solid var(--orange);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-size: 0.87rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        line-height: 1.7;
+      }
+      .highlight-box.info {
+        border-left-color: #818cf8;
+        background: #f5f3ff;
+      }
+
+      /* Footer */
+      .doc-footer {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .doc-footer-text {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .footer-links {
+        display: flex;
+        gap: 12px;
+      }
+      .footer-links a {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #7c3aed;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        text-decoration: underline;
+      }
+
+      @media print {
+        .topbar,
+        .toc {
+          display: none !important;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+        .content {
+          border: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Topbar -->
+    <nav class="topbar">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+            <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+            <rect
+              x="24"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <rect
+              x="54"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <circle cx="35" cy="57" r="5" fill="#4A3728" />
+            <circle cx="65" cy="57" r="5" fill="#4A3728" />
+            <path
+              d="M40 70 Q45 73 50 71 Q55 73 60 70"
+              stroke="white"
+              stroke-width="4"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+          </svg>
+        </div>
+        <div class="logo-text">seu<span>Mota</span></div>
+      </a>
+      <div class="topbar-actions">
+        <a href="javascript:history.back()" class="btn-back">← Voltar</a>
+        <button
+          class="btn-print"
+          onclick="window.print()"
+          style="background: #7c3aed"
+        >
+          🖨️ Imprimir
+        </button>
+      </div>
+    </nav>
+
+    <div class="layout">
+      <!-- TOC -->
+      <aside class="toc">
+        <div class="toc-title">Nesta página</div>
+        <ul class="toc-list" id="tocList">
+          <li><a href="#s1">1. Controlador dos Dados</a></li>
+          <li><a href="#s2">2. Dados Coletados</a></li>
+          <li><a href="#s3">3. Finalidade do Uso</a></li>
+          <li><a href="#s4">4. Base Legal (LGPD)</a></li>
+          <li><a href="#s5">5. Compartilhamento</a></li>
+          <li><a href="#s6">6. Retenção dos Dados</a></li>
+          <li><a href="#s7">7. Segurança</a></li>
+          <li><a href="#s8">8. Seus Direitos</a></li>
+          <li><a href="#s9">9. Cookies</a></li>
+          <li><a href="#s10">10. Menores de Idade</a></li>
+          <li><a href="#s11">11. Transferência Internacional</a></li>
+          <li><a href="#s12">12. Encarregado (DPO)</a></li>
+          <li><a href="#s13">13. Atualizações</a></li>
+        </ul>
+      </aside>
+
+      <!-- Document -->
+      <article class="content">
+        <div class="doc-badge">🔒 Proteção de Dados</div>
+
+        <h1 class="doc-title">Política de Privacidade</h1>
+
+        <div class="doc-meta">
+          <span>📅 Versão: 1.0</span>
+          <span>🗓️ Vigência: 01 de fevereiro de 2026</span>
+          <span>⚖️ LGPD: Lei nº 13.709/2018</span>
+        </div>
+
+        <!-- LGPD Banner -->
+        <div class="lgpd-badge">
+          <div class="lgpd-icon">🛡️</div>
+          <div class="lgpd-text">
+            <div class="lgpd-title">Conformidade com a LGPD</div>
+            <div class="lgpd-sub">
+              Esta política foi elaborada em conformidade com a Lei Geral de
+              Proteção de Dados Pessoais (Lei nº 13.709/2018) e as diretrizes da
+              Autoridade Nacional de Proteção de Dados (ANPD).
+            </div>
+          </div>
+        </div>
+
+        <!-- 1 -->
+        <section class="section" id="s1">
+          <div class="section-num">Artigo 01</div>
+          <h2>Identificação do Controlador</h2>
+          <p>
+            O controlador responsável pelo tratamento dos seus dados pessoais é
+            a <strong>seuMota Tecnologia Ltda.</strong>, pessoa jurídica de
+            direito privado, CNPJ 00.000.000/0001-00, com sede em São Paulo/SP.
+          </p>
+          <p>
+            Ao utilizar a plataforma seuMota, você, como titular dos dados,
+            consente com o tratamento descrito nesta Política, nos termos da
+            LGPD.
+          </p>
+        </section>
+
+        <!-- 2 -->
+        <section class="section" id="s2">
+          <div class="section-num">Artigo 02</div>
+          <h2>Dados Pessoais Coletados</h2>
+          <p>
+            Coletamos diferentes categorias de dados conforme o tipo de usuário:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>Dados coletados</th>
+                <th>Quem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Identificação</td>
+                <td>Nome completo, CPF, data de nascimento, foto de perfil</td>
+                <td>Clientes e Motas</td>
+              </tr>
+              <tr>
+                <td>Contato</td>
+                <td>E-mail, telefone celular</td>
+                <td>Clientes e Motas</td>
+              </tr>
+              <tr>
+                <td>Localização</td>
+                <td>
+                  Endereço de entrega, geolocalização em tempo real (durante
+                  tarefas)
+                </td>
+                <td>Clientes e Motas</td>
+              </tr>
+              <tr>
+                <td>Financeiros</td>
+                <td>
+                  Dados de pagamento (tokenizados), histórico de transações
+                </td>
+                <td>Clientes e Motas</td>
+              </tr>
+              <tr>
+                <td>Documentos</td>
+                <td>
+                  CNH, RG, comprovante de endereço (verificação de identidade)
+                </td>
+                <td>Motas</td>
+              </tr>
+              <tr>
+                <td>Uso da plataforma</td>
+                <td>
+                  Histórico de tarefas, avaliações, logs de acesso, dispositivo,
+                  IP
+                </td>
+                <td>Clientes e Motas</td>
+              </tr>
+              <tr>
+                <td>Comunicações</td>
+                <td>Mensagens no chat da plataforma</td>
+                <td>Clientes e Motas</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="highlight-box info">
+            Nunca coletamos dados sensíveis como origem racial, convicção
+            religiosa, dados de saúde ou orientação sexual sem consentimento
+            explícito e justificativa legal.
+          </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="section" id="s3">
+          <div class="section-num">Artigo 03</div>
+          <h2>Finalidade do Tratamento</h2>
+          <p>
+            Utilizamos seus dados exclusivamente para as seguintes finalidades:
+          </p>
+          <ul>
+            <li>
+              <strong>Prestação do serviço:</strong> criar e gerenciar sua
+              conta, processar tarefas e pagamentos;
+            </li>
+            <li>
+              <strong>Segurança e verificação:</strong> autenticar sua
+              identidade e prevenir fraudes;
+            </li>
+            <li>
+              <strong>Comunicação:</strong> enviar confirmações, alertas de
+              segurança e atualizações de tarefas;
+            </li>
+            <li>
+              <strong>Suporte:</strong> resolver dúvidas, reclamações e
+              disputas;
+            </li>
+            <li>
+              <strong>Melhoria do produto:</strong> análises agregadas e
+              anônimas de uso da plataforma;
+            </li>
+            <li>
+              <strong>Cumprimento legal:</strong> atender obrigações
+              tributárias, fiscais e judiciais;
+            </li>
+            <li>
+              <strong>Marketing:</strong> comunicações promocionais, somente com
+              seu consentimento expresso.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 4 -->
+        <section class="section" id="s4">
+          <div class="section-num">Artigo 04</div>
+          <h2>Base Legal (LGPD)</h2>
+          <p>
+            Todo tratamento de dados realizado pelo seuMota possui base legal
+            prevista na LGPD:
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tratamento</th>
+                <th>Base legal (art. 7º LGPD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Execução do serviço</td>
+                <td>Execução de contrato (inciso V)</td>
+              </tr>
+              <tr>
+                <td>Verificação de identidade</td>
+                <td>Legítimo interesse (inciso IX)</td>
+              </tr>
+              <tr>
+                <td>Obrigações fiscais</td>
+                <td>Obrigação legal (inciso II)</td>
+              </tr>
+              <tr>
+                <td>E-mails de marketing</td>
+                <td>Consentimento (inciso I)</td>
+              </tr>
+              <tr>
+                <td>Prevenção de fraude</td>
+                <td>Legítimo interesse (inciso IX)</td>
+              </tr>
+              <tr>
+                <td>Disputas e litígios</td>
+                <td>Exercício regular de direitos (inciso VI)</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 5 -->
+        <section class="section" id="s5">
+          <div class="section-num">Artigo 05</div>
+          <h2>Compartilhamento de Dados</h2>
+          <p>Compartilhamos seus dados apenas nas seguintes situações:</p>
+          <ul>
+            <li>
+              <strong>Entre Clientes e Motas:</strong> nome, foto e avaliações
+              são compartilhados para viabilizar as tarefas;
+            </li>
+            <li>
+              <strong>Processadores de pagamento:</strong> PagSeguro, Stripe
+              (dados tokenizados, sem número completo do cartão);
+            </li>
+            <li>
+              <strong>Serviços de infraestrutura:</strong> AWS (hospedagem),
+              Firebase (notificações) — com cláusulas de confidencialidade;
+            </li>
+            <li>
+              <strong>Autoridades públicas:</strong> quando exigido por lei,
+              ordem judicial ou regulamento;
+            </li>
+            <li>
+              <strong>Auditores e assessores jurídicos:</strong> sob obrigação
+              de sigilo profissional.
+            </li>
+          </ul>
+          <div class="highlight-box">
+            Nunca vendemos, alugamos ou comercializamos seus dados pessoais com
+            terceiros para fins publicitários.
+          </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="section" id="s6">
+          <div class="section-num">Artigo 06</div>
+          <h2>Retenção e Exclusão dos Dados</h2>
+          <p>
+            Mantemos seus dados pelo tempo necessário para cumprir as
+            finalidades descritas nesta Política:
+          </p>
+          <ul>
+            <li>
+              <strong>Dados de conta ativa:</strong> durante toda a vigência da
+              conta;
+            </li>
+            <li>
+              <strong>Histórico de tarefas:</strong> 5 anos após a conclusão
+              (obrigação fiscal);
+            </li>
+            <li>
+              <strong>Dados financeiros:</strong> 10 anos (Código Civil e Lei
+              Anti-lavagem);
+            </li>
+            <li><strong>Logs de segurança:</strong> 6 meses;</li>
+            <li>
+              <strong>Após exclusão da conta:</strong> anonimização em até 30
+              dias, salvo obrigações legais.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 7 -->
+        <section class="section" id="s7">
+          <div class="section-num">Artigo 07</div>
+          <h2>Segurança dos Dados</h2>
+          <p>
+            Adotamos medidas técnicas e organizacionais para proteger seus
+            dados:
+          </p>
+          <ul>
+            <li>Criptografia TLS 1.3 em todas as comunicações;</li>
+            <li>Dados em repouso criptografados com AES-256;</li>
+            <li>
+              Autenticação em dois fatores disponível para todas as contas;
+            </li>
+            <li>
+              Acesso aos dados restrito a colaboradores com necessidade
+              comprovada;
+            </li>
+            <li>
+              Auditorias de segurança periódicas e programa de bug bounty;
+            </li>
+            <li>
+              Plano de resposta a incidentes com notificação à ANPD em até 72h.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 8 -->
+        <section class="section" id="s8">
+          <div class="section-num">Artigo 08</div>
+          <h2>Seus Direitos como Titular (LGPD Art. 18)</h2>
+          <p>
+            Você tem os seguintes direitos em relação aos seus dados pessoais:
+          </p>
+          <div class="rights-grid">
+            <div class="right-card">
+              <div class="right-icon">🔍</div>
+              <div class="right-title">Acesso</div>
+              <div class="right-desc">
+                Solicitar a confirmação e o acesso aos dados que temos sobre
+                você.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">✏️</div>
+              <div class="right-title">Correção</div>
+              <div class="right-desc">
+                Corrigir dados incompletos, inexatos ou desatualizados.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">🗑️</div>
+              <div class="right-title">Exclusão</div>
+              <div class="right-desc">
+                Solicitar a exclusão dos dados tratados com base em
+                consentimento.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">📦</div>
+              <div class="right-title">Portabilidade</div>
+              <div class="right-desc">
+                Receber seus dados em formato estruturado para outro fornecedor.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">🚫</div>
+              <div class="right-title">Oposição</div>
+              <div class="right-desc">
+                Opor-se ao tratamento baseado em legítimo interesse.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">↩️</div>
+              <div class="right-title">Revogação</div>
+              <div class="right-desc">
+                Revogar o consentimento a qualquer momento, sem penalidade.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">ℹ️</div>
+              <div class="right-title">Informação</div>
+              <div class="right-desc">
+                Conhecer as entidades públicas e privadas com quem
+                compartilhamos dados.
+              </div>
+            </div>
+            <div class="right-card">
+              <div class="right-icon">⚖️</div>
+              <div class="right-title">Reclamação</div>
+              <div class="right-desc">
+                Peticionar à ANPD em caso de violação dos seus direitos.
+              </div>
+            </div>
+          </div>
+          <p>
+            Para exercer seus direitos, acesse
+            <strong>Configurações → Privacidade</strong> no aplicativo ou entre
+            em contato com nosso DPO.
+          </p>
+        </section>
+
+        <!-- 9 -->
+        <section class="section" id="s9">
+          <div class="section-num">Artigo 09</div>
+          <h2>Cookies e Tecnologias de Rastreamento</h2>
+          <p>Utilizamos cookies e tecnologias similares para:</p>
+          <ul>
+            <li>
+              <strong>Cookies essenciais:</strong> manter sua sessão autenticada
+              (não podem ser desativados);
+            </li>
+            <li>
+              <strong>Cookies de preferência:</strong> lembrar suas
+              configurações de idioma e notificação;
+            </li>
+            <li>
+              <strong>Cookies analíticos:</strong> medir desempenho da
+              plataforma (Google Analytics — dados anonimizados);
+            </li>
+            <li>
+              <strong>Cookies de marketing:</strong> personalizar comunicações,
+              com seu consentimento.
+            </li>
+          </ul>
+          <p>
+            Você pode gerenciar cookies nas configurações do seu navegador. A
+            desativação de cookies essenciais pode afetar o funcionamento da
+            plataforma.
+          </p>
+        </section>
+
+        <!-- 10 -->
+        <section class="section" id="s10">
+          <div class="section-num">Artigo 10</div>
+          <h2>Proteção de Menores</h2>
+          <p>
+            O seuMota é destinado exclusivamente a maiores de 18 anos. Não
+            coletamos conscientemente dados de menores de idade.
+          </p>
+          <p>
+            Se você acredita que um menor forneceu dados à plataforma sem
+            autorização, entre em contato imediatamente com nosso DPO para
+            exclusão dos dados.
+          </p>
+        </section>
+
+        <!-- 11 -->
+        <section class="section" id="s11">
+          <div class="section-num">Artigo 11</div>
+          <h2>Transferência Internacional de Dados</h2>
+          <p>
+            Alguns de nossos parceiros de infraestrutura (AWS, Firebase) podem
+            processar dados em servidores fora do Brasil. Nestes casos,
+            garantimos:
+          </p>
+          <ul>
+            <li>
+              Contratos de Proteção de Dados (DPA) com todos os fornecedores;
+            </li>
+            <li>Cláusulas contratuais padrão alinhadas à LGPD e ao GDPR;</li>
+            <li>
+              Transferência apenas para países com nível adequado de proteção ou
+              com salvaguardas equivalentes.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 12 -->
+        <section class="section" id="s12">
+          <div class="section-num">Artigo 12</div>
+          <h2>Encarregado de Dados (DPO)</h2>
+          <p>
+            Em conformidade com o art. 41 da LGPD, nomeamos um Encarregado de
+            Proteção de Dados (DPO) responsável por receber comunicações,
+            orientar colaboradores e interagir com a ANPD.
+          </p>
+          <div class="dpo-box">
+            <div class="dpo-title">📋 Contato do DPO — seuMota</div>
+            <div class="dpo-grid">
+              <div class="dpo-item">📧 dpo@seumota.com.br</div>
+              <div class="dpo-item">📞 0800 000 0001</div>
+              <div class="dpo-item">🕐 Seg–Sex · 9h–18h</div>
+              <div class="dpo-item">📬 Resposta em até 15 dias</div>
+            </div>
+          </div>
+          <p>
+            Você também pode entrar em contato com a
+            <strong>ANPD</strong> (Autoridade Nacional de Proteção de Dados) em
+            <a
+              href="https://www.gov.br/anpd"
+              style="color: #7c3aed"
+              target="_blank"
+              >www.gov.br/anpd</a
+            >
+            em caso de dúvidas ou reclamações.
+          </p>
+        </section>
+
+        <!-- 13 -->
+        <section class="section" id="s13">
+          <div class="section-num">Artigo 13</div>
+          <h2>Atualizações desta Política</h2>
+          <p>
+            Esta Política pode ser atualizada periodicamente para refletir
+            mudanças em nossas práticas ou na legislação aplicável.
+            Notificaremos você por e-mail e notificação no app com antecedência
+            mínima de <strong>15 dias</strong> para mudanças relevantes.
+          </p>
+          <p>
+            A versão mais recente estará sempre disponível em
+            <a href="politica-privacidade.html" style="color: #7c3aed"
+              >politica-privacidade.html</a
+            >
+            e no rodapé do aplicativo.
+          </p>
+        </section>
+
+        <!-- Footer -->
+        <div class="doc-footer">
+          <p class="doc-footer-text">
+            © 2026 seuMota Tecnologia Ltda. · LGPD Compliant · Versão 1.0
+          </p>
+          <div class="footer-links">
+            <a href="../terms/termos-de-uso.html">Termos de Uso</a>
+            <a href="#">Suporte</a>
+            <a href="#">Configurações</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <script src="../../assets/js/politica-privacidade.js"></script>
+  </body>
+</html>

@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Reportes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      /* ── PRIORITY BADGES ── */
+      .priority-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .priority-critical {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .priority-high {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .priority-medium {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .priority-low {
+        background: #f3f4f6;
+        color: #6b7280;
+      }
+
+      /* ── CATEGORY TAGS ── */
+      .category-tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+
+      /* ── REPORT CARD (list view) ── */
+      .report-card {
+        background: var(--white);
+        border: 2px solid var(--sand);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 12px;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .report-card:hover {
+        border-color: #818cf8;
+        box-shadow: 0 4px 12px rgba(129, 140, 248, 0.12);
+      }
+
+      .report-card.critical {
+        border-left: 4px solid #ef4444;
+      }
+
+      .report-card.high {
+        border-left: 4px solid #f59e0b;
+      }
+
+      .report-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 12px;
+      }
+
+      .report-left {
+        display: flex;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .report-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #fef3c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+
+      .report-info {
+        flex: 1;
+      }
+
+      .report-id {
+        font-family: "Courier New", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 4px;
+      }
+
+      .report-title {
+        font-size: 0.92rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 6px;
+        line-height: 1.3;
+      }
+
+      .report-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        flex-wrap: wrap;
+      }
+
+      .report-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .meta-dot {
+        opacity: 0.4;
+      }
+
+      .report-right {
+        text-align: right;
+      }
+
+      .report-time {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 6px;
+      }
+
+      /* ── DETAIL MODAL/PANEL ── */
+      .report-detail-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .report-detail-overlay.active {
+        display: flex;
+      }
+
+      .report-detail-panel {
+        background: var(--white);
+        border-radius: 20px;
+        max-width: 700px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .detail-header {
+        padding: 24px 28px;
+        border-bottom: 2px solid var(--sand);
+        position: sticky;
+        top: 0;
+        background: var(--white);
+        z-index: 10;
+      }
+
+      .detail-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: var(--cream);
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s;
+      }
+
+      .detail-close:hover {
+        background: #ef4444;
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      .detail-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .detail-content {
+        padding: 24px 28px;
+      }
+
+      .detail-section {
+        margin-bottom: 24px;
+      }
+
+      .detail-section-title {
+        font-size: 0.8rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ink-light);
+        margin-bottom: 10px;
+      }
+
+      .detail-text {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.7;
+        background: var(--cream);
+        padding: 14px 16px;
+        border-radius: 10px;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .detail-field {
+        background: var(--cream);
+        padding: 12px 14px;
+        border-radius: 10px;
+      }
+
+      .detail-field-label {
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--ink-light);
+        margin-bottom: 4px;
+      }
+
+      .detail-field-value {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      /* ── TIMELINE ── */
+      .timeline {
+        position: relative;
+        padding-left: 24px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: var(--sand);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 16px;
+        padding-left: 12px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -20px;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--orange);
+        border: 2px solid var(--white);
+      }
+
+      .timeline-time {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 3px;
+      }
+
+      .timeline-text {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* ── ADMIN ACTIONS ── */
+      .detail-actions {
+        padding: 20px 28px;
+        border-top: 2px solid var(--sand);
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        position: sticky;
+        bottom: 0;
+        background: var(--white);
+      }
+
+      .action-btn {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .action-resolve {
+        background: #16a34a;
+        color: white;
+      }
+
+      .action-resolve:hover {
+        background: #15803d;
+      }
+
+      .action-suspend {
+        background: #f59e0b;
+        color: white;
+      }
+
+      .action-suspend:hover {
+        background: #d97706;
+      }
+
+      .action-ban {
+        background: #ef4444;
+        color: white;
+      }
+
+      .action-ban:hover {
+        background: #dc2626;
+      }
+
+      .action-dismiss {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        color: var(--ink-mid);
+      }
+
+      .action-dismiss:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <div class="sidebar-logo-text">seu<span>Mota</span></div>
+        </a>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Gestão</div>
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item"
+            ><span class="nav-icon">👥</span> Usuários<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >1.2k</span
+            ></a
+          >
+          <a href="admin-motas.html" class="nav-item"
+            ><span class="nav-icon">🏍️</span> Motas<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >348</span
+            ></a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Suporte</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações<span
+              class="nav-badge"
+              style="background: #f59e0b"
+              >7</span
+            ></a
+          >
+          <a href="admin-reportes.html" class="nav-item active"
+            ><span class="nav-icon">⚠️</span> Reportes<span
+              class="nav-badge"
+              style="background: #ef4444"
+              >3</span
+            ></a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">👨‍💼</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Admin</div>
+              <div class="sidebar-user-role">Superuser</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main-content">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Reportes</h2>
+              <p>Denúncias e comportamentos inadequados</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-container">
+          <!-- Stat strip -->
+          <div class="stat-strip cols-4">
+            <div class="strip-card">
+              <div class="strip-val">3</div>
+              <div class="strip-lbl">Abertos</div>
+              <div class="strip-delta strip-delta-red">Requer atenção</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">8</div>
+              <div class="strip-lbl">Em análise</div>
+              <div class="strip-delta strip-delta-muted">Investigando</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">47</div>
+              <div class="strip-lbl">Resolvidos (mês)</div>
+              <div class="strip-delta strip-delta-green">
+                +12% vs mês anterior
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">94%</div>
+              <div class="strip-lbl">Taxa resolução</div>
+              <div class="strip-delta strip-delta-green">Meta: 90%</div>
+            </div>
+          </div>
+
+          <!-- Status tabs -->
+          <div class="status-tabs">
+            <button class="status-tab active" data-status="all">
+              Todos <span>11</span>
+            </button>
+            <button class="status-tab" data-status="open">
+              Abertos <span>3</span>
+            </button>
+            <button class="status-tab" data-status="analyzing">
+              Em análise <span>8</span>
+            </button>
+            <button class="status-tab" data-status="resolved">
+              Resolvidos
+            </button>
+            <button class="status-tab" data-status="dismissed">
+              Descartados
+            </button>
+          </div>
+
+          <!-- Reports list -->
+          <div class="reports-list">
+            <!-- Report 1: Critical -->
+            <div class="report-card critical" data-report="1">
+              <div class="report-header">
+                <div class="report-left">
+                  <div class="report-icon">⚠️</div>
+                  <div class="report-info">
+                    <div class="report-id">#REP-2847</div>
+                    <div class="report-title">
+                      Mota solicitou pagamento adicional fora da plataforma
+                    </div>
+                    <div class="report-meta">
+                      <span
+                        ><span class="priority-badge priority-critical"
+                          >🔴 Crítico</span
+                        ></span
+                      >
+                      <span class="meta-dot">·</span>
+                      <span class="category-tag">Fraude</span>
+                      <span class="meta-dot">·</span>
+                      <span>Reportado por: Ana Paula F.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-right">
+                  <div class="report-time">há 2 horas</div>
+                  <span class="pill pill-waiting">Aberto</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report 2: High -->
+            <div class="report-card high" data-report="2">
+              <div class="report-header">
+                <div class="report-left">
+                  <div class="report-icon">⚠️</div>
+                  <div class="report-info">
+                    <div class="report-id">#REP-2846</div>
+                    <div class="report-title">
+                      Cliente cancelou tarefa após Mota chegar no local
+                    </div>
+                    <div class="report-meta">
+                      <span
+                        ><span class="priority-badge priority-high"
+                          >🟠 Alto</span
+                        ></span
+                      >
+                      <span class="meta-dot">·</span>
+                      <span class="category-tag">Cancelamento indevido</span>
+                      <span class="meta-dot">·</span>
+                      <span>Reportado por: João Pedro (Mota)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-right">
+                  <div class="report-time">há 5 horas</div>
+                  <span class="pill pill-waiting">Aberto</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report 3: Medium -->
+            <div class="report-card" data-report="3">
+              <div class="report-header">
+                <div class="report-left">
+                  <div class="report-icon">⚠️</div>
+                  <div class="report-info">
+                    <div class="report-id">#REP-2845</div>
+                    <div class="report-title">
+                      Mota não seguiu instruções da tarefa
+                    </div>
+                    <div class="report-meta">
+                      <span
+                        ><span class="priority-badge priority-medium"
+                          >🔵 Médio</span
+                        ></span
+                      >
+                      <span class="meta-dot">·</span>
+                      <span class="category-tag">Comportamento</span>
+                      <span class="meta-dot">·</span>
+                      <span>Reportado por: Roberto S.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-right">
+                  <div class="report-time">há 1 dia</div>
+                  <span class="pill pill-pending">Em análise</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report 4: Resolved -->
+            <div class="report-card" data-report="4">
+              <div class="report-header">
+                <div class="report-left">
+                  <div class="report-icon">✅</div>
+                  <div class="report-info">
+                    <div class="report-id">#REP-2844</div>
+                    <div class="report-title">
+                      Cliente não forneceu dinheiro conforme combinado
+                    </div>
+                    <div class="report-meta">
+                      <span
+                        ><span class="priority-badge priority-high"
+                          >🟠 Alto</span
+                        ></span
+                      >
+                      <span class="meta-dot">·</span>
+                      <span class="category-tag">Pagamento</span>
+                      <span class="meta-dot">·</span>
+                      <span>Reportado por: Carlos M. (Mota)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-right">
+                  <div class="report-time">há 2 dias</div>
+                  <span class="pill pill-resolved">Resolvido</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report 5: Analyzing -->
+            <div class="report-card" data-report="5">
+              <div class="report-header">
+                <div class="report-left">
+                  <div class="report-icon">⚠️</div>
+                  <div class="report-info">
+                    <div class="report-id">#REP-2843</div>
+                    <div class="report-title">
+                      Mota atrasou mais de 30 minutos sem avisar
+                    </div>
+                    <div class="report-meta">
+                      <span
+                        ><span class="priority-badge priority-medium"
+                          >🔵 Médio</span
+                        ></span
+                      >
+                      <span class="meta-dot">·</span>
+                      <span class="category-tag">Pontualidade</span>
+                      <span class="meta-dot">·</span>
+                      <span>Reportado por: Beatriz L.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="report-right">
+                  <div class="report-time">há 3 dias</div>
+                  <span class="pill pill-pending">Em análise</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Detail modal -->
+    <div class="report-detail-overlay" id="detailOverlay">
+      <div class="report-detail-panel">
+        <div class="detail-header">
+          <button class="detail-close" id="detailClose">×</button>
+          <div class="report-id" id="detailId">#REP-2847</div>
+          <div class="detail-title" id="detailTitle">
+            Mota solicitou pagamento adicional fora da plataforma
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 10px">
+            <span class="priority-badge priority-critical">🔴 Crítico</span>
+            <span class="category-tag">Fraude</span>
+            <span class="pill pill-waiting">Aberto</span>
+          </div>
+        </div>
+
+        <div class="detail-content">
+          <!-- Reported by -->
+          <div class="detail-section">
+            <div class="detail-section-title">Reportado por</div>
+            <div class="detail-grid">
+              <div class="detail-field">
+                <div class="detail-field-label">Nome</div>
+                <div class="detail-field-value">Ana Paula Ferreira</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Tipo</div>
+                <div class="detail-field-value">Cliente</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Data</div>
+                <div class="detail-field-value">18 fev 2026, 14h22</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Tarefa relacionada</div>
+                <div class="detail-field-value">#TAR-8472</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="detail-section">
+            <div class="detail-section-title">Descrição</div>
+            <div class="detail-text">
+              O Mota João Pedro solicitou R$ 10 adicionais em dinheiro alegando
+              que o valor no app estava errado. Eu não tinha dinheiro extra e
+              ele ficou insistindo e até ameaçou cancelar a tarefa. Isso me
+              deixou muito desconfortável.
+            </div>
+          </div>
+
+          <!-- Reported user -->
+          <div class="detail-section">
+            <div class="detail-section-title">Usuário reportado</div>
+            <div class="detail-grid">
+              <div class="detail-field">
+                <div class="detail-field-label">Nome</div>
+                <div class="detail-field-value">João Pedro Silva</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Tipo</div>
+                <div class="detail-field-value">Mota</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Avaliação</div>
+                <div class="detail-field-value">★ 4.7</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-field-label">Reportes anteriores</div>
+                <div class="detail-field-value" style="color: #ef4444">
+                  2 reportes
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="detail-section">
+            <div class="detail-section-title">Histórico de ações</div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-time">18 fev, 14h22</div>
+                <div class="timeline-text">Reporte criado por Ana Paula F.</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-time">18 fev, 14h25</div>
+                <div class="timeline-text">
+                  Prioridade definida como Crítica
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-time">18 fev, 15h10</div>
+                <div class="timeline-text">
+                  Admin revisou histórico de ambos os usuários
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="action-btn action-resolve">
+            ✅ Resolver e advertir
+          </button>
+          <button class="action-btn action-suspend">
+            ⏸️ Suspender Mota 7 dias
+          </button>
+          <button class="action-btn action-ban">
+            🚫 Banir Mota permanentemente
+          </button>
+          <button class="action-btn action-dismiss">
+            ❌ Descartar reporte
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-reportes.js"></script>
+  </body>
+</html>

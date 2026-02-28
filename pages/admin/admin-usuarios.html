@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota Admin — Usuários</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="admin-dashboard.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon" style="background: #818cf8">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text"
+            >seu<span>Mota</span>
+            <small
+              style="
+                font-size: 0.55rem;
+                background: #818cf8;
+                color: white;
+                padding: 2px 7px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: middle;
+              "
+              >ADMIN</small
+            ></span
+          >
+        </a>
+        <div class="nav-section">
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item active"
+            ><span class="nav-icon">👥</span> Usuários<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >1.2k</span
+            ></a
+          >
+          <a href="admin-motas.html" class="nav-item"
+            ><span class="nav-icon">🏍️</span> Motas<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >348</span
+            ></a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Moderação</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações<span
+              class="nav-badge"
+              style="background: #f59e0b"
+              >7</span
+            ></a
+          >
+          <a href="admin-reportes.html" class="nav-item"
+            ><span class="nav-icon">⚠️</span> Reportes<span
+              class="nav-badge"
+              style="background: #ef4444"
+              >3</span
+            ></a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🛡️</div>
+            <div class="user-info">
+              <div class="user-name">Admin seuMota</div>
+              <div class="user-role">Administrador</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Usuários</h2>
+              <p>Gerenciar clientes cadastrados</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button
+              class="admin-btn admin-btn-primary"
+              onclick="showToast('📤 Exportando CSV...')"
+            >
+              📤 Exportar
+            </button>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Stats -->
+          <div class="stat-strip">
+            <div class="strip-card">
+              <div class="strip-val">1.247</div>
+              <div class="strip-lbl">Total de usuários</div>
+              <div class="strip-delta">+34 esta semana</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">1.189</div>
+              <div class="strip-lbl">Ativos</div>
+              <div class="strip-delta" style="color: #16a34a">95,3%</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">41</div>
+              <div class="strip-lbl">Inativos</div>
+              <div class="strip-delta" style="color: var(--ink-light)">
+                sem login +30d
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">17</div>
+              <div class="strip-lbl">Banidos</div>
+              <div class="strip-delta" style="color: #dc2626">1,4%</div>
+            </div>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="admin-toolbar">
+            <div class="search-box">
+              <span>🔍</span>
+              <input
+                type="text"
+                id="userSearch"
+                placeholder="Buscar por nome, e-mail ou CPF…"
+                oninput="filterUsers()"
+              />
+            </div>
+            <select
+              class="admin-select"
+              id="statusFilter"
+              onchange="filterUsers()"
+            >
+              <option value="all">Todos os status</option>
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+              <option value="banido">Banido</option>
+            </select>
+            <select class="admin-select" id="sortFilter">
+              <option value="recent">Mais recentes</option>
+              <option value="name">Nome A–Z</option>
+              <option value="tasks">Mais tarefas</option>
+            </select>
+          </div>
+
+          <!-- Table -->
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <div class="admin-table-title">👥 Clientes cadastrados</div>
+              <div class="admin-table-count" id="userCount">1.247 usuários</div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>Cadastro</th>
+                  <th>Tarefas</th>
+                  <th>Gasto total</th>
+                  <th>Último acesso</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👩</div>
+                      <div>
+                        <div class="user-cell-name">Ana Paula Ferreira</div>
+                        <div class="user-cell-email">
+                          ana.paula&#64;gmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>15 jan 2026</td>
+                  <td>12</td>
+                  <td>R$ 187,00</td>
+                  <td>Hoje, 14h32</td>
+                  <td><span class="pill pill-active">Ativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="banUser(this, 'Ana Paula')"
+                      >
+                        Banir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👨</div>
+                      <div>
+                        <div class="user-cell-name">Roberto Santos</div>
+                        <div class="user-cell-email">
+                          roberto.s&#64;outlook.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>28 dez 2025</td>
+                  <td>8</td>
+                  <td>R$ 124,00</td>
+                  <td>Ontem, 09h15</td>
+                  <td><span class="pill pill-active">Ativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="banUser(this, 'Roberto Santos')"
+                      >
+                        Banir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👩</div>
+                      <div>
+                        <div class="user-cell-name">Beatriz Lima</div>
+                        <div class="user-cell-email">bealima&#64;gmail.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>03 fev 2026</td>
+                  <td>5</td>
+                  <td>R$ 73,00</td>
+                  <td>13 fev, 16h05</td>
+                  <td><span class="pill pill-active">Ativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="banUser(this, 'Beatriz Lima')"
+                      >
+                        Banir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="inativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👴</div>
+                      <div>
+                        <div class="user-cell-name">Carlos Neves</div>
+                        <div class="user-cell-email">
+                          carlinho1952&#64;gmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>10 nov 2025</td>
+                  <td>2</td>
+                  <td>R$ 30,00</td>
+                  <td>45 dias atrás</td>
+                  <td><span class="pill pill-inactive">Inativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-success"
+                        onclick="activateUser(this, 'Carlos Neves')"
+                      >
+                        Reativar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="banido">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👨</div>
+                      <div>
+                        <div class="user-cell-name">Diego Alves</div>
+                        <div class="user-cell-email">d.alves&#64;yahoo.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>20 out 2025</td>
+                  <td>3</td>
+                  <td>R$ 45,00</td>
+                  <td>30 dias atrás</td>
+                  <td><span class="pill pill-banned">Banido</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-success"
+                        onclick="activateUser(this, 'Diego Alves')"
+                      >
+                        Desbanir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👩</div>
+                      <div>
+                        <div class="user-cell-name">Fernanda Costa</div>
+                        <div class="user-cell-email">
+                          fercosta&#64;gmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>01 fev 2026</td>
+                  <td>4</td>
+                  <td>R$ 64,00</td>
+                  <td>Hoje, 11h20</td>
+                  <td><span class="pill pill-active">Ativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="banUser(this, 'Fernanda Costa')"
+                      >
+                        Banir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👨</div>
+                      <div>
+                        <div class="user-cell-name">Thiago Alves</div>
+                        <div class="user-cell-email">
+                          thiago.alves&#64;gmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>22 jan 2026</td>
+                  <td>7</td>
+                  <td>R$ 98,00</td>
+                  <td>12 fev, 18h44</td>
+                  <td><span class="pill pill-active">Ativo</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="banUser(this, 'Thiago Alves')"
+                      >
+                        Banir
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span>Mostrando 7 de 1.247 usuários</span>
+              <div class="page-btns">
+                <button class="page-btn active">1</button>
+                <button class="page-btn" onclick="showToast('📄 Página 2')">
+                  2
+                </button>
+                <button class="page-btn" onclick="showToast('📄 Página 3')">
+                  3
+                </button>
+                <button class="page-btn">…</button>
+                <button
+                  class="page-btn"
+                  onclick="showToast('📄 Última página')"
+                >
+                  125
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-usuarios.js"></script>
+  </body>
+</html>

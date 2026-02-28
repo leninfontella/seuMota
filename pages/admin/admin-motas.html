@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota Admin — Motas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="admin-dashboard.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon" style="background: #818cf8">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text"
+            >seu<span>Mota</span>
+            <small
+              style="
+                font-size: 0.55rem;
+                background: #818cf8;
+                color: white;
+                padding: 2px 7px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: middle;
+              "
+              >ADMIN</small
+            ></span
+          >
+        </a>
+        <div class="nav-section">
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item"
+            ><span class="nav-icon">👥</span> Usuários<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >1.2k</span
+            ></a
+          >
+          <a href="admin-motas.html" class="nav-item active"
+            ><span class="nav-icon">🏍️</span> Motas<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >348</span
+            ></a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Moderação</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações<span
+              class="nav-badge"
+              style="background: #f59e0b"
+              >7</span
+            ></a
+          >
+          <a href="admin-reportes.html" class="nav-item"
+            ><span class="nav-icon">⚠️</span> Reportes<span
+              class="nav-badge"
+              style="background: #ef4444"
+              >3</span
+            ></a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🛡️</div>
+            <div class="user-info">
+              <div class="user-name">Admin seuMota</div>
+              <div class="user-role">Administrador</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Motas</h2>
+              <p>Gerenciar prestadores de serviço</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button
+              class="admin-btn admin-btn-primary"
+              onclick="showToast('📤 Exportando CSV…')"
+            >
+              📤 Exportar
+            </button>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Stats -->
+          <div class="stat-strip">
+            <div class="strip-card">
+              <div class="strip-val">348</div>
+              <div class="strip-lbl">Total de Motas</div>
+              <div class="strip-delta">+8 esta semana</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">289</div>
+              <div class="strip-lbl">Verificados</div>
+              <div class="strip-delta" style="color: #7c3aed">83%</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">7</div>
+              <div class="strip-lbl">Aguardando</div>
+              <div class="strip-delta" style="color: #d97706">verificação</div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">4,8★</div>
+              <div class="strip-lbl">Nota média</div>
+              <div class="strip-delta" style="color: var(--orange)">
+                geral da plataforma
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification queue banner -->
+          <div class="verify-queue-banner">
+            <div class="vqb-icon">🔍</div>
+            <div class="vqb-text">
+              <div class="vqb-title">
+                7 Motas aguardam verificação de documentos
+              </div>
+              <div class="vqb-sub">
+                Tempo médio de espera: 18 horas · SLA recomendado: 24h
+              </div>
+            </div>
+            <button
+              class="vqb-btn"
+              onclick="showToast('🔍 Abrindo fila de verificação…')"
+            >
+              Ver fila →
+            </button>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="admin-toolbar">
+            <div class="search-box">
+              <span>🔍</span>
+              <input
+                type="text"
+                id="motaSearch"
+                placeholder="Buscar por nome, CPF ou categoria…"
+                oninput="filterMotas()"
+              />
+            </div>
+            <select
+              class="admin-select"
+              id="motaStatusFilter"
+              onchange="filterMotas()"
+            >
+              <option value="all">Todos os status</option>
+              <option value="ativo">Ativo</option>
+              <option value="pendente">Pendente</option>
+              <option value="suspenso">Suspenso</option>
+            </select>
+            <select class="admin-select">
+              <option>Todas categorias</option>
+              <option>Mercado</option>
+              <option>Banco</option>
+              <option>Farmácia</option>
+              <option>Lixo</option>
+            </select>
+          </div>
+
+          <!-- Table -->
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <div class="admin-table-title">🏍️ Motas cadastrados</div>
+              <div class="admin-table-count" id="motaCount">348 Motas</div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mota</th>
+                  <th>Nota</th>
+                  <th>Tarefas</th>
+                  <th>Ganho total</th>
+                  <th>Categorias</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="motasTableBody">
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">
+                        🧑
+                        <div class="verified-badge">✓</div>
+                      </div>
+                      <div>
+                        <div class="user-cell-name">João Pedro Silva</div>
+                        <div class="user-cell-sub">67 tarefas · São Paulo</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stars-cell">★ 4.9</span></td>
+                  <td>67</td>
+                  <td>R$ 1.843</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">🛒</span
+                      ><span class="cat-mini">🏦</span
+                      ><span class="cat-mini">💊</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-verified">Verificado</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-purple"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="suspendMota(this, 'João Pedro')"
+                      >
+                        Suspender
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">
+                        👩
+                        <div class="verified-badge">✓</div>
+                      </div>
+                      <div>
+                        <div class="user-cell-name">Fernanda Lima</div>
+                        <div class="user-cell-sub">43 tarefas · São Paulo</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stars-cell">★ 4.8</span></td>
+                  <td>43</td>
+                  <td>R$ 1.204</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">💊</span
+                      ><span class="cat-mini">🛒</span
+                      ><span class="cat-mini">🗑️</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-verified">Verificado</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-purple"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="suspendMota(this, 'Fernanda Lima')"
+                      >
+                        Suspender
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="pendente">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👨</div>
+                      <div>
+                        <div class="user-cell-name">Marcos Oliveira</div>
+                        <div class="user-cell-sub">0 tarefas · Osasco</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="stars-cell" style="color: var(--ink-light)"
+                      >—</span
+                    >
+                  </td>
+                  <td>0</td>
+                  <td>—</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">🛒</span
+                      ><span class="cat-mini">📦</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-pending">Pendente</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-success"
+                        onclick="verifyMota(this, 'Marcos Oliveira')"
+                      >
+                        Verificar</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="suspendMota(this, 'Marcos Oliveira')"
+                      >
+                        Rejeitar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="pendente">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👩</div>
+                      <div>
+                        <div class="user-cell-name">Camila Torres</div>
+                        <div class="user-cell-sub">0 tarefas · Guarulhos</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="stars-cell" style="color: var(--ink-light)"
+                      >—</span
+                    >
+                  </td>
+                  <td>0</td>
+                  <td>—</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">💊</span
+                      ><span class="cat-mini">🏦</span
+                      ><span class="cat-mini">🛒</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-pending">Pendente</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-success"
+                        onclick="verifyMota(this, 'Camila Torres')"
+                      >
+                        Verificar</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="suspendMota(this, 'Camila Torres')"
+                      >
+                        Rejeitar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="ativo">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">
+                        🧔
+                        <div class="verified-badge">✓</div>
+                      </div>
+                      <div>
+                        <div class="user-cell-name">Rodrigo Mendes</div>
+                        <div class="user-cell-sub">29 tarefas · São Paulo</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stars-cell">★ 4.7</span></td>
+                  <td>29</td>
+                  <td>R$ 721</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">📦</span
+                      ><span class="cat-mini">🏦</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-verified">Verificado</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-purple"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-danger"
+                        onclick="suspendMota(this, 'Rodrigo Mendes')"
+                      >
+                        Suspender
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-status="suspenso">
+                  <td>
+                    <div class="user-cell">
+                      <div class="user-cell-avatar">👨</div>
+                      <div>
+                        <div class="user-cell-name">Paulo Henrique</div>
+                        <div class="user-cell-sub">12 tarefas · São Paulo</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stars-cell">★ 3.2</span></td>
+                  <td>12</td>
+                  <td>R$ 312</td>
+                  <td>
+                    <div class="cats-cell">
+                      <span class="cat-mini">🛒</span>
+                    </div>
+                  </td>
+                  <td><span class="pill pill-suspended">Suspenso</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <button
+                        class="row-btn row-btn-purple"
+                        onclick="showToast('👤 Abrindo perfil…')"
+                      >
+                        Ver</button
+                      ><button
+                        class="row-btn row-btn-success"
+                        onclick="verifyMota(this, 'Paulo Henrique')"
+                      >
+                        Reativar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span>Mostrando 6 de 348 Motas</span>
+              <div class="page-btns">
+                <button class="page-btn active">1</button>
+                <button class="page-btn" onclick="showToast('📄 Página 2')">
+                  2
+                </button>
+                <button class="page-btn" onclick="showToast('📄 Página 3')">
+                  3
+                </button>
+                <button class="page-btn">…</button>
+                <button
+                  class="page-btn"
+                  onclick="showToast('📄 Última página')"
+                >
+                  35
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-motas.js"></script>
+  </body>
+</html>

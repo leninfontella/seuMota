@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Favoritos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <style>
+      .fav-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .fav-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 24px;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .fav-card:hover {
+        border-color: var(--orange);
+        box-shadow: 0 6px 24px rgba(240, 123, 29, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .fav-card-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .fav-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        flex-shrink: 0;
+        border: 3px solid var(--orange-soft);
+        position: relative;
+      }
+
+      .fav-online {
+        position: absolute;
+        bottom: 1px;
+        right: 1px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #22c55e;
+        border: 2.5px solid var(--white);
+      }
+
+      .fav-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .fav-name {
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+      .fav-rating {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--orange);
+        margin-bottom: 6px;
+      }
+      .fav-tasks {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .fav-remove-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        color: var(--ink-light);
+        transition: color 0.2s;
+        padding: 4px;
+      }
+      .fav-remove-btn:hover {
+        color: #ef4444;
+      }
+
+      .fav-cats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 16px;
+      }
+
+      .fav-cat-pill {
+        font-size: 0.7rem;
+        font-weight: 800;
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+        padding: 3px 10px;
+        border-radius: 50px;
+      }
+
+      .fav-last-task {
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .fav-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .fav-btn-primary {
+        flex: 1;
+        padding: 11px 14px;
+        border-radius: 50px;
+        background: var(--orange);
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .fav-btn-primary:hover {
+        background: var(--orange-dark);
+      }
+
+      .fav-btn-secondary {
+        padding: 10px 14px;
+        border-radius: 50px;
+        background: transparent;
+        border: 1.5px solid var(--sand);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .fav-btn-secondary:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      /* Empty state */
+      .fav-empty {
+        text-align: center;
+        padding: 80px 20px;
+        max-width: 380px;
+        margin: 0 auto;
+      }
+
+      /* Sort / filter bar */
+      .fav-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .fav-count {
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .fav-sort {
+        margin-left: auto;
+        border: 1.5px solid var(--sand);
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ink);
+        background: var(--white);
+        outline: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="favoritos.html" class="nav-item active"
+            ><span class="nav-icon">⭐</span> Favoritos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="chat.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Motas favoritos</h2>
+              <p>Seus Motas de confiança</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="fav-toolbar">
+            <span class="fav-count" id="favCount">2 favoritos</span>
+            <select class="fav-sort" id="favSort">
+              <option value="recent">Mais recentes</option>
+              <option value="rating">Melhor avaliado</option>
+              <option value="name">Nome A–Z</option>
+            </select>
+          </div>
+
+          <div class="fav-grid" id="favGrid">
+            <!-- Card 1: João Pedro -->
+            <div
+              class="fav-card"
+              data-id="joao"
+              data-rating="4.9"
+              data-name="João Pedro"
+              data-added="2026-02-13"
+            >
+              <button
+                class="fav-remove-btn"
+                title="Remover favorito"
+                onclick="removeFav(this, 'joao', 'João Pedro')"
+              >
+                ❤️
+              </button>
+              <div class="fav-card-top">
+                <div class="fav-avatar">
+                  🧑
+                  <div class="fav-online"></div>
+                </div>
+                <div class="fav-info">
+                  <div class="fav-name">João Pedro</div>
+                  <div class="fav-rating">★ 4.9 · 67 tarefas</div>
+                  <div class="fav-tasks">Adicionado em 13 fev 2026</div>
+                </div>
+              </div>
+              <div class="fav-cats">
+                <span class="fav-cat-pill">🛒 Mercado</span>
+                <span class="fav-cat-pill">🏦 Banco</span>
+                <span class="fav-cat-pill">💊 Farmácia</span>
+                <span class="fav-cat-pill">📦 Correios</span>
+              </div>
+              <div class="fav-last-task">
+                📋 Última tarefa: <strong>Compras no mercado</strong> · 13 fev
+              </div>
+              <div class="fav-actions">
+                <button
+                  class="fav-btn-primary"
+                  onclick="window.location.href = 'postar-tarefa.html'"
+                >
+                  📋 Solicitar tarefa
+                </button>
+                <button
+                  class="fav-btn-secondary"
+                  onclick="window.location.href = 'chat.html'"
+                >
+                  💬
+                </button>
+                <button
+                  class="fav-btn-secondary"
+                  onclick="window.location.href = 'perfil-publico-mota.html'"
+                >
+                  👤
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Fernanda Lima -->
+            <div
+              class="fav-card"
+              data-id="fernanda"
+              data-rating="4.8"
+              data-name="Fernanda Lima"
+              data-added="2026-01-30"
+            >
+              <button
+                class="fav-remove-btn"
+                title="Remover favorito"
+                onclick="removeFav(this, 'fernanda', 'Fernanda Lima')"
+              >
+                ❤️
+              </button>
+              <div class="fav-card-top">
+                <div class="fav-avatar">👩</div>
+                <div class="fav-info">
+                  <div class="fav-name">Fernanda Lima</div>
+                  <div class="fav-rating">★ 4.8 · 43 tarefas</div>
+                  <div class="fav-tasks">Adicionado em 30 jan 2026</div>
+                </div>
+              </div>
+              <div class="fav-cats">
+                <span class="fav-cat-pill">💊 Farmácia</span>
+                <span class="fav-cat-pill">🛒 Mercado</span>
+                <span class="fav-cat-pill">🗑️ Lixo</span>
+              </div>
+              <div class="fav-last-task">
+                📋 Última tarefa: <strong>Buscar remédio na farmácia</strong> ·
+                10 fev
+              </div>
+              <div class="fav-actions">
+                <button
+                  class="fav-btn-primary"
+                  onclick="window.location.href = 'postar-tarefa.html'"
+                >
+                  📋 Solicitar tarefa
+                </button>
+                <button
+                  class="fav-btn-secondary"
+                  onclick="window.location.href = 'chat.html'"
+                >
+                  💬
+                </button>
+                <button
+                  class="fav-btn-secondary"
+                  onclick="window.location.href = 'perfil-publico-mota.html'"
+                >
+                  👤
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state (hidden by default) -->
+          <div class="fav-empty" id="favEmpty" style="display: none">
+            <div style="font-size: 4rem; margin-bottom: 16px">⭐</div>
+            <h2
+              style="
+                font-family: &quot;Fraunces&quot;, serif;
+                font-size: 1.4rem;
+                font-weight: 900;
+                color: var(--ink);
+                margin-bottom: 10px;
+              "
+            >
+              Nenhum favorito ainda
+            </h2>
+            <p
+              style="
+                font-size: 0.88rem;
+                font-weight: 600;
+                color: var(--ink-light);
+                line-height: 1.7;
+                margin-bottom: 24px;
+              "
+            >
+              Após avaliar uma tarefa, toque em ❤️ para salvar o Mota. Ele
+              aparecerá primeiro nas próximas solicitações.
+            </p>
+            <a
+              href="historico-usuario.html"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 13px 24px;
+                border-radius: 50px;
+                background: var(--orange);
+                color: white;
+                font-weight: 800;
+                font-size: 0.88rem;
+                text-decoration: none;
+              "
+            >
+              📜 Ver histórico de tarefas
+            </a>
+          </div>
+
+          <!-- Info tip -->
+          <div
+            style="
+              margin-top: 24px;
+              background: var(--orange-soft);
+              border: 1.5px solid rgba(240, 123, 29, 0.2);
+              border-radius: 14px;
+              padding: 16px 20px;
+              display: flex;
+              gap: 12px;
+              align-items: flex-start;
+              max-width: 560px;
+            "
+          >
+            <span style="font-size: 1.2rem; flex-shrink: 0">💡</span>
+            <div
+              style="
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: var(--orange-dark);
+                line-height: 1.65;
+              "
+            >
+              Motas favoritos aparecem no topo da lista ao escolher quem
+              realizará sua próxima tarefa na mesma categoria.
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/favoritos.js"></script>
+  </body>
+</html>

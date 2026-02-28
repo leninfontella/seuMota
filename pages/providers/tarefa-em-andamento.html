@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Tarefa em andamento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .in-progress-grid {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 20px;
+        align-items: start;
+      }
+      .task-banner {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        border-radius: var(--radius);
+        padding: 22px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .task-banner-left h3 {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 4px;
+      }
+      .task-banner-left p {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .task-banner-price {
+        font-family: "Fraunces", serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: white;
+        flex-shrink: 0;
+      }
+      /* Chat preview */
+      .chat-preview {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .chat-preview-header {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chat-preview-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .chat-messages {
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 120px;
+      }
+      .chat-msg {
+        max-width: 75%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+      .chat-msg.from-client {
+        background: var(--sand);
+        color: var(--ink);
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+      }
+      .chat-msg.from-mota {
+        background: var(--orange);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+      .chat-msg-time {
+        font-size: 0.68rem;
+        opacity: 0.6;
+        margin-top: 3px;
+      }
+      .chat-input-row {
+        padding: 12px 16px;
+        border-top: 1px solid var(--sand);
+        display: flex;
+        gap: 8px;
+      }
+      .chat-input {
+        flex: 1;
+        border: 1.5px solid var(--sand);
+        border-radius: 50px;
+        padding: 10px 16px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink);
+        outline: none;
+        background: var(--cream);
+      }
+      .chat-input:focus {
+        border-color: var(--orange);
+      }
+      .chat-send-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--orange);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+        transition: background 0.2s;
+      }
+      .chat-send-btn:hover {
+        background: var(--orange-dark);
+      }
+      /* Completion modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 300;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal-backdrop.open {
+        display: flex;
+      }
+      .modal {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 32px 28px;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        animation: slideUp 0.3s ease both;
+      }
+      .modal-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+      }
+      .modal-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 10px;
+      }
+      .modal-desc {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+      .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .modal-btn-confirm {
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 14px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+      .modal-btn-cancel {
+        background: transparent;
+        color: var(--ink-mid);
+        border: 1.5px solid var(--sand);
+        border-radius: 50px;
+        padding: 13px;
+        font-family: "Nunito", sans-serif;
+        font-weight: 800;
+        font-size: 0.88rem;
+        cursor: pointer;
+      }
+      @media (max-width: 1000px) {
+        .in-progress-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="online-toggle-wrap">
+          <div class="online-toggle-info">
+            <div class="online-toggle-label">Status</div>
+            <div class="online-toggle-status is-online">
+              <div class="online-dot is-online"></div>
+              Online
+            </div>
+          </div>
+          <label class="toggle-switch"
+            ><input type="checkbox" checked />
+            <div class="toggle-track"></div
+          ></label>
+        </div>
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="tarefa-em-andamento.html" class="nav-item active"
+            ><span class="nav-icon">🏃</span>Em andamento<span class="nav-badge"
+              >1</span
+            ></a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">✅</span> Histórico</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Financeiro</div>
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Meus ganhos</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-publico-mota.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Tarefa em andamento</h2>
+              <p>Siga as etapas abaixo e confirme cada passo</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar" style="cursor: pointer">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Banner da tarefa -->
+          <div class="task-banner">
+            <div class="task-banner-left">
+              <h3>🛒 Compras no mercado — lista pequena</h3>
+              <p>
+                Cliente: Ana Paula · Hoje 14h00 · Pão de Açúcar, Av. Paulista
+              </p>
+            </div>
+            <div class="task-banner-price">R$ 25</div>
+          </div>
+
+          <div class="in-progress-grid">
+            <!-- LEFT: Timeline + action -->
+            <div>
+              <div class="card" style="padding: 28px; margin-bottom: 20px">
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 24px;
+                  "
+                >
+                  Progresso da tarefa
+                </div>
+
+                <div class="progress-timeline">
+                  <!-- Step 1 — done -->
+                  <div class="timeline-item done">
+                    <div class="timeline-dot">✓</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Tarefa aceita</div>
+                      <div class="timeline-time">
+                        13h45 · Você aceitou a tarefa
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 2 — active -->
+                  <div class="timeline-item active" id="step-going">
+                    <div class="timeline-dot">🚶</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">A caminho do local</div>
+                      <div class="timeline-time">
+                        Clique abaixo quando chegar no mercado
+                      </div>
+                      <div class="timeline-note">
+                        📍 <strong>Pão de Açúcar</strong> — Av. Paulista,
+                        1374<br />
+                        Use o app de mapas para navegar até lá.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 3 — pending -->
+                  <div class="timeline-item" id="step-arrived">
+                    <div class="timeline-dot">📍</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Chegou no local</div>
+                      <div class="timeline-time">Aguardando confirmação</div>
+                    </div>
+                  </div>
+
+                  <!-- Step 4 — pending -->
+                  <div class="timeline-item" id="step-doing">
+                    <div class="timeline-dot">⚙️</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title">Realizando a tarefa</div>
+                      <div class="timeline-time">
+                        Coletando os itens da lista
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 5 — pending -->
+                  <div class="timeline-item" id="step-done">
+                    <div class="timeline-dot">✅</div>
+                    <div class="timeline-content">
+                      <div class="timeline-title" style="padding-bottom: 0">
+                        Tarefa concluída
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Main action button -->
+                <button class="big-action-btn" id="mainActionBtn">
+                  📍 Confirmar chegada no local
+                </button>
+
+                <button
+                  style="
+                    width: 100%;
+                    background: transparent;
+                    border: 1.5px solid #fee2e2;
+                    color: #dc2626;
+                    border-radius: 12px;
+                    padding: 13px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="this.style.background = '#FEF2F2'"
+                  onmouseout="this.style.background = 'transparent'"
+                >
+                  ⚠️ Reportar problema
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT: Client + Chat -->
+            <div>
+              <div class="card" style="margin-bottom: 16px; padding: 20px">
+                <div
+                  style="
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: var(--ink-light);
+                    margin-bottom: 14px;
+                  "
+                >
+                  Cliente
+                </div>
+                <div class="client-row">
+                  <div class="client-avatar">👩</div>
+                  <div>
+                    <div class="client-name">Ana Paula</div>
+                    <div class="client-meta">★ 4.8 · Rua das Flores, 142</div>
+                  </div>
+                </div>
+                <a
+                  href="tel:+5511999990000"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    background: var(--sand);
+                    border-radius: 10px;
+                    padding: 11px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.83rem;
+                    color: var(--ink);
+                    text-decoration: none;
+                    margin-top: 14px;
+                    transition: background 0.2s;
+                  "
+                  onmouseover="this.style.background = 'var(--orange-soft)'"
+                  onmouseout="this.style.background = 'var(--sand)'"
+                >
+                  📞 Ligar para o cliente
+                </a>
+              </div>
+
+              <!-- Chat -->
+              <div class="chat-preview">
+                <div class="chat-preview-header">
+                  <span class="chat-preview-title">💬 Mensagens</span>
+                  <span
+                    style="
+                      font-size: 0.75rem;
+                      font-weight: 700;
+                      color: var(--ink-light);
+                    "
+                    >Chat direto</span
+                  >
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                  <div class="chat-msg from-client">
+                    Oi! Sobre o iogurte, pode ser o Natural Grego Activia
+                    também, se não tiver o Danone. 😊
+                    <div class="chat-msg-time">13h46</div>
+                  </div>
+                  <div class="chat-msg from-mota">
+                    Entendido! Vou verificar lá e te aviso.
+                    <div class="chat-msg-time">13h48</div>
+                  </div>
+                </div>
+                <div class="chat-input-row">
+                  <input
+                    type="text"
+                    class="chat-input"
+                    id="chatInput"
+                    placeholder="Escreva uma mensagem..."
+                  />
+                  <button class="chat-send-btn" id="chatSendBtn">➤</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Completion modal -->
+    <div class="modal-backdrop" id="completeModal">
+      <div class="modal">
+        <div class="modal-icon">🎉</div>
+        <h2 class="modal-title">Confirmar conclusão?</h2>
+        <p class="modal-desc">
+          Ao confirmar, o cliente será notificado e você receberá
+          <strong>R$ 25</strong> assim que ele confirmar o recebimento.
+        </p>
+        <div class="modal-actions">
+          <button class="modal-btn-confirm" id="completeYes">
+            ✅ Sim, tarefa concluída!
+          </button>
+          <button class="modal-btn-cancel" id="completeNo">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/tarefa-em-andamento.js"></script>
+  </body>
+</html>

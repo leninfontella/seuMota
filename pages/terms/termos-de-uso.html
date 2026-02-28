@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Termos de Uso</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <style>
+      /* ── PAGE ── */
+      body {
+        background: var(--cream);
+        font-family: "Nunito", sans-serif;
+        color: var(--ink);
+        min-height: 100vh;
+      }
+
+      /* ── TOPBAR ── */
+      .topbar {
+        background: var(--white);
+        border-bottom: 1.5px solid var(--sand);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--orange);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .logo-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .logo-text span {
+        color: var(--orange);
+      }
+
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-back {
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .btn-back:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      .btn-print {
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: none;
+        background: var(--orange);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn-print:hover {
+        background: var(--orange-dark);
+      }
+
+      /* ── LAYOUT ── */
+      .layout {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .toc {
+          display: none;
+        }
+      }
+
+      /* ── TABLE OF CONTENTS ── */
+      .toc {
+        position: sticky;
+        top: 72px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 16px;
+        padding: 20px;
+      }
+
+      .toc-title {
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        color: var(--ink-light);
+        margin-bottom: 14px;
+      }
+
+      .toc-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .toc-list a {
+        display: block;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        text-decoration: none;
+        transition: all 0.2s;
+        line-height: 1.4;
+      }
+
+      .toc-list a:hover {
+        background: var(--orange-soft);
+        color: var(--orange);
+      }
+      .toc-list a.active {
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+        font-weight: 900;
+      }
+
+      /* ── CONTENT ── */
+      .content {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 20px;
+        padding: 48px 52px;
+      }
+
+      @media (max-width: 600px) {
+        .content {
+          padding: 28px 22px;
+        }
+      }
+
+      .doc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--orange-soft);
+        color: var(--orange-dark);
+        font-size: 0.72rem;
+        font-weight: 900;
+        padding: 5px 14px;
+        border-radius: 50px;
+        margin-bottom: 20px;
+      }
+
+      .doc-title {
+        font-family: "Fraunces", serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--ink);
+        line-height: 1.15;
+        margin-bottom: 12px;
+      }
+
+      .doc-meta {
+        display: flex;
+        gap: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 2px solid var(--sand);
+        flex-wrap: wrap;
+      }
+
+      .doc-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* ── INTRO BOX ── */
+      .intro-box {
+        background: var(--orange-soft);
+        border: 1.5px solid rgba(240, 123, 29, 0.2);
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 36px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        line-height: 1.7;
+      }
+
+      .intro-box strong {
+        color: var(--ink);
+      }
+
+      /* ── SECTIONS ── */
+      .section {
+        margin-bottom: 40px;
+        scroll-margin-top: 80px;
+      }
+
+      .section-num {
+        font-size: 0.68rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--orange);
+        margin-bottom: 6px;
+      }
+
+      .section h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1.5px solid var(--sand);
+      }
+
+      .section p {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+
+      .section ul,
+      .section ol {
+        margin: 10px 0 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .section li {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.7;
+      }
+
+      .section li strong {
+        color: var(--ink);
+      }
+
+      /* ── HIGHLIGHT BOX ── */
+      .highlight-box {
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        border-left: 4px solid var(--orange);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 16px 0;
+        font-size: 0.87rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        line-height: 1.7;
+      }
+
+      .highlight-box.warning {
+        border-left-color: #f59e0b;
+        background: #fffbeb;
+      }
+
+      .highlight-box.danger {
+        border-left-color: #ef4444;
+        background: #fff5f5;
+      }
+
+      /* ── FOOTER ── */
+      .doc-footer {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .doc-footer-text {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 12px;
+      }
+
+      .footer-links a {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--orange);
+        text-decoration: none;
+      }
+
+      .footer-links a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── PRINT ── */
+      @media print {
+        .topbar,
+        .toc {
+          display: none !important;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+        .content {
+          border: none;
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Topbar -->
+    <nav class="topbar">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+            <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+            <rect
+              x="24"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <rect
+              x="54"
+              y="49"
+              width="22"
+              height="16"
+              rx="6"
+              fill="none"
+              stroke="#4A3728"
+              stroke-width="3"
+            />
+            <circle cx="35" cy="57" r="5" fill="#4A3728" />
+            <circle cx="65" cy="57" r="5" fill="#4A3728" />
+            <path
+              d="M40 70 Q45 73 50 71 Q55 73 60 70"
+              stroke="white"
+              stroke-width="4"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+          </svg>
+        </div>
+        <div class="logo-text">seu<span>Mota</span></div>
+      </a>
+      <div class="topbar-actions">
+        <a href="javascript:history.back()" class="btn-back">← Voltar</a>
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimir</button>
+      </div>
+    </nav>
+
+    <!-- Layout -->
+    <div class="layout">
+      <!-- Table of contents -->
+      <aside class="toc">
+        <div class="toc-title">Nesta página</div>
+        <ul class="toc-list" id="tocList">
+          <li><a href="#s1">1. Aceitação dos Termos</a></li>
+          <li><a href="#s2">2. Descrição do Serviço</a></li>
+          <li><a href="#s3">3. Cadastro e Conta</a></li>
+          <li><a href="#s4">4. Obrigações do Usuário</a></li>
+          <li><a href="#s5">5. Obrigações do Mota</a></li>
+          <li><a href="#s6">6. Pagamentos e Taxas</a></li>
+          <li><a href="#s7">7. Cancelamentos</a></li>
+          <li><a href="#s8">8. Responsabilidades</a></li>
+          <li><a href="#s9">9. Propriedade Intelectual</a></li>
+          <li><a href="#s10">10. Encerramento de Conta</a></li>
+          <li><a href="#s11">11. Alterações nos Termos</a></li>
+          <li><a href="#s12">12. Contato</a></li>
+        </ul>
+      </aside>
+
+      <!-- Document -->
+      <article class="content">
+        <div class="doc-badge">📄 Documento Legal</div>
+
+        <h1 class="doc-title">Termos de Uso</h1>
+
+        <div class="doc-meta">
+          <span>📅 Versão: 1.0</span>
+          <span>🗓️ Vigência: 01 de fevereiro de 2026</span>
+          <span>🌐 Aplicável: Brasil</span>
+        </div>
+
+        <div class="intro-box">
+          <strong>Leia com atenção antes de usar o seuMota.</strong> Ao criar
+          uma conta ou utilizar nossos serviços, você concorda automaticamente
+          com os presentes Termos de Uso. Se não concordar com qualquer parte
+          deste documento, por favor não utilize a plataforma.
+        </div>
+
+        <!-- 1 -->
+        <section class="section" id="s1">
+          <div class="section-num">Cláusula 01</div>
+          <h2>Aceitação dos Termos</h2>
+          <p>
+            Os presentes Termos de Uso regulam a relação entre a
+            <strong>seuMota Tecnologia Ltda.</strong> (CNPJ 00.000.000/0001-00),
+            doravante "seuMota", e os usuários da plataforma, sejam eles
+            Clientes ou Prestadores de serviço ("Motas").
+          </p>
+          <p>
+            Ao acessar ou utilizar o aplicativo ou website do seuMota, você
+            confirma que:
+          </p>
+          <ul>
+            <li>Tem pelo menos <strong>18 anos de idade</strong>;</li>
+            <li>
+              Leu, compreendeu e concorda com todos os termos aqui dispostos;
+            </li>
+            <li>
+              Tem capacidade legal para celebrar contratos válidos segundo a
+              legislação brasileira.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 2 -->
+        <section class="section" id="s2">
+          <div class="section-num">Cláusula 02</div>
+          <h2>Descrição do Serviço</h2>
+          <p>
+            O seuMota é uma
+            <strong>plataforma de intermediação tecnológica</strong> que conecta
+            Clientes que necessitam de realização de tarefas cotidianas com
+            Prestadores de serviço independentes cadastrados na plataforma.
+          </p>
+          <p>As tarefas disponíveis incluem, mas não se limitam a:</p>
+          <ul>
+            <li>Compras em supermercados, farmácias e comércio local;</li>
+            <li>Retirada e entrega de encomendas;</li>
+            <li>
+              Serviços bancários presenciais (saques, depósitos, pagamento de
+              contas);
+            </li>
+            <li>Descarte de lixo e materiais recicláveis;</li>
+            <li>Serviços de lavanderia e tinturaria.</li>
+          </ul>
+          <div class="highlight-box">
+            O seuMota atua exclusivamente como intermediário tecnológico. Não
+            somos prestadores dos serviços realizados, nem empregadores dos
+            Motas, que atuam como profissionais autônomos e independentes.
+          </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="section" id="s3">
+          <div class="section-num">Cláusula 03</div>
+          <h2>Cadastro e Conta</h2>
+          <p>
+            Para utilizar o seuMota, é necessário criar uma conta informando
+            dados verídicos, precisos e atualizados. Você é inteiramente
+            responsável pela segurança da sua senha e por todas as atividades
+            realizadas em sua conta.
+          </p>
+          <p>É proibido:</p>
+          <ul>
+            <li>Criar contas com dados falsos ou de terceiros;</li>
+            <li>Compartilhar credenciais de acesso com outras pessoas;</li>
+            <li>Criar múltiplas contas para a mesma pessoa física;</li>
+            <li>Utilizar a plataforma para fins ilegais ou prejudiciais.</li>
+          </ul>
+          <p>
+            O seuMota reserva-se o direito de suspender ou encerrar contas que
+            violem estes termos, sem aviso prévio e sem direito a reembolso de
+            saldo disponível em caso de fraude comprovada.
+          </p>
+        </section>
+
+        <!-- 4 -->
+        <section class="section" id="s4">
+          <div class="section-num">Cláusula 04</div>
+          <h2>Obrigações do Usuário (Cliente)</h2>
+          <p>
+            Ao solicitar tarefas pela plataforma, o Cliente compromete-se a:
+          </p>
+          <ul>
+            <li>
+              Fornecer <strong>instruções claras e detalhadas</strong> sobre a
+              tarefa solicitada;
+            </li>
+            <li>
+              Disponibilizar o <strong>valor correto em dinheiro</strong> para
+              compras, quando aplicável;
+            </li>
+            <li>
+              Estar disponível para contato durante a realização da tarefa;
+            </li>
+            <li>Tratar o Mota com respeito e urbanidade;</li>
+            <li>
+              Realizar a <strong>avaliação da tarefa</strong> ao final do
+              serviço;
+            </li>
+            <li>
+              Não solicitar atividades ilegais, perigosas ou que violem a
+              legislação brasileira.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 5 -->
+        <section class="section" id="s5">
+          <div class="section-num">Cláusula 05</div>
+          <h2>Obrigações do Prestador de Serviço (Mota)</h2>
+          <p>Os Motas cadastrados na plataforma comprometem-se a:</p>
+          <ul>
+            <li>Manter documentação pessoal válida e atualizada;</li>
+            <li>
+              Executar as tarefas aceitas com
+              <strong>diligência, pontualidade e qualidade</strong>;
+            </li>
+            <li>Comunicar imediatamente qualquer imprevisto ao Cliente;</li>
+            <li>Não subcontratar tarefas para terceiros não cadastrados;</li>
+            <li>Tratar o Cliente e seus pertences com respeito e cuidado;</li>
+            <li>
+              Manter nota média mínima de <strong>4,0 estrelas</strong> para
+              continuar ativo na plataforma.
+            </li>
+          </ul>
+          <div class="highlight-box warning">
+            Motas com nota abaixo de 4,0 por período superior a 30 dias poderão
+            ter sua conta suspensa ou desativada, a critério do seuMota.
+          </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="section" id="s6">
+          <div class="section-num">Cláusula 06</div>
+          <h2>Pagamentos e Taxas</h2>
+          <p>
+            Os pagamentos pela plataforma são processados de forma segura por
+            meio dos gateways integrados ao seuMota. Aceitamos:
+          </p>
+          <ul>
+            <li>Pix (instantâneo);</li>
+            <li>Cartão de crédito (1 a 6 parcelas sem juros);</li>
+            <li>Cartão de débito;</li>
+            <li>Saldo da carteira digital seuMota.</li>
+          </ul>
+          <p>
+            O seuMota cobra uma <strong>taxa de serviço de 15%</strong> sobre o
+            valor de cada tarefa concluída, retida automaticamente no repasse ao
+            Mota. O Cliente visualiza o valor total antes de confirmar a tarefa.
+          </p>
+          <div class="highlight-box">
+            Os repasses aos Motas são realizados em até <strong>D+3</strong> (3
+            dias úteis) após a confirmação de conclusão da tarefa pelo Cliente.
+          </div>
+        </section>
+
+        <!-- 7 -->
+        <section class="section" id="s7">
+          <div class="section-num">Cláusula 07</div>
+          <h2>Cancelamentos e Reembolsos</h2>
+          <p>
+            O Cliente pode cancelar uma tarefa sem custo desde que o Mota ainda
+            não tenha iniciado o deslocamento. Após o início, aplicam-se as
+            seguintes regras:
+          </p>
+          <ul>
+            <li>
+              <strong>Cancelamento antes do deslocamento:</strong> reembolso
+              integral em até 24h;
+            </li>
+            <li>
+              <strong>Cancelamento após deslocamento:</strong> taxa de
+              cancelamento de R$ 5,00;
+            </li>
+            <li>
+              <strong>Cancelamento pelo Mota:</strong> sem custo para o Cliente;
+              reembolso integral automático;
+            </li>
+            <li>
+              <strong>Tarefa não concluída por falha do Mota:</strong> análise
+              caso a caso pela equipe de suporte.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 8 -->
+        <section class="section" id="s8">
+          <div class="section-num">Cláusula 08</div>
+          <h2>Limitação de Responsabilidades</h2>
+          <p>O seuMota não se responsabiliza por:</p>
+          <ul>
+            <li>Danos causados por Motas durante a execução das tarefas;</li>
+            <li>
+              Perdas de itens ou dinheiro entregues ao Mota sem registro prévio
+              na plataforma;
+            </li>
+            <li>
+              Indisponibilidade temporária do serviço por manutenção ou falhas
+              técnicas;
+            </li>
+            <li>
+              Atrasos decorrentes de fatores externos (trânsito, clima, greves).
+            </li>
+          </ul>
+          <div class="highlight-box danger">
+            Nunca entregue valores em dinheiro ou itens de alto valor sem
+            registrar formalmente na plataforma. O seuMota não garante
+            ressarcimento de valores não registrados em tarefas.
+          </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="section" id="s9">
+          <div class="section-num">Cláusula 09</div>
+          <h2>Propriedade Intelectual</h2>
+          <p>
+            Todo o conteúdo da plataforma — incluindo marca, logotipo, mascote,
+            design, textos, código e funcionalidades — é de propriedade
+            exclusiva do seuMota e protegido pela legislação de propriedade
+            intelectual brasileira (Lei nº 9.279/1996 e Lei nº 9.610/1998).
+          </p>
+          <p>
+            É vedado reproduzir, distribuir, modificar ou criar obras derivadas
+            sem autorização expressa por escrito do seuMota.
+          </p>
+        </section>
+
+        <!-- 10 -->
+        <section class="section" id="s10">
+          <div class="section-num">Cláusula 10</div>
+          <h2>Encerramento de Conta</h2>
+          <p>
+            O usuário pode encerrar sua conta a qualquer momento pelo menu
+            <strong>Configurações → Conta → Encerrar conta</strong>. O
+            encerramento implica:
+          </p>
+          <ul>
+            <li>
+              Cancelamento imediato de tarefas em aberto (sujeito às regras de
+              cancelamento);
+            </li>
+            <li>Perda do histórico de tarefas e avaliações;</li>
+            <li>
+              Liquidação automática de saldo positivo em carteira em até 15 dias
+              úteis.
+            </li>
+          </ul>
+          <p>
+            O seuMota pode encerrar contas unilateralmente em caso de violação
+            destes Termos, atividade fraudulenta ou determinação judicial.
+          </p>
+        </section>
+
+        <!-- 11 -->
+        <section class="section" id="s11">
+          <div class="section-num">Cláusula 11</div>
+          <h2>Alterações nos Termos</h2>
+          <p>
+            O seuMota pode atualizar estes Termos periodicamente. Notificaremos
+            os usuários por e-mail e notificação no aplicativo com
+            <strong>antecedência mínima de 30 dias</strong> para mudanças
+            substanciais.
+          </p>
+          <p>
+            O uso continuado da plataforma após as alterações constitui aceite
+            dos novos termos. Caso discorde, o usuário deve encerrar sua conta
+            antes da data de vigência das mudanças.
+          </p>
+        </section>
+
+        <!-- 12 -->
+        <section class="section" id="s12">
+          <div class="section-num">Cláusula 12</div>
+          <h2>Foro e Contato</h2>
+          <p>
+            Estes Termos são regidos pela
+            <strong>legislação brasileira</strong>. Fica eleito o Foro da
+            Comarca de São Paulo/SP para dirimir quaisquer controvérsias
+            decorrentes deste instrumento.
+          </p>
+          <p>Para dúvidas, entre em contato:</p>
+          <ul>
+            <li>📧 <strong>juridico@seumota.com.br</strong></li>
+            <li>📞 <strong>0800 000 0000</strong> (seg–sex, 9h–18h)</li>
+            <li>
+              🌐 Central de suporte:
+              <a href="suporte.html" style="color: var(--orange)"
+                >suporte.html</a
+              >
+            </li>
+          </ul>
+        </section>
+
+        <!-- Footer -->
+        <div class="doc-footer">
+          <p class="doc-footer-text">
+            © 2026 seuMota Tecnologia Ltda. · Versão 1.0 · São Paulo, Brasil
+          </p>
+          <div class="footer-links">
+            <a href="/pages/policy/politica-privacidade.html"
+              >Política de Privacidade</a
+            >
+            <a href="#">Suporte</a>
+            <a href="#">Configurações</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <script src="../../assets/js/termos-de-uso.js"></script>
+  </body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>seuMota — Página não encontrada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/variables.css" />
+  <link rel="stylesheet" href="../../assets/css/animations.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--white);
+      border-bottom: 1.5px solid var(--sand);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .logo-text span { color: var(--orange); }
+
+    .topbar-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .topbar-links a {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--ink-mid);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .topbar-links a:hover { color: var(--orange); }
+
+    /* ── MAIN ── */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 580px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ── MASCOT ── */
+    .mascot-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 32px;
+    }
+
+    .mascot {
+      width: 160px;
+      height: 160px;
+      filter: drop-shadow(0 12px 32px rgba(240,123,29,.18));
+      animation: floatBob 3s ease-in-out infinite;
+    }
+
+    @keyframes floatBob {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .badge-404 {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: #EF4444;
+      color: white;
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 3px solid var(--cream);
+      animation: popIn .4s cubic-bezier(.34,1.56,.64,1) .3s both;
+    }
+
+    .question-marks {
+      position: absolute;
+      inset: -20px;
+      pointer-events: none;
+    }
+
+    .qm {
+      position: absolute;
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      color: var(--orange);
+      opacity: 0;
+      animation: floatQm 2s ease-in-out infinite;
+    }
+
+    .qm:nth-child(1) { font-size: 1.4rem; top: 20px; left: 0;   animation-delay: 0s;   }
+    .qm:nth-child(2) { font-size: 1rem;   top: 0;    right: 20px; animation-delay: .4s; }
+    .qm:nth-child(3) { font-size: 1.8rem; bottom: 20px; right: 0; animation-delay: .8s; }
+    .qm:nth-child(4) { font-size: 1.1rem; bottom: 10px; left: 10px; animation-delay: 1.2s; }
+
+    @keyframes floatQm {
+      0%   { opacity: 0; transform: translateY(0); }
+      30%  { opacity: .7; }
+      100% { opacity: 0; transform: translateY(-24px); }
+    }
+
+    /* ── TEXT ── */
+    .headline {
+      font-family: 'Fraunces', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .headline span { color: var(--orange); }
+
+    .subline {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 36px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 2px solid var(--sand);
+      border-radius: 50px;
+      padding: 14px 52px 14px 52px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(240,123,29,.08);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--orange);
+      border: none;
+      border-radius: 50px;
+      padding: 9px 20px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .search-btn:hover { background: var(--orange-dark); }
+
+    /* ── QUICK LINKS ── */
+    .quick-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--ink-light);
+      margin-bottom: 14px;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .quick-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1.5px solid var(--sand);
+      background: var(--white);
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .quick-link:hover {
+      border-color: var(--orange);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(240,123,29,.1);
+    }
+
+    .quick-link-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .quick-link-text { text-align: left; }
+    .quick-link-name { font-size: 0.85rem; font-weight: 800; color: var(--ink); }
+    .quick-link-sub  { font-size: 0.72rem; font-weight: 600; color: var(--ink-light); margin-top: 1px; }
+
+    /* ── BACK BUTTON ── */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 50px;
+      background: var(--ink);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-back:hover { background: var(--orange); transform: translateY(-2px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      background: transparent;
+      border: 1.5px solid var(--sand);
+      color: var(--ink-mid);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+
+    .btns-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ── ERROR CODE DECORATION ── */
+    .error-code {
+      font-family: 'Fraunces', serif;
+      font-size: 9rem;
+      font-weight: 900;
+      color: var(--sand);
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      letter-spacing: -4px;
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-inner {
+      position: relative;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      border-top: 1px solid var(--sand);
+    }
+
+    @media (max-width: 640px) {
+      .topbar-links { display: none; }
+      .headline { font-size: 1.8rem; }
+      .quick-links { grid-template-columns: 1fr; }
+      .error-code { font-size: 6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <a href="../../index.html" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:22px;">
+          <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0"/>
+          <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0"/>
+          <circle cx="35" cy="57" r="5" fill="#4A3728"/><circle cx="65" cy="57" r="5" fill="#4A3728"/>
+          <path d="M40 70 Q45 73 50 71 Q55 73 60 70" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">seu<span>Mota</span></div>
+    </a>
+    <div class="topbar-links">
+      <a href="../../index.html">Início</a>
+      <a href="../users/suporte.html">Suporte</a>
+      <a href="../login/login.html">Entrar</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="error-code">404</div>
+
+      <div class="container content-layer">
+
+        <!-- Mascot -->
+        <div class="mascot-wrap">
+          <div class="question-marks">
+            <div class="qm">?</div>
+            <div class="qm">?</div>
+            <div class="qm">?</div>
+            <div class="qm">?</div>
+          </div>
+          <svg class="mascot" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- body -->
+            <ellipse cx="100" cy="145" rx="62" ry="72" fill="#F5C9A0"/>
+            <!-- head -->
+            <ellipse cx="100" cy="88" rx="56" ry="48" fill="#F5C9A0"/>
+            <!-- glasses left -->
+            <rect x="44" y="78" width="44" height="28" rx="10" fill="none" stroke="#4A3728" stroke-width="5"/>
+            <!-- glasses right -->
+            <rect x="108" y="78" width="44" height="28" rx="10" fill="none" stroke="#4A3728" stroke-width="5"/>
+            <!-- glasses bridge -->
+            <line x1="88" y1="92" x2="108" y2="92" stroke="#4A3728" stroke-width="4"/>
+            <!-- eyes: confused / tilted -->
+            <circle cx="66" cy="92" r="9" fill="#4A3728"/>
+            <circle cx="130" cy="92" r="9" fill="#4A3728"/>
+            <circle cx="69" cy="89" r="3" fill="white"/>
+            <circle cx="133" cy="89" r="3" fill="white"/>
+            <!-- confused mouth -->
+            <path d="M80 118 Q90 112 100 115 Q110 118 120 112" stroke="#4A3728" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <!-- nose -->
+            <ellipse cx="100" cy="108" rx="8" ry="6" fill="#E8A878"/>
+            <!-- ears -->
+            <ellipse cx="44" cy="92" rx="10" ry="16" fill="#F5C9A0"/>
+            <ellipse cx="156" cy="92" rx="10" ry="16" fill="#F5C9A0"/>
+            <!-- body white tummy -->
+            <path d="M50 168 Q62 200 100 210 Q138 200 150 168 Q134 180 100 182 Q66 180 50 168Z" fill="white"/>
+            <!-- eyebrow confused (one up one flat) -->
+            <path d="M48 72 Q58 66 68 72" stroke="#4A3728" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M112 70 Q122 70 132 74" stroke="#4A3728" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="badge-404">404</div>
+        </div>
+
+        <!-- Text -->
+        <h1 class="headline">Ops! Essa página<br><span>se perdeu no caminho</span></h1>
+        <p class="subline">O vovô mascote do seuMota procurou em toda a cidade<br>mas não encontrou essa página. Pode ter sido movida ou deletada.</p>
+
+        <!-- Search -->
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="O que você estava buscando?" />
+          <button class="search-btn" onclick="handleSearch()">Buscar</button>
+        </div>
+
+        <!-- Quick links -->
+        <div class="quick-label">Ou vá direto para</div>
+        <div class="quick-links">
+          <a href="../users/dashboard-usuario.html" class="quick-link">
+            <div class="quick-link-icon" style="background:var(--orange-soft);">🏠</div>
+            <div class="quick-link-text">
+              <div class="quick-link-name">Meu painel</div>
+              <div class="quick-link-sub">Ver minhas tarefas</div>
+            </div>
+          </a>
+          <a href="../users/postar-tarefa.html" class="quick-link">
+            <div class="quick-link-icon" style="background:#FFF3E7;">📋</div>
+            <div class="quick-link-text">
+              <div class="quick-link-name">Postar tarefa</div>
+              <div class="quick-link-sub">Solicitar um serviço</div>
+            </div>
+          </a>
+          <a href="../users/suporte.html" class="quick-link">
+            <div class="quick-link-icon" style="background:#DCFCE7;">🆘</div>
+            <div class="quick-link-text">
+              <div class="quick-link-name">Central de ajuda</div>
+              <div class="quick-link-sub">FAQ e suporte</div>
+            </div>
+          </a>
+          <a href="../login/login.html" class="quick-link">
+            <div class="quick-link-icon" style="background:#EDE9FE;">🔑</div>
+            <div class="quick-link-text">
+              <div class="quick-link-name">Entrar na conta</div>
+              <div class="quick-link-sub">Login ou cadastro</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btns-row">
+          <button class="btn-back" onclick="goBack()">
+            ← Voltar
+          </button>
+          <a href="../../index.html" class="btn-secondary">🏠 Página inicial</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    seuMota © 2026 · <a href="../users/suporte.html" style="color:var(--orange);text-decoration:none;">Precisa de ajuda?</a>
+  </footer>
+
+  <script src="../../assets/js/404.js"></script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Escolher Mota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <style>
+      .page-cols {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+      .waiting-pulse {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+      .waiting-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--orange);
+        animation: pulse-orange-sm 1.5s infinite;
+      }
+      @keyframes pulse-orange-sm {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .compare-table th {
+        text-align: left;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--ink-light);
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--sand);
+      }
+      .compare-table td {
+        padding: 12px;
+        font-size: 0.83rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        border-bottom: 1px solid var(--sand);
+      }
+      .compare-table tr:last-child td {
+        border-bottom: none;
+      }
+      .compare-table tr:hover td {
+        background: var(--orange-soft);
+      }
+      @media (max-width: 960px) {
+        .page-cols {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="historico-usuario.html" class="nav-item active"
+            ><span class="nav-icon">✔️</span> Escolher Mota<span
+              class="nav-badge"
+              >2</span
+            ></a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Motas favoritos</a
+          >
+          <a href="tarefas-recorrentes.html" class="nav-item"
+            ><span class="nav-icon">🔁</span> Tarefas recorrentes</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >3</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Escolher Mota</h2>
+              <p id="topbarSub">4 motas aceitaram sua tarefa — escolha um!</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <div class="waiting-pulse">
+              <div class="waiting-dot"></div>
+              Aguardando confirmação
+            </div>
+            <button class="icon-btn">🔔<span class="dot"></span></button>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Task summary bar -->
+          <div class="task-summary-bar">
+            <div class="task-summary-item">
+              <div class="task-summary-icon">🛒</div>
+              <div>
+                <div class="task-summary-label">Sua tarefa</div>
+                <div class="task-summary-value">
+                  Compras no mercado — lista pequena
+                </div>
+              </div>
+            </div>
+            <div class="task-summary-item">
+              <div class="task-summary-icon">📅</div>
+              <div>
+                <div class="task-summary-label">Quando</div>
+                <div class="task-summary-value">Hoje, 14h00</div>
+              </div>
+            </div>
+            <div class="task-summary-item">
+              <div class="task-summary-icon">💰</div>
+              <div>
+                <div class="task-summary-label">Valor</div>
+                <div class="task-summary-value">R$ 25</div>
+              </div>
+            </div>
+            <div class="task-summary-item">
+              <div class="task-summary-icon">📍</div>
+              <div>
+                <div class="task-summary-label">Local</div>
+                <div class="task-summary-value">
+                  Pão de Açúcar, Av. Paulista
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-cols">
+            <!-- LEFT: mota list -->
+            <div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin-bottom: 14px;
+                "
+              >
+                <h3
+                  style="
+                    font-family: &quot;Fraunces&quot;, serif;
+                    font-size: 1.05rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                  "
+                >
+                  Motas disponíveis
+                </h3>
+                <span
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 700;
+                    color: var(--ink-light);
+                  "
+                  >Ordenado por: distância + avaliação</span
+                >
+              </div>
+
+              <div class="mota-cards-list" id="motaList">
+                <!-- Card 1 — top pick -->
+                <div class="mota-choice-card top-pick" data-mota="joao">
+                  <div class="top-pick-badge">⭐ Melhor escolha</div>
+                  <div class="choice-avatar">
+                    🧑
+                    <div class="choice-online"></div>
+                  </div>
+                  <div class="choice-info">
+                    <div class="choice-name">João Pedro</div>
+                    <div class="choice-meta-row">
+                      <span class="choice-meta-pill">📍 320m</span>
+                      <span class="choice-meta-pill">⏱ 5 min</span>
+                      <span class="choice-meta-pill">✅ 67 tarefas</span>
+                      <span class="choice-meta-pill">🎯 0% cancelamentos</span>
+                    </div>
+                    <div class="choice-cats">
+                      Mercado, Banco, Farmácia, Lixo, Encomenda
+                    </div>
+                  </div>
+                  <div class="choice-right">
+                    <div class="choice-rating">★ 4.9 <small>(42)</small></div>
+                    <button class="btn-choose" data-mota="joao">
+                      Escolher →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="mota-choice-card" data-mota="carlos">
+                  <div class="choice-avatar">
+                    👨
+                    <div class="choice-online"></div>
+                  </div>
+                  <div class="choice-info">
+                    <div class="choice-name">Carlos Mendes</div>
+                    <div class="choice-meta-row">
+                      <span class="choice-meta-pill">📍 540m</span>
+                      <span class="choice-meta-pill">⏱ 9 min</span>
+                      <span class="choice-meta-pill">✅ 34 tarefas</span>
+                    </div>
+                    <div class="choice-cats">
+                      Lavanderia, Encomenda, Mercado
+                    </div>
+                  </div>
+                  <div class="choice-right">
+                    <div class="choice-rating">★ 4.8 <small>(21)</small></div>
+                    <button class="btn-choose" data-mota="carlos">
+                      Escolher →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="mota-choice-card" data-mota="fernanda">
+                  <div class="choice-avatar">👩</div>
+                  <div class="choice-info">
+                    <div class="choice-name">Fernanda Lima</div>
+                    <div class="choice-meta-row">
+                      <span class="choice-meta-pill">📍 780m</span>
+                      <span class="choice-meta-pill">⏱ 14 min</span>
+                      <span class="choice-meta-pill">✅ 18 tarefas</span>
+                    </div>
+                    <div class="choice-cats">Farmácia, Mercado, Pet</div>
+                  </div>
+                  <div class="choice-right">
+                    <div class="choice-rating">★ 5.0 <small>(18)</small></div>
+                    <button class="btn-choose" data-mota="fernanda">
+                      Escolher →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="mota-choice-card" data-mota="rodrigo">
+                  <div class="choice-avatar">
+                    🧔
+                    <div class="choice-online"></div>
+                  </div>
+                  <div class="choice-info">
+                    <div class="choice-name">Rodrigo Santos</div>
+                    <div class="choice-meta-row">
+                      <span class="choice-meta-pill">📍 1.1km</span>
+                      <span class="choice-meta-pill">⏱ 18 min</span>
+                      <span class="choice-meta-pill">✅ 52 tarefas</span>
+                    </div>
+                    <div class="choice-cats">Todas as categorias</div>
+                  </div>
+                  <div class="choice-right">
+                    <div class="choice-rating">★ 4.7 <small>(38)</small></div>
+                    <button class="btn-choose" data-mota="rodrigo">
+                      Escolher →
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- /motaList -->
+            </div>
+
+            <!-- RIGHT: comparison panel -->
+            <div>
+              <div class="card" style="padding: 20px; margin-bottom: 16px">
+                <div class="section-label" style="margin-bottom: 14px">
+                  💡 Como escolher?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      font-size: 0.83rem;
+                      font-weight: 600;
+                      color: var(--ink-mid);
+                      line-height: 1.5;
+                    "
+                  >
+                    <span style="flex-shrink: 0">📍</span>
+                    <span>Quanto mais perto, mais rápido ele chega</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      font-size: 0.83rem;
+                      font-weight: 600;
+                      color: var(--ink-mid);
+                      line-height: 1.5;
+                    "
+                  >
+                    <span style="flex-shrink: 0">⭐</span>
+                    <span>Avaliação alta = histórico de boa entrega</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      font-size: 0.83rem;
+                      font-weight: 600;
+                      color: var(--ink-mid);
+                      line-height: 1.5;
+                    "
+                  >
+                    <span style="flex-shrink: 0">✅</span>
+                    <span>Mais tarefas feitas = mais experiência</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 10px;
+                      font-size: 0.83rem;
+                      font-weight: 600;
+                      color: var(--ink-mid);
+                      line-height: 1.5;
+                    "
+                  >
+                    <span style="flex-shrink: 0">🎯</span>
+                    <span>Taxa de cancelamento 0% = mota confiável</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="padding: 0; overflow: hidden">
+                <div
+                  style="
+                    padding: 14px 16px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  <div class="section-label" style="margin: 0">
+                    Comparativo rápido
+                  </div>
+                </div>
+                <table class="compare-table">
+                  <thead>
+                    <tr>
+                      <th>Mota</th>
+                      <th>Dist.</th>
+                      <th>★</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>João Pedro</strong></td>
+                      <td>320m</td>
+                      <td style="color: var(--orange); font-weight: 900">
+                        4.9
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Carlos Mendes</td>
+                      <td>540m</td>
+                      <td style="color: var(--orange); font-weight: 900">
+                        4.8
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Fernanda Lima</td>
+                      <td>780m</td>
+                      <td style="color: var(--orange); font-weight: 900">
+                        5.0
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Rodrigo Santos</td>
+                      <td>1.1km</td>
+                      <td style="color: var(--orange); font-weight: 900">
+                        4.7
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- /page-cols -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Confirm modal -->
+    <div class="modal-backdrop" id="confirmModal">
+      <div class="modal" style="text-align: center">
+        <div class="modal-icon">🤝</div>
+        <h2 class="modal-title">Confirmar escolha?</h2>
+        <p class="modal-desc">
+          Você escolheu <strong id="chosenName">João Pedro</strong>.<br />
+          Ele será notificado agora e você poderá acompanhar a tarefa em tempo
+          real.
+        </p>
+        <button class="modal-btn-primary" id="confirmYes">
+          ✅ Confirmar Mota
+        </button>
+        <button class="modal-btn-secondary" id="confirmNo">
+          Escolher outro
+        </button>
+      </div>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/escolher-mota.js"></script>
+  </body>
+</html>

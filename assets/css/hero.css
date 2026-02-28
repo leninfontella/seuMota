@@ -1,0 +1,172 @@
+/* ─── HERO ───────────────────────────────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  padding: 80px 6vw 60px;
+  min-height: calc(100vh - 73px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background decorations */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240,123,29,0.08) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240,123,29,0.06) 0%, transparent 70%);
+  bottom: 60px;
+  left: -80px;
+  pointer-events: none;
+}
+
+/* Left column */
+.hero-left {
+  animation: slideUp .7s ease both;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--orange-soft);
+  color: var(--orange-dark);
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border-radius: 50px;
+  margin-bottom: 22px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.eyebrow::before {
+  content: '✦';
+  font-size: 0.6rem;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 24px;
+  font-weight: 900;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--orange);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  max-width: 460px;
+  margin-bottom: 36px;
+  font-weight: 600;
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.category-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Right column — mascot */
+.hero-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slideUp .7s .2s ease both;
+}
+
+.mascot-wrap {
+  position: relative;
+  width: 380px;
+  height: 380px;
+}
+
+.mascot-bg-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--orange)      0deg 120deg,
+    #FFA94D            120deg 240deg,
+    var(--orange-dark) 240deg 360deg
+  );
+  opacity: 0.15;
+  animation: spin 20s linear infinite;
+}
+
+.mascot-bg-circle {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #FFD9AA 0%, var(--orange) 100%);
+  box-shadow:
+    0 20px 60px rgba(240,123,29,0.4),
+    inset 0 -10px 30px rgba(0,0,0,0.15);
+}
+
+.mascot-svg-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Floating info badges */
+.float-badge {
+  position: absolute;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--ink);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  animation: float 4s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.float-badge-1 { top: 20px;   left: -30px;  animation-delay: 0s; }
+.float-badge-2 { bottom: 60px; left: -40px;  animation-delay: 1.5s; }
+.float-badge-3 { top: 40px;   right: -30px; animation-delay: 0.8s; }
+
+.badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22C55E;
+  flex-shrink: 0;
+}
+.badge-dot-orange { background: var(--orange); }
+.badge-dot-blue   { background: #3B82F6; }

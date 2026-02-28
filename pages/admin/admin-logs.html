@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Admin Logs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      .logs-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .logs-filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .filter-chip {
+        padding: 8px 16px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .filter-chip:hover,
+      .filter-chip.active {
+        border-color: #818cf8;
+        background: rgba(129, 140, 248, 0.1);
+        color: #6366f1;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 12px;
+        padding: 8px 14px;
+        flex: 1;
+        max-width: 400px;
+        transition: all 0.2s;
+      }
+
+      .search-box:focus-within {
+        border-color: #818cf8;
+        background: rgba(129, 140, 248, 0.05);
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink);
+        flex: 1;
+      }
+
+      .logs-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-export {
+        padding: 8px 16px;
+        border-radius: 10px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-export:hover {
+        border-color: #818cf8;
+        color: #6366f1;
+      }
+
+      .btn-refresh {
+        padding: 8px 14px;
+        border-radius: 10px;
+        background: #818cf8;
+        border: none;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-refresh:hover {
+        background: #6366f1;
+      }
+
+      .log-entry {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        transition: all 0.2s;
+      }
+
+      .log-entry:hover {
+        border-color: #818cf8;
+        box-shadow: 0 4px 12px rgba(129, 140, 248, 0.1);
+      }
+
+      .log-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+
+      .log-icon.info {
+        background: #eff6ff;
+      }
+      .log-icon.success {
+        background: #dcfce7;
+      }
+      .log-icon.warning {
+        background: #fef3c7;
+      }
+      .log-icon.error {
+        background: #fee2e2;
+      }
+      .log-icon.security {
+        background: #f3e8ff;
+      }
+
+      .log-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .log-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 4px;
+      }
+
+      .log-action {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .log-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .log-badge.info {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .log-badge.success {
+        background: #bbf7d0;
+        color: #15803d;
+      }
+      .log-badge.warning {
+        background: #fde68a;
+        color: #92400e;
+      }
+      .log-badge.error {
+        background: #fecaca;
+        color: #991b1b;
+      }
+      .log-badge.security {
+        background: #e9d5ff;
+        color: #6b21a8;
+      }
+
+      .log-details {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--ink-mid);
+        line-height: 1.5;
+        margin-bottom: 6px;
+      }
+
+      .log-meta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .log-meta-item {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .log-time {
+        font-family: "Courier New", monospace;
+        background: var(--cream);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 16px;
+      }
+
+      .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        opacity: 0.3;
+      }
+
+      .empty-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+
+      .empty-desc {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.7;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .stat-box {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      @media (max-width: 768px) {
+        .logs-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .search-box {
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="admin-dashboard.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon" style="background: #818cf8">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text"
+            >seu<span>Mota</span>
+            <small
+              style="
+                font-size: 0.55rem;
+                background: #818cf8;
+                color: white;
+                padding: 2px 7px;
+                border-radius: 4px;
+                margin-left: 4px;
+                vertical-align: middle;
+              "
+              >ADMIN</small
+            ></span
+          >
+        </a>
+
+        <div class="nav-section">
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item"
+            ><span class="nav-icon">👥</span> Usuários</a
+          >
+          <a href="admin-motas.html" class="nav-item"
+            ><span class="nav-icon">🏍️</span> Motas</a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Moderação</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações</a
+          >
+          <a href="admin-reportes.html" class="nav-item"
+            ><span class="nav-icon">⚠️</span> Reportes</a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item active"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🛡️</div>
+            <div class="user-info">
+              <div class="user-name">Admin seuMota</div>
+              <div class="user-role">Administrador</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Logs do Sistema</h2>
+              <p id="logCount">Carregando...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-value" id="totalLogs">0</div>
+              <div class="stat-label">Total de Logs</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="todayLogs">0</div>
+              <div class="stat-label">Hoje</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="errorLogs">0</div>
+              <div class="stat-label">Erros</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value" id="securityLogs">0</div>
+              <div class="stat-label">Segurança</div>
+            </div>
+          </div>
+
+          <!-- Header with filters and search -->
+          <div class="logs-header">
+            <div class="logs-filters">
+              <button class="filter-chip active" data-filter="all">
+                Todos
+              </button>
+              <button class="filter-chip" data-filter="info">ℹ️ Info</button>
+              <button class="filter-chip" data-filter="success">
+                ✅ Sucesso
+              </button>
+              <button class="filter-chip" data-filter="warning">
+                ⚠️ Avisos
+              </button>
+              <button class="filter-chip" data-filter="error">❌ Erros</button>
+              <button class="filter-chip" data-filter="security">
+                🔒 Segurança
+              </button>
+            </div>
+
+            <div class="search-box">
+              <span style="font-size: 1rem">🔍</span>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Buscar nos logs..."
+              />
+            </div>
+
+            <div class="logs-actions">
+              <button class="btn-export" id="exportBtn">📥 Exportar</button>
+              <button class="btn-refresh" id="refreshBtn">🔄 Atualizar</button>
+            </div>
+          </div>
+
+          <!-- Logs List -->
+          <div id="logsList">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="emptyState" style="display: none">
+            <div class="empty-icon">📜</div>
+            <div class="empty-title">Nenhum log encontrado</div>
+            <div class="empty-desc">
+              Não há logs que correspondam aos filtros selecionados.
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-logs.js"></script>
+  </body>
+</html>

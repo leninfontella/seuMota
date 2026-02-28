@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Entrar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <style>
+      /* Login-specific overrides */
+      .auth-panel-login {
+        justify-content: center;
+        gap: 0;
+      }
+
+      .panel-quotes {
+        margin-top: 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .panel-quote {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 16px 18px;
+        animation: slideUp 0.6s ease both;
+      }
+
+      .panel-quote:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .panel-quote:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      .quote-text {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        font-style: italic;
+        margin-bottom: 10px;
+      }
+
+      .quote-author {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .quote-avatar {
+        font-size: 1.2rem;
+      }
+
+      .quote-name {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .quote-stars {
+        color: var(--orange);
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+      }
+
+      /* Forgot password link */
+      .forgot-link {
+        text-align: right;
+        margin-top: -14px;
+        margin-bottom: 16px;
+      }
+
+      .forgot-link a {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--orange);
+        text-decoration: none;
+      }
+
+      .forgot-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Auth form centered when panel hides */
+      .auth-form-center {
+        max-width: 440px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-page">
+      <!-- ═══ LEFT PANEL ═══ -->
+      <div class="auth-panel auth-panel-login">
+        <div>
+          <a
+            href="../../index.html"
+            class="panel-logo"
+            style="margin-bottom: 40px; display: flex"
+          >
+            <div class="panel-logo-icon">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+                <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+                <path
+                  d="M28 48 Q36 43 44 47"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M56 47 Q64 43 72 48"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <rect
+                  x="24"
+                  y="49"
+                  width="22"
+                  height="16"
+                  rx="6"
+                  fill="none"
+                  stroke="#4A3728"
+                  stroke-width="3"
+                />
+                <rect
+                  x="54"
+                  y="49"
+                  width="22"
+                  height="16"
+                  rx="6"
+                  fill="none"
+                  stroke="#4A3728"
+                  stroke-width="3"
+                />
+                <line
+                  x1="46"
+                  y1="57"
+                  x2="54"
+                  y2="57"
+                  stroke="#4A3728"
+                  stroke-width="2.5"
+                />
+                <line
+                  x1="24"
+                  y1="57"
+                  x2="17"
+                  y2="59"
+                  stroke="#4A3728"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="76"
+                  y1="57"
+                  x2="83"
+                  y2="59"
+                  stroke="#4A3728"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <circle cx="35" cy="57" r="5" fill="#4A3728" />
+                <circle cx="65" cy="57" r="5" fill="#4A3728" />
+                <circle cx="37" cy="55" r="1.5" fill="white" />
+                <circle cx="67" cy="55" r="1.5" fill="white" />
+                <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+                <path
+                  d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                  fill="white"
+                />
+                <path
+                  d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+                <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              </svg>
+            </div>
+            <span class="panel-logo-text">seu<span>Mota</span></span>
+          </a>
+
+          <div class="panel-content" style="margin: 0">
+            <h2 class="panel-headline">
+              Bem-vindo<br />de volta. <em>O bairro<br />te esperou.</em>
+            </h2>
+            <p class="panel-desc" style="margin-top: 16px">
+              Entre na sua conta e veja as tarefas disponíveis ou acompanhe o
+              que já está em andamento.
+            </p>
+          </div>
+
+          <div class="panel-quotes">
+            <div class="panel-quote">
+              <p class="quote-text">
+                "Meu Mota favorito já sabe exatamente o que comprar. É como ter
+                um ajudante de confiança."
+              </p>
+              <div class="quote-author">
+                <span class="quote-avatar">👩</span>
+                <div>
+                  <div class="quote-name">Ana Paula · SP</div>
+                  <div class="quote-stars">★★★★★</div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-quote">
+              <p class="quote-text">
+                "Faço minhas tarefas no caminho de casa. Em 1 hora já juntei
+                R$60."
+              </p>
+              <div class="quote-author">
+                <span class="quote-avatar">🧑</span>
+                <div>
+                  <div class="quote-name">Rafael · BH</div>
+                  <div class="quote-stars">★★★★★</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ RIGHT PANEL — FORM ═══ -->
+      <div class="auth-form-area">
+        <div class="auth-form-center">
+          <div class="form-header">
+            <h1 class="form-title">Entrar na conta</h1>
+            <p class="form-subtitle">
+              Não tem conta?
+              <a href="../register/cadastro-usuario.html">Criar como cliente</a>
+              &nbsp;·&nbsp;
+              <a href="../register/cadastro-prestador.html">Virar Mota</a>
+            </p>
+          </div>
+
+          <!-- Social login -->
+          <div class="social-row">
+            <button class="btn-social" type="button">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335"
+                />
+              </svg>
+              Google
+            </button>
+            <button class="btn-social" type="button">
+              <svg viewBox="0 0 24 24" fill="#1877F2">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                />
+              </svg>
+              Facebook
+            </button>
+          </div>
+
+          <div class="divider">ou entre com e-mail</div>
+
+          <!-- Alert de erro de login -->
+          <div
+            id="loginAlert"
+            style="
+              display: none;
+              background: #fef2f2;
+              border: 1.5px solid #fecaca;
+              border-radius: 12px;
+              padding: 12px 16px;
+              margin-bottom: 20px;
+              font-size: 0.85rem;
+              font-weight: 700;
+              color: #dc2626;
+              display: none;
+            "
+          >
+            ❌ E-mail ou senha incorretos. Tente novamente.
+          </div>
+
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <div class="input-wrap">
+                <span class="input-icon">✉️</span>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="seu@email.com"
+                  autocomplete="email"
+                />
+              </div>
+              <span class="field-error" id="emailErr"
+                >Informe um e-mail válido</span
+              >
+            </div>
+
+            <!-- Account Type Selector -->
+            <div class="form-group">
+              <label>Entrar como</label>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"
+              >
+                <label class="account-type-option" style="cursor: pointer">
+                  <input
+                    type="radio"
+                    name="accountType"
+                    value="cliente"
+                    checked
+                    style="display: none"
+                  />
+                  <div
+                    class="account-type-card"
+                    data-type="cliente"
+                    style="
+                      border: 2px solid var(--orange);
+                      background: var(--orange-soft);
+                      padding: 14px 20px;
+                      border-radius: 12px;
+                      text-align: center;
+                      transition: all 0.2s;
+                      font-weight: 800;
+                      font-size: 0.88rem;
+                      color: var(--ink);
+                    "
+                  >
+                    👤 Cliente
+                  </div>
+                </label>
+                <label class="account-type-option" style="cursor: pointer">
+                  <input
+                    type="radio"
+                    name="accountType"
+                    value="mota"
+                    style="display: none"
+                  />
+                  <div
+                    class="account-type-card"
+                    data-type="mota"
+                    style="
+                      border: 2px solid var(--sand);
+                      background: var(--white);
+                      padding: 14px 20px;
+                      border-radius: 12px;
+                      text-align: center;
+                      transition: all 0.2s;
+                      font-weight: 800;
+                      font-size: 0.88rem;
+                      color: var(--ink-mid);
+                    "
+                  >
+                    🏍️ Mota
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <div class="input-wrap">
+                <span class="input-icon">🔒</span>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Sua senha"
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  class="toggle-pass"
+                  data-target="password"
+                >
+                  👁️
+                </button>
+              </div>
+              <span class="field-error" id="passwordErr"
+                >Informe sua senha</span
+              >
+            </div>
+
+            <div class="forgot-link">
+              <a href="../register/recuperar-senha.html">Esqueci minha senha</a>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 8px">
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  cursor: pointer;
+                  font-weight: 600;
+                  font-size: 0.85rem;
+                  color: var(--ink-mid);
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="remember"
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    accent-color: var(--orange);
+                    padding: 0;
+                    border: none;
+                    box-shadow: none;
+                  "
+                />
+                Lembrar de mim por 30 dias
+              </label>
+            </div>
+
+            <div class="form-actions" style="margin-top: 20px">
+              <button type="submit" class="btn-submit" id="loginBtn">
+                Entrar →
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/login.js"></script>
+  </body>
+</html>

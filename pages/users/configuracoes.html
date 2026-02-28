@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Configurações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações</a
+          >
+          <a href="configuracoes.html" class="nav-item active"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="suporte.html" class="nav-item"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Configurações</h2>
+              <p>Personalize sua experiência</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="config-layout">
+            <!-- Sidebar nav -->
+            <nav class="config-nav">
+              <div class="config-nav-item active" data-target="aparencia">
+                <span class="config-nav-icon">🎨</span> Aparência
+              </div>
+              <div class="config-nav-item" data-target="idioma">
+                <span class="config-nav-icon">🌍</span> Idioma e região
+              </div>
+              <div class="config-nav-item" data-target="privacidade">
+                <span class="config-nav-icon">🔒</span> Privacidade
+              </div>
+              <div class="config-nav-item" data-target="seguranca">
+                <span class="config-nav-icon">🛡️</span> Segurança
+              </div>
+              <div class="config-nav-item" data-target="dispositivos">
+                <span class="config-nav-icon">📱</span> Dispositivos
+              </div>
+              <div class="config-nav-item" data-target="dados">
+                <span class="config-nav-icon">📊</span> Meus dados
+              </div>
+              <div class="config-nav-item" data-target="acessibilidade">
+                <span class="config-nav-icon">♿</span> Acessibilidade
+              </div>
+            </nav>
+
+            <!-- Sections -->
+            <div>
+              <!-- ─── APARÊNCIA ─── -->
+              <div class="config-section active section-box" id="sec-aparencia">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  🎨 Aparência
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Tema</div>
+                    <div class="config-row-desc">
+                      Claro, escuro ou automático (segue o sistema)
+                    </div>
+                  </div>
+                  <div class="theme-row" id="themeRow">
+                    <button class="theme-btn active" data-theme="light">
+                      ☀️ Claro
+                    </button>
+                    <button class="theme-btn" data-theme="dark">
+                      🌙 Escuro
+                    </button>
+                    <button class="theme-btn" data-theme="auto">⚙️ Auto</button>
+                  </div>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Cor de destaque</div>
+                    <div class="config-row-desc">
+                      Cor principal usada em botões e elementos ativos
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <div
+                      style="
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        background: #f07b1d;
+                        border: 3px solid var(--ink);
+                        cursor: pointer;
+                      "
+                      title="Laranja (padrão)"
+                    ></div>
+                    <div
+                      style="
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        background: #6366f1;
+                        cursor: pointer;
+                        border: 2px solid transparent;
+                      "
+                      title="Índigo"
+                      onclick="showToast('🎨 Em breve!')"
+                    ></div>
+                    <div
+                      style="
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        background: #22c55e;
+                        cursor: pointer;
+                        border: 2px solid transparent;
+                      "
+                      title="Verde"
+                      onclick="showToast('🎨 Em breve!')"
+                    ></div>
+                    <div
+                      style="
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        background: #ec4899;
+                        cursor: pointer;
+                        border: 2px solid transparent;
+                      "
+                      title="Rosa"
+                      onclick="showToast('🎨 Em breve!')"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Tamanho de fonte</div>
+                    <div class="config-row-desc">
+                      Afeta o texto em toda a interface
+                    </div>
+                  </div>
+                  <select class="config-select" id="fontSizeSelect">
+                    <option>Pequeno</option>
+                    <option selected>Normal</option>
+                    <option>Grande</option>
+                  </select>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Animações</div>
+                    <div class="config-row-desc">
+                      Transições e micro-interações
+                    </div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked id="animToggle" />
+                    <div class="toggle-track"></div>
+                  </label>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Exibir fotos dos Motas</div>
+                    <div class="config-row-desc">
+                      Mostrar avatares nos cards de tarefa
+                    </div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <div class="toggle-track"></div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- ─── IDIOMA ─── -->
+              <div class="config-section section-box" id="sec-idioma">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  🌍 Idioma e região
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Idioma do app</div>
+                    <div class="config-row-desc">
+                      Lingua usada em menus, botões e notificações
+                    </div>
+                  </div>
+                  <select class="config-select">
+                    <option selected>🇧🇷 Português (BR)</option>
+                    <option>🇺🇸 English</option>
+                    <option>🇪🇸 Español</option>
+                  </select>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Fuso horário</div>
+                    <div class="config-row-desc">
+                      Usado nas datas e horários das tarefas
+                    </div>
+                  </div>
+                  <select class="config-select">
+                    <option selected>GMT-3 · São Paulo</option>
+                    <option>GMT-4 · Manaus</option>
+                    <option>GMT-5 · Acre</option>
+                  </select>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Moeda</div>
+                    <div class="config-row-desc">
+                      Formato de exibição dos valores
+                    </div>
+                  </div>
+                  <select class="config-select">
+                    <option selected>R$ Real (BRL)</option>
+                  </select>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Formato de data</div>
+                  </div>
+                  <select class="config-select">
+                    <option selected>DD/MM/AAAA</option>
+                    <option>MM/DD/AAAA</option>
+                    <option>AAAA-MM-DD</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- ─── PRIVACIDADE ─── -->
+              <div
+                class="config-section section-box"
+                id="sec-privacidade"
+                data-link="politica-privacidade.html"
+              >
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 16px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  🔒 Privacidade
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                    margin-bottom: 20px;
+                  "
+                >
+                  <a
+                    href="politica-privacidade.html"
+                    target="_blank"
+                    style="
+                      padding: 9px 18px;
+                      border-radius: 10px;
+                      background: #ede9fe;
+                      color: #5b21b6;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.82rem;
+                      text-decoration: none;
+                    "
+                    >🔒 Política de Privacidade</a
+                  >
+                  <a
+                    href="termos-de-uso.html"
+                    target="_blank"
+                    style="
+                      padding: 9px 18px;
+                      border-radius: 10px;
+                      background: var(--orange-soft);
+                      color: var(--orange-dark);
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.82rem;
+                      text-decoration: none;
+                    "
+                    >📄 Termos de Uso</a
+                  >
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Compartilhar localização</div>
+                    <div class="config-row-desc">
+                      Necessário para encontrar Motas próximos
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Personalização por comportamento
+                    </div>
+                    <div class="config-row-desc">
+                      Uso do histórico para sugestões personalizadas
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Compartilhar dados com parceiros
+                    </div>
+                    <div class="config-row-desc">
+                      Analytics e parceiros de marketing
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Perfil visível para busca
+                    </div>
+                    <div class="config-row-desc">
+                      Outros usuários podem encontrar seu perfil
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Histórico de localização</div>
+                    <div class="config-row-desc">
+                      Armazenar rotas anteriores para otimizar sugestões
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+              </div>
+
+              <!-- ─── SEGURANÇA ─── -->
+              <div class="config-section section-box" id="sec-seguranca">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  🛡️ Segurança
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Autenticação em 2 fatores (2FA)
+                    </div>
+                    <div class="config-row-desc">
+                      SMS para (11) 99999-0000 · Altamente recomendado
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Login biométrico</div>
+                    <div class="config-row-desc">
+                      Impressão digital ou Face ID (somente app)
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Alertas de login suspeito
+                    </div>
+                    <div class="config-row-desc">
+                      Notificação ao detectar acesso em novo dispositivo
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" checked />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Trocar senha</div>
+                    <div class="config-row-desc">
+                      Última alteração há 45 dias
+                    </div>
+                  </div>
+                  <a
+                    href="recuperar-senha.html"
+                    style="
+                      font-size: 0.82rem;
+                      font-weight: 800;
+                      color: var(--orange);
+                      text-decoration: none;
+                      padding: 8px 14px;
+                      border: 1.5px solid rgba(240, 123, 29, 0.3);
+                      border-radius: 50px;
+                      transition: background 0.2s;
+                    "
+                    onmouseover="this.style.background = 'var(--orange-soft)'"
+                    onmouseout="this.style.background = 'transparent'"
+                  >
+                    Alterar →
+                  </a>
+                </div>
+              </div>
+
+              <!-- ─── DISPOSITIVOS ─── -->
+              <div class="config-section section-box" id="sec-dispositivos">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  📱 Dispositivos conectados
+                </div>
+
+                <div class="device-card">
+                  <div class="device-icon">💻</div>
+                  <div class="device-info">
+                    <div class="device-name">Chrome · MacBook Pro</div>
+                    <div class="device-detail">São Paulo, SP · Ativo agora</div>
+                  </div>
+                  <span class="device-current">Este dispositivo</span>
+                </div>
+
+                <div class="device-card">
+                  <div class="device-icon">📱</div>
+                  <div class="device-info">
+                    <div class="device-name">iPhone 15 · Safari</div>
+                    <div class="device-detail">São Paulo, SP · Há 2 horas</div>
+                  </div>
+                  <button class="device-remove">Encerrar</button>
+                </div>
+
+                <div class="device-card">
+                  <div class="device-icon">📱</div>
+                  <div class="device-info">
+                    <div class="device-name">Android · Chrome</div>
+                    <div class="device-detail">São Paulo, SP · Há 3 dias</div>
+                  </div>
+                  <button class="device-remove">Encerrar</button>
+                </div>
+
+                <button
+                  style="
+                    margin-top: 14px;
+                    background: transparent;
+                    border: 1.5px solid #fecaca;
+                    border-radius: 10px;
+                    padding: 10px 18px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.85rem;
+                    color: #dc2626;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                  "
+                  onmouseover="this.style.background = '#FEF2F2'"
+                  onmouseout="this.style.background = 'transparent'"
+                >
+                  ⚠️ Encerrar todas as outras sessões
+                </button>
+              </div>
+
+              <!-- ─── DADOS ─── -->
+              <div class="config-section section-box" id="sec-dados">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  📊 Meus dados
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Exportar meus dados</div>
+                    <div class="config-row-desc">
+                      Baixe um arquivo com todo o seu histórico e dados pessoais
+                      (LGPD)
+                    </div>
+                  </div>
+                  <button
+                    style="
+                      background: var(--orange-soft);
+                      border: 1.5px solid rgba(240, 123, 29, 0.3);
+                      border-radius: 50px;
+                      padding: 9px 16px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.82rem;
+                      color: var(--orange-dark);
+                      cursor: pointer;
+                    "
+                    onclick="
+                      showToast('📧 Enviaremos o arquivo por e-mail em até 24h')
+                    "
+                  >
+                    📥 Solicitar
+                  </button>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">
+                      Limpar histórico de buscas
+                    </div>
+                    <div class="config-row-desc">
+                      Apaga os termos buscados anteriormente
+                    </div>
+                  </div>
+                  <button
+                    style="
+                      background: transparent;
+                      border: 1.5px solid var(--sand);
+                      border-radius: 50px;
+                      padding: 9px 16px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.82rem;
+                      color: var(--ink-mid);
+                      cursor: pointer;
+                    "
+                    onclick="showToast('🗑️ Histórico de buscas apagado')"
+                  >
+                    Limpar
+                  </button>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Excluir conta e dados</div>
+                    <div class="config-row-desc">
+                      Remoção permanente e irreversível de toda sua conta (LGPD
+                      Art. 18)
+                    </div>
+                  </div>
+                  <button
+                    style="
+                      background: transparent;
+                      border: 1.5px solid #fecaca;
+                      border-radius: 50px;
+                      padding: 9px 16px;
+                      font-family: &quot;Nunito&quot;, sans-serif;
+                      font-weight: 800;
+                      font-size: 0.82rem;
+                      color: #dc2626;
+                      cursor: pointer;
+                    "
+                    onclick="
+                      if (confirm('Esta ação é irreversível. Tem certeza?'))
+                        showToast(
+                          '🗑️ Solicitação registrada. Você será contatado.',
+                        );
+                    "
+                  >
+                    🗑️ Excluir
+                  </button>
+                </div>
+              </div>
+
+              <!-- ─── ACESSIBILIDADE ─── -->
+              <div class="config-section section-box" id="sec-acessibilidade">
+                <div
+                  style="
+                    font-size: 1rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--sand);
+                  "
+                >
+                  ♿ Acessibilidade
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Alto contraste</div>
+                    <div class="config-row-desc">
+                      Aumenta o contraste para melhor legibilidade
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Reduzir animações</div>
+                    <div class="config-row-desc">
+                      Remove transições e efeitos de movimento
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Leitor de tela</div>
+                    <div class="config-row-desc">
+                      Compatibilidade otimizada com VoiceOver / TalkBack
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+
+                <div class="config-row" style="border-bottom: none">
+                  <div class="config-row-left">
+                    <div class="config-row-title">Tamanho dos botões</div>
+                    <div class="config-row-desc">
+                      Aumentar área de toque para facilitar uso
+                    </div>
+                  </div>
+                  <label class="toggle-switch"
+                    ><input type="checkbox" />
+                    <div class="toggle-track"></div
+                  ></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="js/app-shell.js"></script>
+    <script src="js/configuracoes.js"></script>
+  </body>
+</html>

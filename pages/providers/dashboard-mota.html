@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Painel do Mota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .filters-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .filter-chip {
+        padding: 7px 16px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .filter-chip:hover,
+      .filter-chip.active {
+        border-color: #22c55e;
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+      .feed-empty {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      .feed-empty-icon {
+        font-size: 3.5rem;
+        margin-bottom: 16px;
+      }
+      .feed-empty-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+      .feed-empty-desc {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.65;
+      }
+      .content-cols {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        align-items: start;
+      }
+      .perf-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .perf-card-title {
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--ink-light);
+        margin-bottom: 14px;
+      }
+      .perf-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--sand);
+        font-size: 0.85rem;
+      }
+      .perf-row:last-child {
+        border-bottom: none;
+      }
+      .perf-row-label {
+        font-weight: 700;
+        color: var(--ink-mid);
+      }
+      .perf-row-value {
+        font-weight: 900;
+        color: var(--ink);
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+      }
+      .perf-row-value.green {
+        color: #16a34a;
+      }
+      .perf-row-value.orange {
+        color: var(--orange);
+      }
+      @media (max-width: 1000px) {
+        .content-cols {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <path
+                d="M28 48 Q36 43 44 47"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M56 47 Q64 43 72 48"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <line
+                x1="46"
+                y1="57"
+                x2="54"
+                y2="57"
+                stroke="#4A3728"
+                stroke-width="2.5"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+
+        <!-- Online toggle -->
+        <div class="online-toggle-wrap">
+          <div class="online-toggle-info">
+            <div class="online-toggle-label">Status</div>
+            <div class="online-toggle-status is-online" id="statusLabel">
+              <div class="online-dot is-online" id="statusDot"></div>
+              Online
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="onlineToggle" checked />
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+
+        <!-- Today's earnings pill -->
+        <div class="earning-pill">
+          <div>
+            <div
+              style="
+                font-size: 0.68rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                color: rgba(255, 255, 255, 0.35);
+              "
+            >
+              Hoje
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: rgba(255, 255, 255, 0.4);
+              "
+            >
+              0 tarefas feitas
+            </div>
+          </div>
+          <div class="earning-pill-value">R$ 0</div>
+        </div>
+
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item active">
+            <span class="nav-icon">🏠</span> Início
+          </a>
+          <a href="detalhe-tarefa.html" class="nav-item">
+            <span class="nav-icon">📋</span> Tarefas ativas
+            <span class="nav-badge">1</span>
+          </a>
+
+          <a href="tarefa-em-andamento.html" class="nav-item">
+            <span class="nav-icon">🏃</span> Em andamento
+            <span class="nav-badge">1</span>
+          </a>
+
+          <a href="historico-mota.html" class="nav-item">
+            <span class="nav-icon">✅</span> Histórico
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Financeiro</div>
+          <a href="ganhos-mota.html" class="nav-item">
+            <span class="nav-icon">💰</span> Meus ganhos
+          </a>
+          <a href="dados-bancarios.html" class="nav-item">
+            <span class="nav-icon">💳</span> Dados bancários
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-publico-mota.html" class="nav-item">
+            <span class="nav-icon">👤</span> Meu perfil
+          </a>
+          <a href="notificacoes-mota.html" class="nav-item">
+            <span class="nav-icon">🔔</span> Notificações
+            <span class="nav-badge">2</span>
+          </a>
+          <a href="configuracoes-mota.html" class="nav-item">
+            <span class="nav-icon">⚙️</span> Configurações
+          </a>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- ═══ MAIN ═══ -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Tarefas no seu bairro</h2>
+              <p id="taskCount">
+                6 tarefas disponíveis a menos de 1,5km de você
+              </p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn" title="Notificações">
+              🔔<span class="dot"></span>
+            </button>
+            <button class="icon-btn" title="Mensagens">💬</button>
+            <div class="user-avatar" style="cursor: pointer">🧑</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="content-cols">
+            <!-- LEFT: task feed -->
+            <div>
+              <!-- Filters -->
+              <div class="filters-row">
+                <button class="filter-chip active" data-filter="all">
+                  Todas
+                </button>
+                <button class="filter-chip" data-filter="mercado">
+                  🛒 Mercado
+                </button>
+                <button class="filter-chip" data-filter="banco">
+                  🏦 Banco
+                </button>
+                <button class="filter-chip" data-filter="farmacia">
+                  💊 Farmácia
+                </button>
+                <button class="filter-chip" data-filter="lixo">🗑️ Lixo</button>
+                <button class="filter-chip" data-filter="outros">
+                  ➕ Outros
+                </button>
+              </div>
+
+              <!-- Feed -->
+              <div class="task-feed" id="taskFeed">
+                <a
+                  href="detalhe-tarefa.html"
+                  class="feed-card new-task"
+                  data-cat="mercado"
+                >
+                  <div class="feed-card-header">
+                    <div class="feed-card-icon">🛒</div>
+                    <div class="feed-card-title-wrap">
+                      <div class="feed-card-title">
+                        Compras no mercado — lista pequena
+                      </div>
+                      <div class="feed-card-cat">Mercado</div>
+                    </div>
+                    <div class="feed-card-price">R$ 25</div>
+                  </div>
+                  <div class="feed-card-meta">
+                    <span class="feed-meta-chip">📍 320m</span>
+                    <span class="feed-meta-chip">🕒 Hoje 14h</span>
+                    <span class="feed-meta-chip">⏱ Postada há 5min</span>
+                  </div>
+                  <div
+                    class="feed-card-actions"
+                    onclick="event.preventDefault()"
+                  >
+                    <button
+                      class="btn-accept"
+                      onclick="window.location = 'detalhe-tarefa.html'"
+                    >
+                      ✅ Ver e aceitar
+                    </button>
+                    <button class="btn-decline">Pular</button>
+                  </div>
+                </a>
+
+                <a
+                  href="detalhe-tarefa.html"
+                  class="feed-card"
+                  data-cat="banco"
+                >
+                  <div class="feed-card-header">
+                    <div class="feed-card-icon">🏦</div>
+                    <div class="feed-card-title-wrap">
+                      <div class="feed-card-title">
+                        Pagar boleto na lotérica
+                      </div>
+                      <div class="feed-card-cat">Banco / Lotérica</div>
+                    </div>
+                    <div class="feed-card-price">R$ 15</div>
+                  </div>
+                  <div class="feed-card-meta">
+                    <span class="feed-meta-chip">📍 540m</span>
+                    <span class="feed-meta-chip">🕒 Hoje 16h</span>
+                    <span class="feed-meta-chip">⏱ Postada há 12min</span>
+                  </div>
+                  <div
+                    class="feed-card-actions"
+                    onclick="event.preventDefault()"
+                  >
+                    <button
+                      class="btn-accept"
+                      onclick="window.location = 'detalhe-tarefa.html'"
+                    >
+                      ✅ Ver e aceitar
+                    </button>
+                    <button class="btn-decline">Pular</button>
+                  </div>
+                </a>
+
+                <a
+                  href="detalhe-tarefa.html"
+                  class="feed-card"
+                  data-cat="farmacia"
+                >
+                  <div class="feed-card-header">
+                    <div class="feed-card-icon">💊</div>
+                    <div class="feed-card-title-wrap">
+                      <div class="feed-card-title">
+                        Buscar remédio na farmácia
+                      </div>
+                      <div class="feed-card-cat">Farmácia</div>
+                    </div>
+                    <div class="feed-card-price">R$ 18</div>
+                  </div>
+                  <div class="feed-card-meta">
+                    <span class="feed-meta-chip">📍 780m</span>
+                    <span class="feed-meta-chip">🕒 Hoje 17h30</span>
+                    <span class="feed-meta-chip">⏱ Postada há 24min</span>
+                  </div>
+                  <div
+                    class="feed-card-actions"
+                    onclick="event.preventDefault()"
+                  >
+                    <button
+                      class="btn-accept"
+                      onclick="window.location = 'detalhe-tarefa.html'"
+                    >
+                      ✅ Ver e aceitar
+                    </button>
+                    <button class="btn-decline">Pular</button>
+                  </div>
+                </a>
+
+                <a href="detalhe-tarefa.html" class="feed-card" data-cat="lixo">
+                  <div class="feed-card-header">
+                    <div class="feed-card-icon">🗑️</div>
+                    <div class="feed-card-title-wrap">
+                      <div class="feed-card-title">
+                        Descer lixo e reciclagem
+                      </div>
+                      <div class="feed-card-cat">Levar o lixo</div>
+                    </div>
+                    <div class="feed-card-price">R$ 8</div>
+                  </div>
+                  <div class="feed-card-meta">
+                    <span class="feed-meta-chip">📍 200m</span>
+                    <span class="feed-meta-chip">🕒 Amanhã 9h</span>
+                    <span class="feed-meta-chip">⏱ Postada há 1h</span>
+                  </div>
+                  <div
+                    class="feed-card-actions"
+                    onclick="event.preventDefault()"
+                  >
+                    <button
+                      class="btn-accept"
+                      onclick="window.location = 'detalhe-tarefa.html'"
+                    >
+                      ✅ Ver e aceitar
+                    </button>
+                    <button class="btn-decline">Pular</button>
+                  </div>
+                </a>
+
+                <a
+                  href="detalhe-tarefa.html"
+                  class="feed-card"
+                  data-cat="mercado"
+                >
+                  <div class="feed-card-header">
+                    <div class="feed-card-icon">🛒</div>
+                    <div class="feed-card-title-wrap">
+                      <div class="feed-card-title">
+                        Compras semanais completas
+                      </div>
+                      <div class="feed-card-cat">Mercado</div>
+                    </div>
+                    <div class="feed-card-price">R$ 50</div>
+                  </div>
+                  <div class="feed-card-meta">
+                    <span class="feed-meta-chip">📍 1.1km</span>
+                    <span class="feed-meta-chip">🕒 Amanhã 11h</span>
+                    <span class="feed-meta-chip">⏱ Postada há 2h</span>
+                  </div>
+                  <div
+                    class="feed-card-actions"
+                    onclick="event.preventDefault()"
+                  >
+                    <button
+                      class="btn-accept"
+                      onclick="window.location = 'detalhe-tarefa.html'"
+                    >
+                      ✅ Ver e aceitar
+                    </button>
+                    <button class="btn-decline">Pular</button>
+                  </div>
+                </a>
+              </div>
+              <!-- /task-feed -->
+            </div>
+
+            <!-- RIGHT: performance sidebar -->
+            <div>
+              <div class="perf-card">
+                <div class="perf-card-title">Sua performance hoje</div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Tarefas concluídas</span
+                  ><span class="perf-row-value">0</span>
+                </div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Ganhos hoje</span
+                  ><span class="perf-row-value green">R$ 0</span>
+                </div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Avaliação média</span
+                  ><span class="perf-row-value orange">★ 4.9</span>
+                </div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Taxa de aceite</span
+                  ><span class="perf-row-value">87%</span>
+                </div>
+              </div>
+
+              <div class="perf-card">
+                <div class="perf-card-title">Esta semana</div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Tarefas</span
+                  ><span class="perf-row-value">12</span>
+                </div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Ganhos</span
+                  ><span class="perf-row-value green">R$ 284</span>
+                </div>
+                <div class="perf-row">
+                  <span class="perf-row-label">Horas ativo</span
+                  ><span class="perf-row-value">18h</span>
+                </div>
+              </div>
+
+              <a
+                href="ganhos-mota.html"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  background: var(--white);
+                  border: 1.5px solid var(--sand);
+                  border-radius: 12px;
+                  padding: 14px;
+                  font-family: &quot;Nunito&quot;, sans-serif;
+                  font-weight: 800;
+                  font-size: 0.88rem;
+                  color: var(--ink);
+                  text-decoration: none;
+                  transition: all 0.2s;
+                "
+                onmouseover="this.style.borderColor = '#22C55E'"
+                onmouseout="this.style.borderColor = 'var(--sand)'"
+              >
+                💰 Ver extrato completo →
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/dashboard-mota.js"></script>
+  </body>
+</html>

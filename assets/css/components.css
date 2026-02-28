@@ -1,0 +1,112 @@
+/* ─── BUTTONS ────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all .2s;
+  border: 2px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(240,123,29,0.4);
+}
+.btn-primary:hover {
+  background: var(--orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(240,123,29,0.5);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.btn-light {
+  background: var(--white);
+  color: var(--ink);
+}
+.btn-light:hover {
+  background: var(--cream);
+  transform: translateY(-2px);
+}
+
+.btn-outline-light {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.3);
+  color: var(--white);
+}
+.btn-outline-light:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+}
+
+/* ─── CHIPS ──────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1.5px solid var(--sand);
+  color: var(--ink-mid);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.chip:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: var(--orange-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(240,123,29,0.15);
+}
+
+/* ─── SECTION LABELS (reusable) ───────────────────── */
+.section-label {
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 900;
+  text-align: center;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.section-sub {
+  text-align: center;
+  color: var(--ink-mid);
+  font-size: 1rem;
+  font-weight: 600;
+  max-width: 500px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+}

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Configurações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/mota.css" />
+    <style>
+      .settings-section {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+
+      .settings-section-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .settings-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--sand);
+      }
+
+      .settings-item:last-child {
+        border-bottom: none;
+      }
+
+      .settings-item-left {
+        flex: 1;
+      }
+
+      .settings-item-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .settings-item-desc {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--ink-light);
+        line-height: 1.5;
+      }
+
+      .settings-item-right {
+        flex-shrink: 0;
+        margin-left: 16px;
+      }
+
+      /* Toggle Switch */
+      .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        cursor: pointer;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--sand);
+        border-radius: 50px;
+        transition: 0.3s;
+      }
+
+      .toggle-track::before {
+        content: "";
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+
+      .toggle-switch input:checked + .toggle-track {
+        background: #22c55e;
+      }
+
+      .toggle-switch input:checked + .toggle-track::before {
+        transform: translateX(22px);
+      }
+
+      /* Select dropdown */
+      .settings-select {
+        padding: 8px 14px;
+        border: 1.5px solid var(--sand);
+        border-radius: 10px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--ink);
+        background: var(--white);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .settings-select:focus {
+        outline: none;
+        border-color: #22c55e;
+      }
+
+      /* Slider */
+      .settings-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 180px;
+        height: 6px;
+        border-radius: 5px;
+        background: var(--sand);
+        outline: none;
+        transition: opacity 0.2s;
+      }
+
+      .settings-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #22c55e;
+        cursor: pointer;
+      }
+
+      .settings-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #22c55e;
+        cursor: pointer;
+        border: none;
+      }
+
+      .slider-value {
+        display: inline-block;
+        min-width: 50px;
+        text-align: right;
+        font-weight: 800;
+        color: #22c55e;
+        margin-left: 10px;
+      }
+
+      /* Buttons */
+      .btn-danger {
+        padding: 12px 24px;
+        border-radius: 10px;
+        background: transparent;
+        border: 1.5px solid #fecaca;
+        color: #dc2626;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-danger:hover {
+        background: #fef2f2;
+        border-color: #f87171;
+      }
+
+      .btn-link {
+        padding: 12px 24px;
+        border-radius: 10px;
+        background: var(--cream);
+        border: 1.5px solid var(--sand);
+        color: var(--ink);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-link:hover {
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+
+      /* Category chips */
+      .category-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .category-chip {
+        padding: 6px 14px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .category-chip.active {
+        border-color: #22c55e;
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+
+      .category-chip:hover {
+        border-color: #22c55e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app mota-app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+
+        <div class="nav-section">
+          <a href="dashboard-mota.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Painel</a
+          >
+          <a href="ganhos-mota.html" class="nav-item"
+            ><span class="nav-icon">💰</span> Ganhos</a
+          >
+          <a href="historico-mota.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="avaliacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Avaliações</a
+          >
+          <a href="editar-perfil-mota.html" class="nav-item"
+            ><span class="nav-icon">✏️</span> Editar perfil</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="notificacoes-mota.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >2</span
+            ></a
+          >
+          <a href="chat-mota.html" class="nav-item"
+            ><span class="nav-icon">💬</span> Mensagens</a
+          >
+          <a href="configuracoes-mota.html" class="nav-item active"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="suporte.html" class="nav-item"
+            ><span class="nav-icon">🆘</span> Suporte</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">🧑</div>
+            <div class="user-info">
+              <div class="user-name">João Pedro</div>
+              <div class="user-role">Mota · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Configurações</h2>
+              <p>Personalize sua experiência como Mota</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Preferências de Trabalho -->
+          <div class="settings-section">
+            <div class="settings-section-title">
+              🎯 Preferências de trabalho
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Raio de alcance</div>
+                <div class="settings-item-desc">
+                  Distância máxima das tarefas que você quer ver
+                </div>
+              </div>
+              <div
+                class="settings-item-right"
+                style="display: flex; align-items: center"
+              >
+                <input
+                  type="range"
+                  class="settings-slider"
+                  id="raioSlider"
+                  min="0.5"
+                  max="5"
+                  step="0.5"
+                  value="2"
+                />
+                <span class="slider-value" id="raioValue">2.0 km</span>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Categorias preferidas</div>
+                <div class="settings-item-desc">
+                  Selecione os tipos de tarefa que você prefere fazer
+                </div>
+                <div class="category-chips">
+                  <button class="category-chip active" data-cat="mercado">
+                    🛒 Mercado
+                  </button>
+                  <button class="category-chip active" data-cat="banco">
+                    🏦 Banco
+                  </button>
+                  <button class="category-chip" data-cat="farmacia">
+                    💊 Farmácia
+                  </button>
+                  <button class="category-chip active" data-cat="lixo">
+                    🗑️ Lixo
+                  </button>
+                  <button class="category-chip" data-cat="pet">🐕 Pet</button>
+                  <button class="category-chip" data-cat="outros">
+                    ➕ Outros
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Aceitar automaticamente</div>
+                <div class="settings-item-desc">
+                  Aceite automático de tarefas recorrentes de clientes favoritos
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="autoAccept" />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notificações -->
+          <div class="settings-section">
+            <div class="settings-section-title">🔔 Notificações</div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Novas tarefas próximas</div>
+                <div class="settings-item-desc">
+                  Receba alerta quando uma tarefa for postada perto de você
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifTarefas" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Mensagens de clientes</div>
+                <div class="settings-item-desc">
+                  Notificações de mensagens no chat
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifMensagens" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Avaliações recebidas</div>
+                <div class="settings-item-desc">
+                  Seja notificado quando um cliente avaliar você
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifAvaliacoes" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Lembretes de tarefa</div>
+                <div class="settings-item-desc">
+                  Lembrete 30 minutos antes do horário combinado
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifLembretes" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Som de notificação</div>
+                <div class="settings-item-desc">
+                  Toque sonoro ao receber notificações
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifSom" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Privacidade -->
+          <div class="settings-section">
+            <div class="settings-section-title">🔒 Privacidade</div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">
+                  Mostrar localização aproximada
+                </div>
+                <div class="settings-item-desc">
+                  Clientes veem apenas o bairro, não o endereço exato
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="privLocalizacao" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Perfil público</div>
+                <div class="settings-item-desc">
+                  Seu perfil pode ser visto por clientes que buscam Motas
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="privPerfil" checked />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Mostrar última atividade</div>
+                <div class="settings-item-desc">
+                  Exibir quando você esteve online pela última vez
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="privAtividade" />
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dados e Acesso -->
+          <div class="settings-section">
+            <div class="settings-section-title">📄 Dados e acesso</div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Alterar senha</div>
+                <div class="settings-item-desc">
+                  Mantenha sua conta segura com uma senha forte
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <button
+                  class="btn-link"
+                  onclick="alert('Funcionalidade em breve!')"
+                >
+                  Alterar
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">Baixar meus dados</div>
+                <div class="settings-item-desc">
+                  Exportar todas as suas informações em formato JSON
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <button class="btn-link" onclick="alert('Download iniciado!')">
+                  Baixar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zona Perigosa -->
+          <div class="settings-section">
+            <div class="settings-section-title" style="color: #dc2626">
+              ⚠️ Zona perigosa
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">
+                  Pausar conta temporariamente
+                </div>
+                <div class="settings-item-desc">
+                  Sua conta fica invisível mas os dados permanecem salvos
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <button class="btn-danger" id="pauseBtn">Pausar conta</button>
+              </div>
+            </div>
+
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-title">
+                  Excluir conta permanentemente
+                </div>
+                <div class="settings-item-desc">
+                  Todos os seus dados serão apagados. Esta ação não pode ser
+                  desfeita.
+                </div>
+              </div>
+              <div class="settings-item-right">
+                <button class="btn-danger" id="deleteBtn">Excluir conta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/configuracoes-mota.js"></script>
+  </body>
+</html>

@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Quero ser um Mota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/forms.css" />
+    <style>
+      /* Extra styles for provider page */
+      .auth-panel {
+        background: #1a2e1a;
+      }
+
+      .auth-panel::before {
+        background: radial-gradient(
+          circle,
+          rgba(34, 197, 94, 0.12) 0%,
+          transparent 65%
+        );
+      }
+      .auth-panel::after {
+        background: radial-gradient(
+          circle,
+          rgba(240, 123, 29, 0.08) 0%,
+          transparent 65%
+        );
+      }
+
+      .panel-tag {
+        background: rgba(34, 197, 94, 0.15);
+        border-color: rgba(34, 197, 94, 0.3);
+        color: #4ade80;
+      }
+
+      .perk-dot {
+        background: #4ade80;
+      }
+
+      .earn-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(240, 123, 29, 0.15);
+        border: 1px solid rgba(240, 123, 29, 0.25);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: 24px;
+        width: 100%;
+      }
+
+      .earn-badge-icon {
+        font-size: 1.6rem;
+      }
+
+      .earn-badge-text {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.5;
+      }
+
+      .earn-badge-text strong {
+        display: block;
+        color: var(--orange);
+        font-size: 1rem;
+      }
+
+      /* Step indicator in panel */
+      .panel-steps {
+        position: relative;
+        z-index: 1;
+        margin-top: 28px;
+      }
+
+      .panel-step-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        opacity: 0.4;
+        transition: opacity 0.3s;
+      }
+
+      .panel-step-item.active {
+        opacity: 1;
+      }
+      .panel-step-item.done {
+        opacity: 0.7;
+      }
+
+      .panel-step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.5);
+        flex-shrink: 0;
+      }
+
+      .panel-step-item.active .panel-step-num {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: white;
+        box-shadow: 0 0 0 3px rgba(240, 123, 29, 0.25);
+      }
+
+      .panel-step-item.done .panel-step-num {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: white;
+      }
+
+      .panel-step-name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .panel-step-item.active .panel-step-name {
+        color: white;
+      }
+
+      /* doc upload strip */
+      .doc-uploads {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-page">
+      <!-- ═══ LEFT PANEL ═══ -->
+      <div class="auth-panel">
+        <a href="index.html" class="panel-logo">
+          <div class="panel-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <path
+                d="M28 48 Q36 43 44 47"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M56 47 Q64 43 72 48"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <line
+                x1="46"
+                y1="57"
+                x2="54"
+                y2="57"
+                stroke="#4A3728"
+                stroke-width="2.5"
+              />
+              <line
+                x1="24"
+                y1="57"
+                x2="17"
+                y2="59"
+                stroke="#4A3728"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="76"
+                y1="57"
+                x2="83"
+                y2="59"
+                stroke="#4A3728"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="panel-logo-text">seu<span>Mota</span></span>
+        </a>
+
+        <div class="panel-content">
+          <div class="panel-tag">🧑‍💼 Quero ser Mota</div>
+          <h2 class="panel-headline">
+            Ganhe dinheiro<br />
+            fazendo tarefas<br />
+            <em>perto de você.</em>
+          </h2>
+          <p class="panel-desc">
+            Defina seus horários, escolha as tarefas que quer fazer e comece a
+            ganhar no seu bairro.
+          </p>
+
+          <div class="earn-badge">
+            <span class="earn-badge-icon">💰</span>
+            <div class="earn-badge-text">
+              <strong>Até R$ 1.800 / mês</strong>
+              renda extra estimada fazendo tarefas no seu bairro
+            </div>
+          </div>
+
+          <!-- Step tracker -->
+          <div class="panel-steps" id="panelSteps">
+            <div class="panel-step-item active" data-panel-step="1">
+              <div class="panel-step-num">1</div>
+              <span class="panel-step-name">Dados pessoais</span>
+            </div>
+            <div class="panel-step-item" data-panel-step="2">
+              <div class="panel-step-num">2</div>
+              <span class="panel-step-name">Endereço</span>
+            </div>
+            <div class="panel-step-item" data-panel-step="3">
+              <div class="panel-step-num">3</div>
+              <span class="panel-step-name">Perfil e categorias</span>
+            </div>
+            <div class="panel-step-item" data-panel-step="4">
+              <div class="panel-step-num">4</div>
+              <span class="panel-step-name">Senha e documentos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-perks">
+          <div class="perk">
+            <div class="perk-dot"></div>
+            Você define seus dias e horários
+          </div>
+          <div class="perk">
+            <div class="perk-dot"></div>
+            Pagamento direto na sua conta
+          </div>
+          <div class="perk">
+            <div class="perk-dot"></div>
+            Suporte 7 dias por semana
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ RIGHT PANEL — MULTI-STEP FORM ═══ -->
+      <div class="auth-form-area">
+        <div id="formWrap">
+          <div class="form-header">
+            <h1 class="form-title" id="formTitle">Dados pessoais</h1>
+            <p class="form-subtitle">
+              Já tem conta?
+              <a href="/pages/login/login.html">Entrar como usuário</a>
+              &nbsp;·&nbsp; Quer contratar?
+              <a href="cadastro-usuario.html">Criar conta de usuário</a>
+            </p>
+          </div>
+
+          <!-- Stepper -->
+          <div class="stepper" id="stepper">
+            <div class="step-pill">
+              <div class="step-circle active" id="sc1">1</div>
+              <span class="step-label active" id="sl1">Pessoal</span>
+            </div>
+            <div class="step-line" id="line1"></div>
+            <div class="step-pill">
+              <div class="step-circle" id="sc2">2</div>
+              <span class="step-label" id="sl2">Endereço</span>
+            </div>
+            <div class="step-line" id="line2"></div>
+            <div class="step-pill">
+              <div class="step-circle" id="sc3">3</div>
+              <span class="step-label" id="sl3">Perfil</span>
+            </div>
+            <div class="step-line" id="line3"></div>
+            <div class="step-pill">
+              <div class="step-circle" id="sc4">4</div>
+              <span class="step-label" id="sl4">Acesso</span>
+            </div>
+          </div>
+
+          <form id="motaForm" novalidate>
+            <!-- ────────────── STEP 1 — DADOS PESSOAIS ────────────── -->
+            <div class="form-step active" id="step1">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="p_firstName">Nome</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input
+                      type="text"
+                      id="p_firstName"
+                      placeholder="Seu nome"
+                      autocomplete="given-name"
+                    />
+                  </div>
+                  <span class="field-error" id="p_firstNameErr"
+                    >Informe seu nome</span
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="p_lastName">Sobrenome</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input
+                      type="text"
+                      id="p_lastName"
+                      placeholder="Sobrenome"
+                      autocomplete="family-name"
+                    />
+                  </div>
+                  <span class="field-error" id="p_lastNameErr"
+                    >Informe seu sobrenome</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="p_email">E-mail</label>
+                <div class="input-wrap">
+                  <span class="input-icon">✉️</span>
+                  <input
+                    type="email"
+                    id="p_email"
+                    placeholder="seu@email.com"
+                    autocomplete="email"
+                  />
+                </div>
+                <span class="field-error" id="p_emailErr">E-mail inválido</span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="p_phone">Celular</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">📱</span>
+                    <input
+                      type="tel"
+                      id="p_phone"
+                      placeholder="(11) 99999-9999"
+                      autocomplete="tel"
+                    />
+                  </div>
+                  <span class="field-error" id="p_phoneErr"
+                    >Celular inválido</span
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="p_birth">Data de nascimento</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🎂</span>
+                    <input type="date" id="p_birth" />
+                  </div>
+                  <span class="field-error" id="p_birthErr"
+                    >Você precisa ter 18+ anos</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="p_cpf">CPF</label>
+                <div class="input-wrap">
+                  <span class="input-icon">🪪</span>
+                  <input
+                    type="text"
+                    id="p_cpf"
+                    placeholder="000.000.000-00"
+                    maxlength="14"
+                  />
+                </div>
+                <span class="field-error" id="p_cpfErr">CPF inválido</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-next" id="next1">
+                  Próximo: Endereço →
+                </button>
+              </div>
+            </div>
+
+            <!-- ────────────── STEP 2 — ENDEREÇO ────────────── -->
+            <div class="form-step" id="step2">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="p_cep">CEP</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">📍</span>
+                    <input
+                      type="text"
+                      id="p_cep"
+                      placeholder="00000-000"
+                      maxlength="9"
+                    />
+                  </div>
+                  <span class="field-error" id="p_cepErr">CEP inválido</span>
+                </div>
+                <div class="form-group">
+                  <label for="p_num">Número</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🏠</span>
+                    <input type="text" id="p_num" placeholder="123" />
+                  </div>
+                  <span class="field-error" id="p_numErr"
+                    >Informe o número</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="p_street">Rua / Avenida</label>
+                <div class="input-wrap">
+                  <span class="input-icon">🏙️</span>
+                  <input
+                    type="text"
+                    id="p_street"
+                    placeholder="Preenchido pelo CEP..."
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="p_neighborhood">Bairro</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🏘️</span>
+                    <input
+                      type="text"
+                      id="p_neighborhood"
+                      placeholder="Seu bairro"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="p_city">Cidade / UF</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🌆</span>
+                    <input
+                      type="text"
+                      id="p_city"
+                      placeholder="São Paulo / SP"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="p_complement"
+                  >Complemento
+                  <span style="font-weight: 600; color: var(--ink-light)"
+                    >(opcional)</span
+                  ></label
+                >
+                <div class="input-wrap">
+                  <span class="input-icon">📝</span>
+                  <input
+                    type="text"
+                    id="p_complement"
+                    placeholder="Apto, bloco, referência..."
+                  />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-back" id="back2">
+                  ← Voltar
+                </button>
+                <button type="button" class="btn-next" id="next2">
+                  Próximo: Perfil →
+                </button>
+              </div>
+            </div>
+
+            <!-- ────────────── STEP 3 — PERFIL E CATEGORIAS ────────────── -->
+            <div class="form-step" id="step3">
+              <div class="form-group">
+                <label>Foto de perfil</label>
+                <div class="photo-upload" id="photoUploadWrap">
+                  <img
+                    src=""
+                    alt="Preview"
+                    class="photo-preview"
+                    id="photoPreview"
+                  />
+                  <div class="photo-upload-icon" id="photoIcon">📷</div>
+                  <div class="photo-upload-label" id="photoLabel">
+                    Clique para enviar sua foto
+                  </div>
+                  <div class="photo-upload-hint">
+                    JPG ou PNG · Máx. 5MB · Cara visível
+                  </div>
+                  <input type="file" id="p_photo" accept="image/*" />
+                </div>
+                <span class="field-error" id="p_photoErr"
+                  >Envie uma foto de perfil</span
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="p_bio"
+                  >Sobre você
+                  <span style="font-weight: 600; color: var(--ink-light)"
+                    >(opcional)</span
+                  ></label
+                >
+                <div class="input-wrap">
+                  <span class="input-icon" style="top: 16px; transform: none"
+                    >✍️</span
+                  >
+                  <textarea
+                    id="p_bio"
+                    class="no-icon"
+                    style="padding-left: 42px"
+                    placeholder="Conte um pouco sobre você, sua disponibilidade e o que te faz um ótimo Mota..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Quais tarefas você quer realizar?
+                  <span style="color: #ef4444">*</span></label
+                >
+                <div class="category-grid">
+                  <label class="cat-check" id="cc1">
+                    <input type="checkbox" name="cats" value="lixo" />
+                    🗑️ Levar o lixo
+                  </label>
+                  <label class="cat-check" id="cc2">
+                    <input type="checkbox" name="cats" value="lavanderia" />
+                    👕 Lavanderia
+                  </label>
+                  <label class="cat-check" id="cc3">
+                    <input type="checkbox" name="cats" value="mercado" />
+                    🛒 Mercado
+                  </label>
+                  <label class="cat-check" id="cc4">
+                    <input type="checkbox" name="cats" value="banco" />
+                    🏦 Banco / Lotérica
+                  </label>
+                  <label class="cat-check" id="cc5">
+                    <input type="checkbox" name="cats" value="farmacia" />
+                    💊 Farmácia
+                  </label>
+                  <label class="cat-check" id="cc6">
+                    <input type="checkbox" name="cats" value="encomenda" />
+                    📦 Retirar encomenda
+                  </label>
+                  <label class="cat-check" id="cc7">
+                    <input type="checkbox" name="cats" value="pet" />
+                    🐕 Passeio com pet
+                  </label>
+                  <label class="cat-check" id="cc8">
+                    <input type="checkbox" name="cats" value="outros" />
+                    ➕ Outras tarefas
+                  </label>
+                </div>
+                <span class="field-error" id="p_catsErr"
+                  >Selecione ao menos uma categoria</span
+                >
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-back" id="back3">
+                  ← Voltar
+                </button>
+                <button type="button" class="btn-next" id="next3">
+                  Próximo: Acesso →
+                </button>
+              </div>
+            </div>
+
+            <!-- ────────────── STEP 4 — SENHA E DOCUMENTOS ────────────── -->
+            <div class="form-step" id="step4">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="p_password">Senha</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+                    <input
+                      type="password"
+                      id="p_password"
+                      placeholder="Mínimo 8 caracteres"
+                      autocomplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      class="toggle-pass"
+                      data-target="p_password"
+                    >
+                      👁️
+                    </button>
+                  </div>
+                  <span class="field-error" id="p_passwordErr"
+                    >Mínimo 8 caracteres</span
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="p_confirmPassword">Confirmar senha</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">🔒</span>
+                    <input
+                      type="password"
+                      id="p_confirmPassword"
+                      placeholder="Repita a senha"
+                      autocomplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      class="toggle-pass"
+                      data-target="p_confirmPassword"
+                    >
+                      👁️
+                    </button>
+                  </div>
+                  <span class="field-error" id="p_confirmPasswordErr"
+                    >As senhas não coincidem</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Documento de identidade (RG ou CNH)
+                  <span style="color: #ef4444">*</span></label
+                >
+                <div class="doc-uploads">
+                  <div class="photo-upload" id="docFrontWrap">
+                    <div class="photo-upload-icon">🪪</div>
+                    <div class="photo-upload-label">Frente</div>
+                    <div class="photo-upload-hint">Foto nítida do doc</div>
+                    <input
+                      type="file"
+                      id="p_docFront"
+                      accept="image/*,application/pdf"
+                    />
+                    <img
+                      src=""
+                      class="photo-preview"
+                      id="docFrontPreview"
+                      style="border-radius: 8px"
+                    />
+                  </div>
+                  <div class="photo-upload" id="docBackWrap">
+                    <div class="photo-upload-icon">🪪</div>
+                    <div class="photo-upload-label">Verso</div>
+                    <div class="photo-upload-hint">Foto nítida do doc</div>
+                    <input
+                      type="file"
+                      id="p_docBack"
+                      accept="image/*,application/pdf"
+                    />
+                    <img
+                      src=""
+                      class="photo-preview"
+                      id="docBackPreview"
+                      style="border-radius: 8px"
+                    />
+                  </div>
+                </div>
+                <span class="field-error" id="p_docErr"
+                  >Envie o documento frente e verso</span
+                >
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Selfie segurando o documento
+                  <span style="color: #ef4444">*</span></label
+                >
+                <div class="photo-upload" id="selfieWrap">
+                  <img
+                    src=""
+                    alt="Preview"
+                    class="photo-preview"
+                    id="selfiePreview"
+                  />
+                  <div class="photo-upload-icon" id="selfieIcon">🤳</div>
+                  <div class="photo-upload-label" id="selfieLabel">
+                    Tire uma selfie segurando o doc
+                  </div>
+                  <div class="photo-upload-hint">
+                    Necessário para verificação de identidade
+                  </div>
+                  <input type="file" id="p_selfie" accept="image/*" />
+                </div>
+                <span class="field-error" id="p_selfieErr"
+                  >Envie a selfie com o documento</span
+                >
+              </div>
+
+              <label class="terms-row">
+                <input type="checkbox" id="p_terms" name="p_terms" />
+                <span class="terms-text">
+                  Li e aceito os
+                  <a
+                    href="termos-de-uso.html"
+                    target="_blank"
+                    style="color: var(--orange)"
+                    >Termos de Uso</a
+                  >, a
+                  <a
+                    href="politica-privacidade.html"
+                    target="_blank"
+                    style="color: var(--orange)"
+                    >Política de Privacidade</a
+                  >
+                  e o <a href="#">Contrato de Prestador</a> do seuMota.
+                </span>
+              </label>
+              <span class="field-error" id="p_termsErr"
+                >Você precisa aceitar os
+                <a
+                  href="termos-de-uso.html"
+                  target="_blank"
+                  style="color: var(--orange)"
+                  >termos de uso</a
+                ></span
+              >
+
+              <div class="form-actions">
+                <button type="button" class="btn-back" id="back4">
+                  ← Voltar
+                </button>
+                <button type="submit" class="btn-submit">
+                  Enviar cadastro →
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Success -->
+        <div class="success-screen" id="successScreen">
+          <div class="success-icon">🧑‍💼</div>
+          <h2 class="success-title">Cadastro enviado!</h2>
+          <p class="success-desc">
+            Recebemos seu cadastro e estamos verificando seus documentos. Em até
+            24h você receberá um e-mail confirmando sua aprovação como Mota.
+          </p>
+          <a
+            href="/index.html"
+            class="btn-submit"
+            style="
+              display: inline-flex;
+              text-decoration: none;
+              max-width: 300px;
+              margin: 0 auto;
+            "
+          >
+            Ir para a página inicial →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/form-prestador.js"></script>
+  </body>
+</html>

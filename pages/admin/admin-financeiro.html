@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Financeiro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/extras.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <style>
+      /* ── PERIOD SELECTOR ── */
+      .period-selector {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 20px;
+      }
+
+      .period-btn {
+        padding: 8px 16px;
+        border-radius: 50px;
+        border: 1.5px solid var(--sand);
+        background: var(--white);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--ink-mid);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .period-btn.active {
+        background: #818cf8;
+        border-color: #818cf8;
+        color: white;
+      }
+
+      .period-btn:hover:not(.active) {
+        border-color: #818cf8;
+        color: #818cf8;
+      }
+
+      /* ── CHART PLACEHOLDER ── */
+      .chart-box {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+
+      .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .chart-title {
+        font-size: 0.9rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .chart-legend {
+        display: flex;
+        gap: 16px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .chart-placeholder {
+        height: 280px;
+        background: var(--cream);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      /* ── SPLIT LAYOUT ── */
+      .finance-grid {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      @media (max-width: 1200px) {
+        .finance-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── QUICK STATS CARD ── */
+      .quick-stats-card {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+
+      .quick-stat-item {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .quick-stat-item:last-child {
+        border-bottom: none;
+      }
+
+      .quick-stat-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-light);
+      }
+
+      .quick-stat-value {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .quick-stat-value.positive {
+        color: #16a34a;
+      }
+      .quick-stat-value.negative {
+        color: #dc2626;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <div class="sidebar-logo-text">seu<span>Mota</span></div>
+        </a>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Gestão</div>
+          <a href="admin-dashboard.html" class="nav-item"
+            ><span class="nav-icon">📊</span> Dashboard</a
+          >
+          <a href="admin-usuarios.html" class="nav-item"
+            ><span class="nav-icon">👥</span> Usuários<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >1.2k</span
+            ></a
+          >
+          <a href="admin-motas.html" class="nav-item"
+            ><span class="nav-icon">🏍️</span> Motas<span
+              class="nav-badge"
+              style="background: #818cf8"
+              >348</span
+            ></a
+          >
+          <a href="admin-tarefas.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Tarefas</a
+          >
+          <a href="admin-financeiro.html" class="nav-item active"
+            ><span class="nav-icon">💰</span> Financeiro</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Suporte</div>
+          <a href="admin-verificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔍</span> Verificações<span
+              class="nav-badge"
+              style="background: #f59e0b"
+              >7</span
+            ></a
+          >
+          <a href="admin-reportes.html" class="nav-item"
+            ><span class="nav-icon">⚠️</span> Reportes<span
+              class="nav-badge"
+              style="background: #ef4444"
+              >3</span
+            ></a
+          >
+          <a href="admin-tickets.html" class="nav-item"
+            ><span class="nav-icon">🎫</span> Tickets</a
+          >
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-label">Sistema</div>
+          <a href="admin-configuracoes.html" class="nav-item"
+            ><span class="nav-icon">⚙️</span> Configurações</a
+          >
+          <a href="admin-logs.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Logs</a
+          >
+          <a href="../../index.html" class="nav-item"
+            ><span class="nav-icon">↩️</span> Sair do admin</a
+          >
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">👨‍💼</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Admin</div>
+              <div class="sidebar-user-role">Superuser</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main -->
+      <main class="main-content">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Financeiro</h2>
+              <p>Visão geral e transações</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="admin-btn admin-btn-ghost">
+              📥 Exportar relatório
+            </button>
+          </div>
+        </div>
+
+        <div class="content-container">
+          <!-- Period selector -->
+          <div class="period-selector">
+            <button class="period-btn">Hoje</button>
+            <button class="period-btn">Esta semana</button>
+            <button class="period-btn active">Este mês</button>
+            <button class="period-btn">Últimos 3 meses</button>
+            <button class="period-btn">Este ano</button>
+            <button class="period-btn">Personalizado</button>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="stat-strip cols-5">
+            <div class="strip-card">
+              <div class="strip-val">R$ 43.287</div>
+              <div class="strip-lbl">GMV Total</div>
+              <div class="strip-delta strip-delta-purple">
+                +18% vs mês anterior
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">R$ 6.493</div>
+              <div class="strip-lbl">Receita (15%)</div>
+              <div class="strip-delta strip-delta-purple">
+                +18% vs mês anterior
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">R$ 36.794</div>
+              <div class="strip-lbl">Repasse Motas</div>
+              <div class="strip-delta strip-delta-muted">
+                +17% vs mês anterior
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val">R$ 2.891</div>
+              <div class="strip-lbl">Taxa média tarefa</div>
+              <div class="strip-delta strip-delta-orange">
+                R$ 0,87 p/ tarefa
+              </div>
+            </div>
+            <div class="strip-card">
+              <div class="strip-val-sm">R$ 15,02</div>
+              <div class="strip-lbl">Ticket médio</div>
+              <div class="strip-delta strip-delta-muted">
+                +3% vs mês anterior
+              </div>
+            </div>
+          </div>
+
+          <!-- Main grid -->
+          <div class="finance-grid">
+            <!-- Left: Chart + Table -->
+            <div>
+              <!-- Revenue chart -->
+              <div class="chart-box">
+                <div class="chart-header">
+                  <div class="chart-title">Receita diária — Fevereiro 2026</div>
+                  <div class="chart-legend">
+                    <div class="legend-item">
+                      <div class="legend-dot" style="background: #818cf8"></div>
+                      <span>Receita</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-dot" style="background: #f97316"></div>
+                      <span>GMV</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="chart-placeholder">
+                  📊 Gráfico de receita diária (Chart.js ou Recharts)
+                </div>
+              </div>
+
+              <!-- Recent transactions -->
+              <div class="admin-table-wrap">
+                <div class="admin-table-header">
+                  <div class="admin-table-title">Transações recentes</div>
+                  <div class="admin-table-count">50</div>
+                </div>
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Data/Hora</th>
+                      <th>Tipo</th>
+                      <th>Cliente</th>
+                      <th>Mota</th>
+                      <th>Valor</th>
+                      <th>Taxa 15%</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="mono-id">#TX-8473</span></td>
+                      <td>18 fev, 14h32</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #dcfce7;
+                            color: #166534;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Pagamento</span
+                        >
+                      </td>
+                      <td>Ana Paula F.</td>
+                      <td>João Pedro</td>
+                      <td style="font-weight: 900">R$ 25,00</td>
+                      <td style="color: #7c3aed; font-weight: 900">R$ 3,75</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8472</span></td>
+                      <td>18 fev, 13h18</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #fef3c7;
+                            color: #92400e;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Repasse</span
+                        >
+                      </td>
+                      <td>—</td>
+                      <td>Carlos M.</td>
+                      <td style="font-weight: 900">R$ 68,00</td>
+                      <td>—</td>
+                      <td>
+                        <span class="pill pill-waiting">Processando</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8471</span></td>
+                      <td>18 fev, 12h05</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #dcfce7;
+                            color: #166534;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Pagamento</span
+                        >
+                      </td>
+                      <td>Roberto S.</td>
+                      <td>Fernanda L.</td>
+                      <td style="font-weight: 900">R$ 18,00</td>
+                      <td style="color: #7c3aed; font-weight: 900">R$ 2,70</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8470</span></td>
+                      <td>18 fev, 10h47</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #fee2e2;
+                            color: #991b1b;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Reembolso</span
+                        >
+                      </td>
+                      <td>Beatriz L.</td>
+                      <td>—</td>
+                      <td style="font-weight: 900; color: #dc2626">
+                        -R$ 15,00
+                      </td>
+                      <td style="color: #dc2626; font-weight: 900">-R$ 2,25</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8469</span></td>
+                      <td>17 fev, 19h22</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #dcfce7;
+                            color: #166534;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Pagamento</span
+                        >
+                      </td>
+                      <td>Diego A.</td>
+                      <td>João Pedro</td>
+                      <td style="font-weight: 900">R$ 32,00</td>
+                      <td style="color: #7c3aed; font-weight: 900">R$ 4,80</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8468</span></td>
+                      <td>17 fev, 17h54</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #fef3c7;
+                            color: #92400e;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Repasse</span
+                        >
+                      </td>
+                      <td>—</td>
+                      <td>Rodrigo S.</td>
+                      <td style="font-weight: 900">R$ 124,50</td>
+                      <td>—</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8467</span></td>
+                      <td>17 fev, 16h31</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #dcfce7;
+                            color: #166534;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Pagamento</span
+                        >
+                      </td>
+                      <td>Fernanda C.</td>
+                      <td>Carlos M.</td>
+                      <td style="font-weight: 900">R$ 20,00</td>
+                      <td style="color: #7c3aed; font-weight: 900">R$ 3,00</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="mono-id">#TX-8466</span></td>
+                      <td>17 fev, 15h12</td>
+                      <td>
+                        <span
+                          style="
+                            font-size: 0.7rem;
+                            font-weight: 800;
+                            background: #dcfce7;
+                            color: #166534;
+                            padding: 3px 8px;
+                            border-radius: 50px;
+                          "
+                          >Pagamento</span
+                        >
+                      </td>
+                      <td>Thiago A.</td>
+                      <td>João Pedro</td>
+                      <td style="font-weight: 900">R$ 28,00</td>
+                      <td style="color: #7c3aed; font-weight: 900">R$ 4,20</td>
+                      <td><span class="pill pill-done">Concluído</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="pagination">
+                  <div>Mostrando 1-50 de 2.847</div>
+                  <div class="page-btns">
+                    <button class="page-btn">←</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">57</button>
+                    <button class="page-btn">→</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /left column -->
+
+            <!-- Right: Quick stats -->
+            <div>
+              <div class="quick-stats-card">
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 14px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid var(--sand);
+                  "
+                >
+                  💳 Resumo do período
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Tarefas concluídas</div>
+                  <div class="quick-stat-value">2.704</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Taxa média (%)</div>
+                  <div class="quick-stat-value">15,0%</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Transações processadas</div>
+                  <div class="quick-stat-value">2.847</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Reembolsos</div>
+                  <div class="quick-stat-value negative">12</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Repasses pendentes</div>
+                  <div class="quick-stat-value">R$ 2.340</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Saldo em carteira</div>
+                  <div class="quick-stat-value positive">R$ 8.472</div>
+                </div>
+              </div>
+
+              <!-- Payment methods breakdown -->
+              <div class="quick-stats-card" style="margin-top: 20px">
+                <div
+                  style="
+                    font-size: 0.88rem;
+                    font-weight: 900;
+                    color: var(--ink);
+                    margin-bottom: 14px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid var(--sand);
+                  "
+                >
+                  💳 Meios de pagamento
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Pix</div>
+                  <div class="quick-stat-value">62%</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Cartão de crédito</div>
+                  <div class="quick-stat-value">28%</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Cartão de débito</div>
+                  <div class="quick-stat-value">7%</div>
+                </div>
+
+                <div class="quick-stat-item">
+                  <div class="quick-stat-label">Saldo carteira</div>
+                  <div class="quick-stat-value">3%</div>
+                </div>
+              </div>
+            </div>
+            <!-- /right column -->
+          </div>
+          <!-- /finance-grid -->
+        </div>
+        <!-- /content-container -->
+      </main>
+    </div>
+
+    <div class="toast-fixed" id="toast"></div>
+
+    <script src="../../assets/js/app-shell.js"></script>
+    <script src="../../assets/js/admin-financeiro.js"></script>
+  </body>
+</html>

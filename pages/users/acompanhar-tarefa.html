@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>seuMota — Acompanhar tarefa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <link rel="stylesheet" href="../../assets/css/animations.css" />
+    <link rel="stylesheet" href="../../assets/css/app-shell.css" />
+    <link rel="stylesheet" href="../../assets/css/cliente.css" />
+    <style>
+      /* Animated Mota dot on map */
+      .mota-pin {
+        position: absolute;
+        font-size: 1.8rem;
+        z-index: 2;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+        transition:
+          top 2s ease,
+          left 2s ease;
+        top: 55%;
+        left: 35%;
+      }
+      .pin-pulse {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(240, 123, 29, 0.3);
+        animation: ping 1.5s infinite;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+      }
+      @keyframes ping {
+        0% {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(2.4);
+          opacity: 0;
+        }
+      }
+      .destination-pin {
+        position: absolute;
+        font-size: 1.4rem;
+        top: 25%;
+        right: 28%;
+        z-index: 2;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+      }
+      /* Status steps row */
+      .steps-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+      }
+      .step-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        position: relative;
+      }
+      .step-node:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 17px;
+        left: calc(50% + 17px);
+        right: calc(-50% + 17px);
+        height: 2px;
+        background: var(--sand);
+        z-index: 0;
+      }
+      .step-node.done:not(:last-child)::after {
+        background: #22c55e;
+      }
+      .step-node.active:not(:last-child)::after {
+        background: linear-gradient(90deg, #22c55e, var(--sand));
+      }
+      .step-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid var(--sand);
+        background: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        z-index: 1;
+        flex-shrink: 0;
+        transition: all 0.3s;
+      }
+      .step-node.done .step-circle {
+        background: #22c55e;
+        border-color: #22c55e;
+        color: white;
+      }
+      .step-node.active .step-circle {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: white;
+        box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.15);
+        animation: pulse-orange 2s infinite;
+      }
+      @keyframes pulse-orange {
+        0%,
+        100% {
+          box-shadow: 0 0 0 4px rgba(240, 123, 29, 0.15);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(240, 123, 29, 0.07);
+        }
+      }
+      .step-label {
+        font-size: 0.68rem;
+        font-weight: 800;
+        color: var(--ink-light);
+        text-align: center;
+        max-width: 64px;
+      }
+      .step-node.done .step-label {
+        color: #16a34a;
+      }
+      .step-node.active .step-label {
+        color: var(--orange);
+      }
+      /* Chat styling (same as mota side) */
+      .chat-wrap {
+        background: var(--white);
+        border: 1.5px solid var(--sand);
+        border-radius: var(--radius);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .chat-header {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chat-header-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .chat-header-status {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #22c55e;
+      }
+      .chat-body {
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 160px;
+        max-height: 240px;
+        overflow-y: auto;
+      }
+      .chat-msg {
+        max-width: 78%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+      .chat-msg.from-mota {
+        background: var(--sand);
+        color: var(--ink);
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+      }
+      .chat-msg.from-me {
+        background: var(--orange);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+      }
+      .chat-msg-time {
+        font-size: 0.68rem;
+        opacity: 0.6;
+        margin-top: 3px;
+      }
+      .chat-footer {
+        padding: 10px 12px;
+        border-top: 1px solid var(--sand);
+        display: flex;
+        gap: 8px;
+      }
+      .chat-input {
+        flex: 1;
+        border: 1.5px solid var(--sand);
+        border-radius: 50px;
+        padding: 9px 16px;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--ink);
+        background: var(--cream);
+        outline: none;
+      }
+      .chat-input:focus {
+        border-color: var(--orange);
+      }
+      .chat-send {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--orange);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .chat-send:hover {
+        background: var(--orange-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
+              <ellipse cx="50" cy="36" rx="28" ry="22" fill="#F5C9A0" />
+              <rect
+                x="24"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <rect
+                x="54"
+                y="49"
+                width="22"
+                height="16"
+                rx="6"
+                fill="none"
+                stroke="#4A3728"
+                stroke-width="3"
+              />
+              <circle cx="35" cy="57" r="5" fill="#4A3728" />
+              <circle cx="65" cy="57" r="5" fill="#4A3728" />
+              <circle cx="37" cy="55" r="1.5" fill="white" />
+              <circle cx="67" cy="55" r="1.5" fill="white" />
+              <ellipse cx="50" cy="68" rx="5" ry="4" fill="#E8A878" />
+              <path
+                d="M22 72 Q18 85 28 92 Q38 98 50 99 Q62 98 72 92 Q82 85 78 72 Q70 80 50 82 Q30 80 22 72Z"
+                fill="white"
+              />
+              <path
+                d="M40 70 Q45 73 50 71 Q55 73 60 70"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <ellipse cx="18" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+              <ellipse cx="82" cy="55" rx="5" ry="8" fill="#F5C9A0" />
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">seu<span>Mota</span></span>
+        </a>
+        <div class="nav-section">
+          <a href="dashboard-usuario.html" class="nav-item"
+            ><span class="nav-icon">🏠</span> Início</a
+          >
+          <a href="postar-tarefa.html" class="nav-item"
+            ><span class="nav-icon">📋</span> Postar tarefa</a
+          >
+          <a href="historico-usuario.html" class="nav-item active"
+            ><span class="nav-icon">🏍️</span>Acompanhar<span class="nav-badge"
+              >2</span
+            ></a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Favoritos</div>
+          <a href="favoritos.html" class="nav-item"
+            ><span class="nav-icon">⭐</span> Motas favoritos</a
+          >
+          <a href="tarefas-recorrentes.html" class="nav-item"
+            ><span class="nav-icon">🔁</span> Tarefas recorrentes</a
+          >
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Conta</div>
+          <a href="perfil-usuario.html" class="nav-item"
+            ><span class="nav-icon">👤</span> Meu perfil</a
+          >
+          <a href="notificacoes.html" class="nav-item"
+            ><span class="nav-icon">🔔</span> Notificações<span
+              class="nav-badge"
+              >1</span
+            ></a
+          >
+          <a href="historico-usuario.html" class="nav-item"
+            ><span class="nav-icon">📜</span> Histórico</a
+          >
+          <a href="pagamentos.html" class="nav-item"
+            ><span class="nav-icon">💳</span> Pagamentos</a
+          >
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-user-card">
+            <div class="user-avatar">👩</div>
+            <div class="user-info">
+              <div class="user-name">Ana Paula</div>
+              <div class="user-role">Cliente · São Paulo</div>
+            </div>
+            <button class="user-menu-btn">⋯</button>
+          </div>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main">
+        <div class="topbar">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="mobile-nav-toggle" id="navToggle">☰</button>
+            <div class="topbar-left">
+              <h2>Acompanhar tarefa</h2>
+              <p id="topbarStatus">João Pedro está a caminho do mercado</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="icon-btn">🔔</button>
+            <div class="user-avatar" style="cursor: pointer">👩</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- Status steps -->
+          <div class="steps-row" id="stepsRow">
+            <div class="step-node done">
+              <div class="step-circle">✓</div>
+              <div class="step-label">Aceito</div>
+            </div>
+            <div class="step-node active" id="stepAcaminho">
+              <div class="step-circle">🚶</div>
+              <div class="step-label">A caminho</div>
+            </div>
+            <div class="step-node" id="stepChegou">
+              <div class="step-circle">📍</div>
+              <div class="step-label">No local</div>
+            </div>
+            <div class="step-node" id="stepFazendo">
+              <div class="step-circle">⚙️</div>
+              <div class="step-label">Realizando</div>
+            </div>
+            <div class="step-node" id="stepConcluido">
+              <div class="step-circle">✅</div>
+              <div class="step-label">Concluído</div>
+            </div>
+          </div>
+
+          <div class="track-layout">
+            <!-- LEFT: map + ETA -->
+            <div>
+              <!-- ETA banner -->
+              <div class="eta-card" id="etaCard">
+                <div>
+                  <div class="eta-label">Previsão de chegada no local</div>
+                  <div class="eta-time" id="etaTime">~5 min</div>
+                  <div class="eta-sub" id="etaSub">
+                    João Pedro está a 320m do mercado
+                  </div>
+                </div>
+                <div class="eta-mota-mini">
+                  <div class="eta-mota-avatar">🧑</div>
+                  <div class="eta-mota-name">João Pedro</div>
+                </div>
+              </div>
+
+              <!-- Map -->
+              <div class="map-area" id="mapArea">
+                <div class="pin-pulse"></div>
+                <div class="mota-pin" id="motaPin">🏍️</div>
+                <div class="destination-pin">📍</div>
+                <span
+                  class="map-area-icon"
+                  style="opacity: 0.15; position: absolute"
+                  >🗺️</span
+                >
+                <div class="map-area-label">Google Maps API · Em breve</div>
+                <div
+                  class="map-area-text"
+                  style="
+                    position: absolute;
+                    bottom: 16px;
+                    left: 0;
+                    right: 0;
+                    text-align: center;
+                  "
+                >
+                  Mapa em tempo real disponível com integração Google Maps
+                </div>
+              </div>
+
+              <!-- Status badge -->
+              <div class="status-badge-large orange" id="statusBadge">
+                <span class="status-badge-icon">🚶</span>
+                <div class="status-badge-text">
+                  <strong id="statusTitle">A caminho do local</strong>
+                  <span id="statusDesc"
+                    >João Pedro saiu e está se deslocando até o Pão de
+                    Açúcar</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: mota info + chat -->
+            <div>
+              <div class="track-mota-card">
+                <div class="track-mota-row">
+                  <div class="track-mota-avatar">🧑</div>
+                  <div>
+                    <div class="track-mota-name">João Pedro</div>
+                    <div class="track-mota-meta">
+                      ★ 4.9 · 67 tarefas · São Paulo
+                    </div>
+                  </div>
+                </div>
+                <div class="track-actions">
+                  <a href="tel:+5511999990000" class="track-btn">📞 Ligar</a>
+                  <button class="track-btn primary" id="openChatBtn">
+                    💬 Mensagem
+                  </button>
+                </div>
+              </div>
+
+              <!-- Chat -->
+              <div class="chat-wrap" id="chatWrap">
+                <div class="chat-header">
+                  <span class="chat-header-title">💬 Chat com João Pedro</span>
+                  <span class="chat-header-status">● Online</span>
+                </div>
+                <div class="chat-body" id="chatBody">
+                  <div class="chat-msg from-mota">
+                    Oi, Ana! Acabei de sair. Estou a caminho do mercado. 👋
+                    <div class="chat-msg-time">13h46</div>
+                  </div>
+                  <div class="chat-msg from-me">
+                    Oi João! Obrigada. O iogurte pode ser Natural Grego Activia
+                    se não tiver o Danone. 😊
+                    <div class="chat-msg-time">13h48</div>
+                  </div>
+                  <div class="chat-msg from-mota">
+                    Entendido! Anotado aqui. Em uns 5 minutinhos chego lá.
+                    <div class="chat-msg-time">13h49</div>
+                  </div>
+                </div>
+                <div class="chat-footer">
+                  <input
+                    class="chat-input"
+                    id="chatInput"
+                    type="text"
+                    placeholder="Escrever mensagem..."
+                  />
+                  <button class="chat-send" id="chatSend">➤</button>
+                </div>
+              </div>
+
+              <!-- Cancel / report -->
+              <div
+                style="
+                  margin-top: 14px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                "
+              >
+                <button
+                  style="
+                    background: transparent;
+                    border: 1.5px solid var(--sand);
+                    border-radius: 10px;
+                    padding: 11px;
+                    font-family: &quot;Nunito&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.82rem;
+                    color: var(--ink-mid);
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                  onmouseover="
+                    this.style.borderColor = '#EF4444';
+                    this.style.color = '#DC2626';
+                  "
+                  onmouseout="
+                    this.style.borderColor = 'var(--sand)';
+                    this.style.color = 'var(--ink-mid)';
+                  "
+                >
+                  ⚠️ Reportar problema
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /track-layout -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Completion notification modal -->
+    <div class="modal-backdrop" id="completeModal">
+      <div class="modal" style="text-align: center">
+        <div class="modal-icon">🎉</div>
+        <h2 class="modal-title">Tarefa concluída!</h2>
+        <p class="modal-desc">
+          João Pedro marcou a tarefa como concluída.<br />
+          O pagamento de <strong>R$ 25</strong> foi debitado.<br /><br />
+          O que achou do serviço?
+        </p>
+        <a
+          href="avaliar-mota.html"
+          class="modal-btn-primary"
+          style="
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            padding: 14px;
+            border-radius: 50px;
+            font-family: &quot;Nunito&quot;, sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+          "
+        >
+          ⭐ Avaliar João Pedro
+        </a>
+        <button class="modal-btn-secondary" id="skipReview">
+          Avaliar depois
+        </button>
+      </div>
+    </div>
+
+    <script src="/assets/js/app-shell.js"></script>
+    <script src="/assets/js/acompanhar-tarefa.js"></script>
+  </body>
+</html>
