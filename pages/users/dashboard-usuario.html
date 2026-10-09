@@ -381,25 +381,249 @@
         .content-grid {
           grid-template-columns: 1fr;
         }
+      }
+
+      @media (max-width: 768px) {
         .stats-row {
           grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+        .stat-card {
+          padding: 16px 14px;
+        }
+        .stat-card-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 1.2rem;
+        }
+        .stat-card-value {
+          font-size: 1.4rem;
+        }
+        .stat-card-label {
+          font-size: 0.7rem;
+        }
+
+        .post-cta {
+          padding: 24px 20px;
+          flex-direction: column;
+          text-align: center;
+        }
+        .post-cta-text h3 {
+          font-size: 1.1rem;
+        }
+        .post-cta-text p {
+          margin: 0 auto;
+          font-size: 0.82rem;
+        }
+        .post-cta-btn {
+          font-size: 0.85rem;
+          padding: 11px 20px;
+        }
+
+        .task-item {
+          padding: 14px 16px;
+          gap: 12px;
+        }
+        .task-cat-icon {
+          width: 38px;
+          height: 38px;
+          font-size: 1.1rem;
+        }
+        .task-title {
+          font-size: 0.85rem;
+        }
+        .task-price {
+          font-size: 0.95rem;
+        }
+
+        .quick-cats {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 8px;
+        }
+        .quick-cat {
+          padding: 12px 6px;
+        }
+        .quick-cat-emoji {
+          font-size: 1.4rem;
+        }
+        .quick-cat-name {
+          font-size: 0.7rem;
+        }
+
+        .mota-card {
+          padding: 12px 14px;
+        }
+        .mota-avatar {
+          width: 42px;
+          height: 42px;
+          font-size: 1.2rem;
+        }
+        .mota-name {
+          font-size: 0.84rem;
+        }
+        .mota-detail {
+          font-size: 0.72rem;
+        }
+
+        .section-header h3 {
+          font-size: 0.95rem;
+        }
+        .section-link {
+          font-size: 0.75rem;
         }
       }
 
       @media (max-width: 600px) {
         .stats-row {
           grid-template-columns: 1fr;
+          gap: 10px;
         }
+        .stat-card {
+          padding: 16px 18px;
+        }
+
         .quick-cats {
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 8px;
         }
+        .quick-cat {
+          padding: 14px 8px;
+        }
+
+        .post-cta::before {
+          width: 150px;
+          height: 150px;
+        }
+
+        .task-item {
+          flex-wrap: wrap;
+          padding: 14px;
+        }
+        .task-info {
+          width: 100%;
+        }
+        .task-right {
+          width: 100%;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 6px;
+        }
+        .task-meta {
+          flex-wrap: wrap;
+        }
+
+        .page-content {
+          padding: 16px 14px;
+        }
+        .content-grid {
+          gap: 24px;
+        }
+        .section-header {
+          margin-bottom: 12px;
+        }
+        .mota-list {
+          gap: 8px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .topbar {
+          padding: 12px 16px;
+        }
+        .topbar h2 {
+          font-size: 1.1rem;
+        }
+        .topbar p {
+          font-size: 0.75rem;
+        }
+        .topbar-right {
+          gap: 8px;
+        }
+        .icon-btn {
+          width: 36px;
+          height: 36px;
+          font-size: 1rem;
+        }
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+          font-size: 1rem;
+        }
+
         .post-cta {
-          flex-direction: column;
-          text-align: center;
+          padding: 20px 16px;
+        }
+        .post-cta-text h3 {
+          font-size: 1rem;
         }
         .post-cta-text p {
-          margin: 0 auto;
+          font-size: 0.78rem;
+        }
+
+        .stat-card-icon {
+          width: 36px;
+          height: 36px;
+          font-size: 1.1rem;
+        }
+        .stat-card-value {
+          font-size: 1.3rem;
+        }
+        .stat-card-label {
+          font-size: 0.68rem;
+        }
+
+        .quick-cats {
+          gap: 6px;
+        }
+        .quick-cat {
+          padding: 10px 4px;
+        }
+        .quick-cat-emoji {
+          font-size: 1.2rem;
+        }
+        .quick-cat-name {
+          font-size: 0.65rem;
+        }
+
+        .task-cat-icon {
+          width: 34px;
+          height: 34px;
+          font-size: 1rem;
+        }
+        .task-title {
+          font-size: 0.82rem;
+        }
+        .task-meta span {
+          font-size: 0.7rem;
+        }
+        .badge {
+          font-size: 0.68rem;
+          padding: 3px 8px;
+        }
+
+        .section-header h3 {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .stats-row {
+          gap: 8px;
+        }
+        .stat-card {
+          padding: 12px 14px;
+          gap: 10px;
+        }
+        .quick-cats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .post-cta-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .task-item {
+          padding: 12px;
         }
       }
     </style>
@@ -408,7 +632,7 @@
     <div class="app">
       <!-- ═══ SIDEBAR ═══ -->
       <aside class="sidebar" id="sidebar">
-        <a href="index.html" class="sidebar-logo">
+        <a href="/index.html" class="sidebar-logo">
           <div class="sidebar-logo-icon">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="50" cy="52" rx="32" ry="36" fill="#F5C9A0" />
@@ -827,7 +1051,6 @@
         <!-- /page-content -->
       </main>
     </div>
-
     <script src="/assets/js/app-shell.js"></script>
     <script src="/assets/js/dashboard-usuario.js"></script>
   </body>
